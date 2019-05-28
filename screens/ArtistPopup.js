@@ -1,15 +1,42 @@
 import React from 'react';
-import { Linking, ScrollView, StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import {
+	Linking,
+	ScrollView,
+	StyleSheet,
+	View,
+	Text,
+	Image,
+	TouchableOpacity
+} from 'react-native';
 import Modal from 'react-native-modal';
-import { Zocial } from '@expo/vector-icons';
+import { Zocial, EvilIcons } from '@expo/vector-icons';
 import Layout from '../constants/Layout';
 import Footer from '../components/Footer';
+import { likeArtist } from '../Config/ExternalURL';
 
 export default class ArtistPopup extends React.Component {
-	render() {
+	constructor() {
+		super();
+		this._likeArtist = this._likeArtist.bind(this);
+	}
 
+	_likeArtist(opts) {
+		console.log(likeArtist);
+		fetch(likeArtist, {
+			method: 'post',
+			body: JSON.stringify(opts)
+		})
+			.then(res => {
+				console.log('Artist Liked.', res);
+			})
+			.catch(err => {
+				console.log('error liking artist.', err);
+			});
+	}
+
+	render() {
 		let { artist, color1, color2 } = this.props;
-    console.log('ARTIST', artist)
+		console.log('ARTIST', artist);
 		return (
 			<Modal isVisible={this.props.isVisible}>
 				<View style={[styles.container, { backgroundColor: color1 }]}>
@@ -18,11 +45,22 @@ export default class ArtistPopup extends React.Component {
 						style={styles.image}
 						resizeMode={'cover'}
 					/>
+					<TouchableOpacity
+						style={styles.like}
+						onPress={() =>
+							this._likeArtist({ artist_id: artist.artist_id, user_id: 1 })
+						}
+					>
+						<EvilIcons name="heart" size={40} color="white" />
+					</TouchableOpacity>
 					<View style={[styles.triangle, { borderBottomColor: color2 }]} />
-          <Text style={styles.artistName}>{artist.artist_name}</Text>
-          <TouchableOpacity onPress={() => this.props.onClose()} style={[styles.close, {backgroundColor: color1}]}>
-            <Text style={styles.x}>X</Text>
-          </TouchableOpacity>
+					<Text style={styles.artistName}>{artist.artist_name}</Text>
+					<TouchableOpacity
+						onPress={() => this.props.onClose()}
+						style={[styles.close, { backgroundColor: color1 }]}
+					>
+						<Text style={styles.x}>X</Text>
+					</TouchableOpacity>
 					<View style={[styles.triangle2, { borderTopColor: color1 }]} />
           <TouchableOpacity style={styles.icon} onPress={() =>  Linking.openURL(artist.artist_soundcloud)}>
             <Zocial name="soundcloud" size={22} color='orange'/>
@@ -33,9 +71,7 @@ export default class ArtistPopup extends React.Component {
 							padding: 10
 						}}
 					>
-						<Text style={styles.description}>
-							{artist.artist_description}
-						</Text>
+						<Text style={styles.description}>{artist.artist_description}</Text>
 					</ScrollView>
 				</View>
         <View style={{position: 'absolute', bottom: -20, left: -20, flex: 1 }}>
@@ -65,6 +101,11 @@ const styles = StyleSheet.create({
   },
 	image: {
 		height: Layout.window.width * 0.9
+	},
+	like: {
+		position: 'absolute',
+		top: 10,
+		left: 10
 	},
 	triangle: {
 		position: 'absolute',
@@ -99,33 +140,33 @@ const styles = StyleSheet.create({
 		width: Layout.window.width * 0.9,
 		height: Layout.window.width * 0.85
 	},
-  artistName: {
-    position: 'absolute',
-    right: 5,
-    top: Layout.window.width * 0.05,
-    fontSize: 25,
-    color: 'white',
-    fontWeight: 'bold'
-  },
-  x: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 20
-  },
-  close: {
-    position: 'absolute',
-    top: -10,
-    right: -5,
-    height: 25,
-    width: 20,
-    justifyContent: 'center'
-  },
-  description: {
-    position: 'absolute',
-    right: 5,
-    top: Layout.window.width * 0.05,
-    fontSize: 14,
-    color: 'white',
-    fontWeight: '200'
-  }
+	artistName: {
+		position: 'absolute',
+		right: 5,
+		top: Layout.window.width * 0.05,
+		fontSize: 25,
+		color: 'white',
+		fontWeight: 'bold'
+	},
+	x: {
+		color: 'white',
+		textAlign: 'center',
+		fontSize: 20
+	},
+	close: {
+		position: 'absolute',
+		top: -10,
+		right: -5,
+		height: 25,
+		width: 20,
+		justifyContent: 'center'
+	},
+	description: {
+		position: 'absolute',
+		right: 5,
+		top: Layout.window.width * 0.05,
+		fontSize: 14,
+		color: 'white',
+		fontWeight: '200'
+	}
 });
