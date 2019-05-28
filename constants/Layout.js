@@ -12,7 +12,7 @@ export default {
   rotationHeader: "1deg",
   fixRotationHeader: "-1deg",
   headerAHeight: 70,
-  backTextSize: 10,
+  backTextSize: 12,
   labelTextSize: 14,
   underlayColor: 'rgba(0,0,0,.2)',
 };

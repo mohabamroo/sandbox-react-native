@@ -6,3 +6,4 @@ export const NewsDB = require('./NewsDB');
 export const UserDB = require('./User');
 export const DiscoverDB = require('./Discover');
 export const BalanceDB = require('./Balance');
+export const MediaDB = require('./MediaDB');
