@@ -55,7 +55,7 @@ export default createAppContainer(createStackNavigator({
         bg: 'bg4',
       },
       subHeader: {
-        bg: 'lineupheader'
+        bg: 'circ4'
       }
     },
     navigationOptions: ({navigation, screenProps}) => ({
@@ -106,13 +106,18 @@ export default createAppContainer(createStackNavigator({
       title: {
         text: "Media",
         fontColor: 'yellow',
-        bgColor: 'blue'
+        bgColor: 'pink'
+      },
+      // FIXME:
+      backBtn: {
+        fontcolor: 'white',
+        bgColor: 'green'
       },
       mainHeader: {
-        bg: 'bg1',
+        bg: 'bg2',
       },
       subHeader: {
-        bg: 'circ2'
+        bg: 'circ6'
       }
     },
     navigationOptions: ({navigation, screenProps}) => ({
@@ -152,7 +157,7 @@ export default createAppContainer(createStackNavigator({
         bg: 'bg5',
       },
       subHeader: {
-        bg: 'info'
+        bg: 'circ3'
       }
     },
     navigationOptions: ({navigation, screenProps}) => ({
