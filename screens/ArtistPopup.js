@@ -3,6 +3,7 @@ import { Linking, ScrollView, StyleSheet, View, Text, Image, TouchableOpacity } 
 import Modal from 'react-native-modal';
 import { Zocial } from '@expo/vector-icons';
 import Layout from '../constants/Layout';
+import Footer from '../components/Footer';
 
 export default class ArtistPopup extends React.Component {
 	render() {
@@ -37,6 +38,9 @@ export default class ArtistPopup extends React.Component {
 						</Text>
 					</ScrollView>
 				</View>
+        <View style={{position: 'absolute', bottom: -20, left: -20, flex: 1 }}> 
+          <Footer />
+        </View>
 			</Modal>
 		);
 	}
