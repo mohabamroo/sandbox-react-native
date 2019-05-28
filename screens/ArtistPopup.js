@@ -25,7 +25,7 @@ export default class ArtistPopup extends React.Component {
           </TouchableOpacity>
 					<View style={[styles.triangle2, { borderTopColor: color1 }]} />
           <TouchableOpacity style={styles.icon} onPress={() =>  Linking.openURL(artist.artist_soundcloud)}>
-            <Zocial name="soundcloud" size={20} color='orange'/>
+            <Zocial name="soundcloud" size={22} color='orange'/>
           </TouchableOpacity>
 					<ScrollView
 						style={[styles.textArea, { backgroundColor: color1 }]}
@@ -38,7 +38,7 @@ export default class ArtistPopup extends React.Component {
 						</Text>
 					</ScrollView>
 				</View>
-        <View style={{position: 'absolute', bottom: -20, left: -20, flex: 1 }}> 
+        <View style={{position: 'absolute', bottom: -20, left: -20, flex: 1 }}>
           <Footer />
         </View>
 			</Modal>
@@ -54,9 +54,9 @@ const styles = StyleSheet.create({
 	},
   icon: {
     position: 'absolute',
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
