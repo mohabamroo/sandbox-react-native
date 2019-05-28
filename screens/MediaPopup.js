@@ -28,7 +28,7 @@ export default class ArtistPopup extends React.Component {
 	render() {
 		const { photos, isVisible } = this.props;
 		return (
-			<Modal isVisible={true}>
+			<Modal isVisible={false}>
 				<View style={[styles.container]}>
 					<View
 						style={{
