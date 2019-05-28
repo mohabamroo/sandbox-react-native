@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   View,
   Text,
-  ImageBackground
+  ImageBackground,
+  AppState
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 
@@ -29,11 +30,18 @@ export default class LinksScreen extends React.Component {
   }
   async componentDidMount() {
     let artists = await ArtistsDB.Get();
-    console.log("TCL: LinksScreen -> componentDidMount -> artists", artists)
+    artists = artists.map(x => {
+      return { ...x, visible: true };
+    });
     this.setState({
-      artists: this.ds.cloneWithRows(artists)
+      artists: this.ds.cloneWithRows(artists),
+      initialArtists: artists,
+      appState: AppState.currentState
     });
   }
+
+  componentWillUnmount() {}
+
   renderArtist(row, L, index) {
     let color = this.state.colors[index % Number(this.state.colors.length)];
     let color2 = this.state.colors2[index % Number(this.state.colors2.length)];
@@ -50,6 +58,22 @@ export default class LinksScreen extends React.Component {
         />
         <Text style={styles.artistName}>{row['artist_name']}</Text>
         {/**<Image source={Assets.artist1} style={styles.artistsRowImage} /> */}
+        <View style={styles.sessionInfo}>
+          <Text style={styles.sessionDay}>
+            {row['artist_session'] && row['artist_session']['session_stage']
+              ? row['artist_session']['session_stage']
+              : 'Main Stage'}
+          </Text>
+          <Text style={styles.sessionTime}>
+            {row['artist_session']
+              ? row['artist_session']['session_day'] +
+                ', ' +
+                row['artist_session']['session_start_time'] +
+                ' - ' +
+                row['artist_session']['session_end_time']
+              : ''}
+          </Text>
+        </View>
         <View
           style={[
             styles.triangle2,
@@ -73,6 +97,22 @@ export default class LinksScreen extends React.Component {
   section() {
     return;
   }
+
+  _handleAppStateChange = newState => {
+    this.setState(newState);
+    let currentActive = newState.active;
+    let newArr = this.state.initialArtists.filter(row => {
+      let stage = row['artist_session']['session_stage'];
+      stage = stage ? stage.replace('stage', '').toLowerCase() : stage;
+      let visible =
+        currentActive == 'all' || (stage && stage.includes(currentActive));
+      return visible;
+    });
+    this.setState({
+      artists: this.ds.cloneWithRows(newArr)
+    });
+  };
+
   render() {
     return (
       <View style={__GStyles.default.container}>
@@ -81,7 +121,7 @@ export default class LinksScreen extends React.Component {
           <View style={styles.tabsContainer}>
             <TouchableOpacity
               onPress={() => {
-                this.setState({ active: 'all' });
+                this._handleAppStateChange({ active: 'all' });
               }}
               style={{ flex: 0.5 }}
             >
@@ -110,7 +150,7 @@ export default class LinksScreen extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                this.setState({ active: 'main' });
+                this._handleAppStateChange({ active: 'main' });
               }}
               style={{ flex: 1 }}
             >
@@ -139,7 +179,9 @@ export default class LinksScreen extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                this.setState({ active: 'sandbox' });
+                this._handleAppStateChange({
+                  active: 'sandbox'
+                });
               }}
               style={{ flex: 1 }}
             >
@@ -169,7 +211,9 @@ export default class LinksScreen extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                this.setState({ active: 'morning' });
+                this._handleAppStateChange({
+                  active: 'morning'
+                });
               }}
               style={{ flex: 1 }}
             >
@@ -249,11 +293,11 @@ const styles = StyleSheet.create({
   triangle: {
     width: 0,
     height: 0,
+    borderBottomWidth: Layout.window.width,
     backgroundColor: 'transparent',
     borderStyle: 'solid',
     borderLeftWidth: Layout.window.width,
     borderRightWidth: Layout.window.width / 2,
-    borderBottomWidth: Layout.window.width,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent'
   },
@@ -288,6 +332,22 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     width: Layout.window.width / 3,
+    color: '#fff'
+  },
+  sessionInfo: {
+    color: '#fff',
+    position: 'absolute',
+    bottom: 5,
+    right: 5,
+    fontSize: 20,
+    zIndex: 10
+  },
+  sessionDay: {
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'right'
+  },
+  sessionTime: {
     color: '#fff'
   }
 });
