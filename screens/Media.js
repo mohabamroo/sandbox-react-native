@@ -40,7 +40,7 @@ export default class Media extends React.Component {
   };
 
   arrayToObject = array => {
-    array.reduce((obj, item) => {
+    return array.reduce((obj, item) => {
       obj[item.year] = item.images;
       return obj;
     }, {});
