@@ -62,12 +62,9 @@ export default class ArtistPopup extends React.Component {
 						<Text style={styles.x}>X</Text>
 					</TouchableOpacity>
 					<View style={[styles.triangle2, { borderTopColor: color1 }]} />
-					<TouchableOpacity
-						style={styles.icon}
-						onPress={() => Linking.openURL(artist.artist_soundcloud)}
-					>
-						<Zocial name="soundcloud" size={20} color="orange" />
-					</TouchableOpacity>
+          <TouchableOpacity style={styles.icon} onPress={() =>  Linking.openURL(artist.artist_soundcloud)}>
+            <Zocial name="soundcloud" size={22} color='orange'/>
+          </TouchableOpacity>
 					<ScrollView
 						style={[styles.textArea, { backgroundColor: color1 }]}
 						contentContainerStyle={{
@@ -77,9 +74,9 @@ export default class ArtistPopup extends React.Component {
 						<Text style={styles.description}>{artist.artist_description}</Text>
 					</ScrollView>
 				</View>
-				<View style={{ position: 'absolute', bottom: -20, left: -20, flex: 1 }}>
-					<Footer />
-				</View>
+        <View style={{position: 'absolute', bottom: -20, left: -20, flex: 1 }}>
+          <Footer />
+        </View>
 			</Modal>
 		);
 	}
@@ -91,17 +88,17 @@ const styles = StyleSheet.create({
 		height: '70%',
 		width: '100%'
 	},
-	icon: {
-		position: 'absolute',
-		width: 30,
-		height: 30,
-		borderRadius: 15,
-		backgroundColor: 'white',
-		alignItems: 'center',
-		justifyContent: 'center',
-		top: Layout.window.width * 0.46,
-		right: Layout.window.width * 0.06
-	},
+  icon: {
+    position: 'absolute',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: Layout.window.width * 0.46,
+    right: Layout.window.width * 0.06
+  },
 	image: {
 		height: Layout.window.width * 0.9
 	},
