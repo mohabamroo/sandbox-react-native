@@ -15,5 +15,11 @@ export default {
   newsLabelBG: 'orange',
   newsLabelFontColor: '#fff',
   newsFooterBG: 'blue',
-  newsFooterText: '#fff'
+  newsFooterText: '#fff',
+  greenish: '#61A485',
+  rose: '#F169A7',
+  redish: '#E9665C',
+  pinkish: '#F8B7BB',
+  yellowish: '#FFE958'
+
 };
