@@ -8,7 +8,7 @@ import {
   Text
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
-
+import MediaPopup from './MediaPopup';
 import * as __GStyles from '../styles';
 import Assets from '../constants/Assets';
 
@@ -117,6 +117,7 @@ export default class Media extends React.Component {
           </View>
         </View>
         <ScrollView style={styles.container} />
+        <MediaPopup />
       </View>
     );
   }

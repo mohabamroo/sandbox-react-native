@@ -20,6 +20,7 @@ export default {
     lineupheader: require(`${__pattern}/lineupheader.png`),
     homeProfile: require(`${__pattern}/homeProfile.png`),
     artist1: require(`${__Artists}/1.png`),
-    artistLogo: require(`${__path}/artistLogo.png`)
-    
+    artistLogo: require(`${__path}/artistLogo.png`),
+    robotdev: require(`${__path}/robot-dev.png`)
+
 }
