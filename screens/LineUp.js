@@ -10,6 +10,7 @@ import {
   ImageBackground
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
+import ArtistPopup from './ArtistPopup';
 
 import * as __GStyles from '../styles';
 import { ArtistsDB } from '../Config/DB';
@@ -24,7 +25,9 @@ export default class LinksScreen extends React.Component {
       active: 'all',
       colors: ['#fabb79', '#008691', '#e9665d', '#60a484'],
       colors2: ['#60a484', '#f069a7', '#fabb79', '#ffe958'],
-      artists: this.ds.cloneWithRows([])
+      artists: this.ds.cloneWithRows([]),
+      current_artist: null,
+      show_popup: false
     };
   }
   async componentDidMount() {
@@ -38,36 +41,41 @@ export default class LinksScreen extends React.Component {
     let color = this.state.colors[index % Number(this.state.colors.length)];
     let color2 = this.state.colors2[index % Number(this.state.colors2.length)];
     return (
-      <View key={index} style={styles.artistRow}>
-        <Image source={{ uri: row.artist_image }} style={styles.image} />
-        <View
-          style={[
-            styles.triangle,
-            styles.triangleDown,
-            styles.nameArea,
-            { borderBottomColor: color }
-          ]}
-        />
-        <Text style={styles.artistName}>{row['artist_name']}</Text>
-        {/**<Image source={Assets.artist1} style={styles.artistsRowImage} /> */}
-        <View
-          style={[
-            styles.triangle2,
-            styles.triangleCornerBottomRight,
-            styles.footerArea,
-            { borderTopColor: color2 }
-          ]}
-        >
-          <View
-            style={{
-              flex: 1,
-              width: Layout.window.width,
-              height: Layout.window.width,
-              backgroundColor: 'red'
-            }}
-          />
+      <TouchableOpacity onPress={() => this.setState({
+        show_popup: true,
+        current_artist: row
+      })}>
+        <View key={index} style={styles.artistRow}>
+            <Image source={{ uri: row.artist_image }} style={styles.image} />
+            <View
+              style={[
+                styles.triangle,
+                styles.triangleDown,
+                styles.nameArea,
+                { borderBottomColor: color }
+              ]}
+            />
+            <Text style={styles.artistName}>{row['artist_name']}</Text>
+            {/**<Image source={Assets.artist1} style={styles.artistsRowImage} /> */}
+            <View
+              style={[
+                styles.triangle2,
+                styles.triangleCornerBottomRight,
+                styles.footerArea,
+                { borderTopColor: color2 }
+              ]}
+            >
+              <View
+                style={{
+                  flex: 1,
+                  width: Layout.window.width,
+                  height: Layout.window.width,
+                  backgroundColor: 'red'
+                }}
+              />
+            </View>
         </View>
-      </View>
+        </TouchableOpacity>
     );
   }
   section() {
@@ -207,6 +215,13 @@ export default class LinksScreen extends React.Component {
             />
           </ScrollView>
         </View>
+        {this.state.current_artist &&
+          (<ArtistPopup
+            isVisible={this.state.show_popup}
+            artist={this.state.current_artist}
+          />)
+        }
+
       </View>
     );
   }
