@@ -27,7 +27,9 @@ export default class LinksScreen extends React.Component {
       colors2: ['#60a484', '#f069a7', '#fabb79', '#ffe958'],
       artists: this.ds.cloneWithRows([]),
       current_artist: null,
-      show_popup: false
+      show_popup: false,
+      color1: '#fff',
+      color2: '#fff'
     };
   }
   async componentDidMount() {
@@ -43,7 +45,9 @@ export default class LinksScreen extends React.Component {
     return (
       <TouchableOpacity onPress={() => this.setState({
         show_popup: true,
-        current_artist: row
+        current_artist: row,
+        color1 : color,
+        color2
       })}>
         <View key={index} style={styles.artistRow}>
             <Image source={{ uri: row.artist_image }} style={styles.image} />
@@ -219,6 +223,9 @@ export default class LinksScreen extends React.Component {
           (<ArtistPopup
             isVisible={this.state.show_popup}
             artist={this.state.current_artist}
+            color1={this.state.color1}
+            color2={this.state.color2}
+            onClose={() => this.setState({show_popup: false})}
           />)
         }
 

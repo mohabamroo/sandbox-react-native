@@ -1,86 +1,127 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View, Text, Image} from 'react-native';
+import { Linking, ScrollView, StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
+import { Zocial } from '@expo/vector-icons';
 import Layout from '../constants/Layout';
 
-
 export default class ArtistPopup extends React.Component {
-  render() {
-    let artist = this.props.artist;
-    return (
-      <Modal isVisible={this.props.isVisible} >
-        <View style={styles.container}>
-          <Image source={{ uri: artist.artist_image }} style={styles.image} resizeMode={'cover'}/>
-          <View
-            style={[
-              styles.triangle,
-              { borderBottomColor: 'red' }
-            ]}
-          />
-          <View
-            style={[
-              styles.triangle2,
-              { borderTopColor: '#008691' }
-            ]}
-          />
-          <ScrollView
-            style={[
-              styles.textArea,
-              { backgroundColor: '#008691' }
-            ]}
-            contentContainerStyle={{
-              padding: 10
-            }}
-          >
-          <Text> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Text>
-          </ScrollView>
-      </View>
-      </Modal>
-    );
-  }
+	render() {
+
+		let { artist, color1, color2 } = this.props;
+    console.log('ARTIST', artist)
+		return (
+			<Modal isVisible={this.props.isVisible}>
+				<View style={[styles.container, { backgroundColor: color1 }]}>
+					<Image
+						source={{ uri: artist.artist_image }}
+						style={styles.image}
+						resizeMode={'cover'}
+					/>
+					<View style={[styles.triangle, { borderBottomColor: color2 }]} />
+          <Text style={styles.artistName}>{artist.artist_name}</Text>
+          <TouchableOpacity onPress={() => this.props.onClose()} style={[styles.close, {backgroundColor: color1}]}>
+            <Text style={styles.x}>X</Text>
+          </TouchableOpacity>
+					<View style={[styles.triangle2, { borderTopColor: color1 }]} />
+          <TouchableOpacity style={styles.icon} onPress={() =>  Linking.openURL(artist.artist_soundcloud)}>
+            <Zocial name="soundcloud" size={20} color='orange'/>
+          </TouchableOpacity>
+					<ScrollView
+						style={[styles.textArea, { backgroundColor: color1 }]}
+						contentContainerStyle={{
+							padding: 10
+						}}
+					>
+						<Text style={styles.description}>
+							{artist.artist_description}
+						</Text>
+					</ScrollView>
+				</View>
+			</Modal>
+		);
+	}
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: '30%',
-    height: '70%',
-    width: '100%',
-    backgroundColor: '#fff'
-  },
-  image: {
-    height: Layout.window.width * 0.9
-  },
-  triangle: {
+	container: {
+		marginBottom: '30%',
+		height: '70%',
+		width: '100%'
+	},
+  icon: {
     position: 'absolute',
-    top: 0,
-    right: 0,
-    width: 0,
-    height: 0,
-    backgroundColor: 'transparent',
-    borderStyle: 'solid',
-    borderRightWidth: Layout.window.width * 0.7,
-    borderBottomWidth: Layout.window.width * 0.6,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    transform: [{ rotate: '180deg' }]
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: Layout.window.width * 0.46,
+    right: Layout.window.width * 0.06
   },
-  triangle2: {
+	image: {
+		height: Layout.window.width * 0.9
+	},
+	triangle: {
+		position: 'absolute',
+		top: 0,
+		right: 0,
+		width: 0,
+		height: 0,
+		backgroundColor: 'transparent',
+		borderStyle: 'solid',
+		borderRightWidth: Layout.window.width * 0.7,
+		borderBottomWidth: Layout.window.width * 0.6,
+		borderLeftColor: 'transparent',
+		borderRightColor: 'transparent',
+		transform: [{ rotate: '180deg' }]
+	},
+	triangle2: {
+		position: 'absolute',
+		top: Layout.window.width * 0.5,
+		width: 0,
+		height: 0,
+		backgroundColor: 'transparent',
+		borderStyle: 'solid',
+		borderRightWidth: Layout.window.width * 0.9,
+		borderTopWidth: Layout.window.width * 0.1,
+		borderRightColor: 'transparent',
+		alignSelf: 'flex-end',
+		transform: [{ rotate: '180deg' }]
+	},
+	textArea: {
+		position: 'absolute',
+		top: Layout.window.width * 0.6,
+		width: Layout.window.width * 0.9,
+		height: Layout.window.width * 0.85
+	},
+  artistName: {
     position: 'absolute',
-    top: Layout.window.width * 0.4,
-    width: 0,
-    height: 0,
-    backgroundColor: 'transparent',
-    borderStyle: 'solid',
-    borderRightWidth: Layout.window.width * 0.9 ,
-    borderTopWidth: Layout.window.width * 0.2,
-    borderRightColor: 'transparent',
-    alignSelf: 'flex-end',
-    transform: [{ rotate: '180deg' }]
+    right: 5,
+    top: Layout.window.width * 0.05,
+    fontSize: 25,
+    color: 'white',
+    fontWeight: 'bold'
   },
-  textArea: {
+  x: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 20
+  },
+  close: {
     position: 'absolute',
-    top: Layout.window.width * 0.6,
-    width: Layout.window.width * 0.9,
-    height: Layout.window.width * 0.85
+    top: -10,
+    right: -5,
+    height: 25,
+    width: 20,
+    justifyContent: 'center'
+  },
+  description: {
+    position: 'absolute',
+    right: 5,
+    top: Layout.window.width * 0.05,
+    fontSize: 14,
+    color: 'white',
+    fontWeight: '200'
   }
 });
