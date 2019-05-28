@@ -19,262 +19,264 @@ import * as assets from '../constants/Assets';
 import FQAs from '../screens/FQAs';
 import Partners from '../screens/Partners';
 
-export default createAppContainer(createStackNavigator({
-  Loading: {
-    screen: Loading,
-    params: {},
-    navigationOptions: ({navigation, screenProps}) => ({
-      header: null,
-    })
-  },
-  Home: {
-    screen: HomeScreen,
-    params: {
-      title: {
-        text: "The Home Screen",
-        fontColor: 'yellow',
-        bgColor: 'green'
+export default createAppContainer(
+  createStackNavigator(
+    {
+      Loading: {
+        screen: Loading,
+        params: {},
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
       },
-      mainHeader: {
-        bg: 'bg1',
+      Home: {
+        screen: HomeScreen,
+        params: {
+          title: {
+            text: 'The Home Screen',
+            fontColor: 'yellow',
+            bgColor: 'green'
+          },
+          mainHeader: {
+            bg: 'bg1'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      LineUp: {
+        screen: LineUp,
+        params: {
+          title: {
+            text: 'Line Up',
+            fontColor: '#7bc19e',
+            bgColor: '#ffe958',
+            bgBack: '#7bc19e',
+            colorBack: '#ffe958'
+          },
+          mainHeader: {
+            bg: 'bg4'
+          },
+          subHeader: {
+            bg: 'circ4'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      Schedule: {
+        screen: Schedule,
+        params: {
+          title: {
+            text: 'Schedule',
+            fontColor: 'yellow',
+            bgColor: 'blue'
+          },
+          mainHeader: {
+            bg: 'bg1'
+          },
+          subHeader: {
+            bg: 'circ2'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      Balance: {
+        screen: Balance,
+        params: {
+          title: {
+            text: 'Balance',
+            fontColor: 'yellow',
+            bgColor: 'blue'
+          },
+          mainHeader: {
+            bg: 'bg1'
+          },
+          subHeader: {
+            bg: 'circ2'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      Media: {
+        screen: Media,
+        params: {
+          title: {
+            text: 'Media',
+            fontColor: 'yellow',
+            bgColor: 'pink',
+            colorBack: 'white',
+            bgBack: 'green'
+          },
+          mainHeader: {
+            bg: 'bg2'
+          },
+          subHeader: {
+            bg: 'circ6'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      Discover: {
+        screen: Discover,
+        params: {
+          title: {
+            text: 'Discover',
+            fontColor: 'yellow',
+            bgColor: 'blue'
+          },
+          mainHeader: {
+            bg: 'bg1'
+          },
+          subHeader: {
+            bg: 'circ2'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      Info: {
+        screen: Info,
+        params: {
+          title: {
+            text: 'Info',
+            fontColor: '#ffec59',
+            bgColor: '#7bc19e',
+            bgBack: '#189aa9',
+            colorBack: '#ffec59'
+          },
+          mainHeader: {
+            bg: 'bg5'
+          },
+          subHeader: {
+            bg: 'circ3'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      safety: {
+        screen: Safety,
+        params: {
+          title: {
+            text: 'Info',
+            fontColor: '#ffec59',
+            bgColor: '#7bc19e',
+            bgBack: '#189aa9',
+            colorBack: '#ffec59'
+          },
+          mainHeader: {
+            bg: 'bg1'
+          },
+          subHeader: {
+            bg: 'info'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      rules: {
+        screen: Rules,
+        params: {
+          title: {
+            text: 'Info',
+            fontColor: '#ffec59',
+            bgColor: '#7bc19e',
+            bgBack: '#189aa9',
+            colorBack: '#ffec59'
+          },
+          mainHeader: {
+            bg: 'bg1'
+          },
+          subHeader: {
+            bg: 'info'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      policies: {
+        screen: Policies,
+        params: {
+          title: {
+            text: 'Info',
+            fontColor: '#ffec59',
+            bgColor: '#7bc19e',
+            bgBack: '#189aa9',
+            colorBack: '#ffec59'
+          },
+          mainHeader: {
+            bg: 'bg1'
+          },
+          subHeader: {
+            bg: 'info'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      faqs: {
+        screen: FQAs,
+        params: {
+          title: {
+            text: 'Info',
+            fontColor: '#ffec59',
+            bgColor: '#7bc19e',
+            bgBack: '#189aa9',
+            colorBack: '#ffec59'
+          },
+          mainHeader: {
+            bg: 'bg1'
+          },
+          subHeader: {
+            bg: 'info'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      partners: {
+        screen: Partners,
+        params: {
+          title: {
+            text: 'Info',
+            fontColor: '#ffec59',
+            bgColor: '#7bc19e',
+            bgBack: '#189aa9',
+            colorBack: '#ffec59'
+          },
+          mainHeader: {
+            bg: 'bg1'
+          },
+          subHeader: {
+            bg: 'info'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
       }
     },
-    navigationOptions: ({navigation, screenProps}) => ({
-      header: null,
-    })
-  },
-  LineUp: {
-    screen: LineUp,
-    params: {
-      title: {
-        text: "Line Up",
-        fontColor: '#7bc19e',
-        bgColor: '#ffe958'
-      },
-      mainHeader: {
-        bg: 'bg4',
-      },
-      subHeader: {
-        bg: 'circ4'
+    {
+      initialRouteName: 'Home',
+      mode: 'card',
+      navigationOptions: {
+        animationEnabled: true
       }
-    },
-    navigationOptions: ({navigation, screenProps}) => ({
-      header: null,
-    })
-  },
-  Schedule: {
-    screen: Schedule,
-    params: {
-      title: {
-        text: "Schedule",
-        fontColor: 'yellow',
-        bgColor: 'blue'
-      },
-      mainHeader: {
-        bg: 'bg1',
-      },
-      subHeader: {
-        bg: 'circ2'
-      }
-    },
-    navigationOptions: ({navigation, screenProps}) => ({
-      header: null,
-    })
-  },
-  Balance: {
-    screen: Balance,
-    params: {
-      title: {
-        text: "Balance",
-        fontColor: 'yellow',
-        bgColor: 'blue'
-      },
-      mainHeader: {
-        bg: 'bg1',
-      },
-      subHeader: {
-        bg: 'circ2'
-      }
-    },
-    navigationOptions: ({navigation, screenProps}) => ({
-      header: null,
-    })
-  },
-  Media: {
-    screen: Media,
-    params: {
-      title: {
-        text: "Media",
-        fontColor: 'yellow',
-        bgColor: 'pink'
-      },
-      // FIXME:
-      backBtn: {
-        fontcolor: 'white',
-        bgColor: 'green'
-      },
-      mainHeader: {
-        bg: 'bg2',
-      },
-      subHeader: {
-        bg: 'circ6'
-      }
-    },
-    navigationOptions: ({navigation, screenProps}) => ({
-      header: null,
-    })
-  },
-  Discover: {
-    screen: Discover,
-    params: {
-      title: {
-        text: "Discover",
-        fontColor: 'yellow',
-        bgColor: 'blue'
-      },
-      mainHeader: {
-        bg: 'bg1',
-      },
-      subHeader: {
-        bg: 'circ2'
-      }
-    },
-    navigationOptions: ({navigation, screenProps}) => ({
-      header: null,
-    })
-  },
-  Info: {
-    screen: Info,
-    params: {
-      title: {
-        text: "Info",
-        fontColor: '#ffec59',
-        bgColor: '#7bc19e',
-        bgBack: "#189aa9",
-        colorBack: '#ffec59'
-      },
-      mainHeader: {
-        bg: 'bg5',
-      },
-      subHeader: {
-        bg: 'circ3'
-      }
-    },
-    navigationOptions: ({navigation, screenProps}) => ({
-      header: null,
-    })
-  },
-  safety: {
-    screen: Safety,
-    params: {
-      title: {
-        text: "Info",
-        fontColor: '#ffec59',
-        bgColor: '#7bc19e',
-        bgBack: "#189aa9",
-        colorBack: '#ffec59'
-      },
-      mainHeader: {
-        bg: 'bg1',
-      },
-      subHeader: {
-        bg: 'info'
-      }
-    },
-    navigationOptions: ({navigation, screenProps}) => ({
-      header: null,
-    })
-  },
-  rules: {
-    screen: Rules,
-    params: {
-      title: {
-        text: "Info",
-        fontColor: '#ffec59',
-        bgColor: '#7bc19e',
-        bgBack: "#189aa9",
-        colorBack: '#ffec59'
-      },
-      mainHeader: {
-        bg: 'bg1',
-      },
-      subHeader: {
-        bg: 'info'
-      }
-    },
-    navigationOptions: ({navigation, screenProps}) => ({
-      header: null,
-    })
-  },
-  policies: {
-    screen: Policies,
-    params: {
-      title: {
-        text: "Info",
-        fontColor: '#ffec59',
-        bgColor: '#7bc19e',
-        bgBack: "#189aa9",
-        colorBack: '#ffec59'
-      },
-      mainHeader: {
-        bg: 'bg1',
-      },
-      subHeader: {
-        bg: 'info'
-      }
-    },
-    navigationOptions: ({navigation, screenProps}) => ({
-      header: null,
-    })
-  },
-  faqs: {
-    screen: FQAs,
-    params: {
-      title: {
-        text: "Info",
-        fontColor: '#ffec59',
-        bgColor: '#7bc19e',
-        bgBack: "#189aa9",
-        colorBack: '#ffec59'
-      },
-      mainHeader: {
-        bg: 'bg1',
-      },
-      subHeader: {
-        bg: 'info'
-      }
-    },
-    navigationOptions: ({navigation, screenProps}) => ({
-      header: null,
-    })
-  },
-  partners: {
-    screen: Partners,
-    params: {
-      title: {
-        text: "Info",
-        fontColor: '#ffec59',
-        bgColor: '#7bc19e',
-        bgBack: "#189aa9",
-        colorBack: '#ffec59'
-      },
-      mainHeader: {
-        bg: 'bg1',
-      },
-      subHeader: {
-        bg: 'info'
-      }
-    },
-    navigationOptions: ({navigation, screenProps}) => ({
-      header: null,
-    })
-  },
-
-},
-{
-  initialRouteName: "Home",
-  mode: 'card',
-  navigationOptions: {
-    animationEnabled: true
-  }
-}));
+    }
+  )
+);
