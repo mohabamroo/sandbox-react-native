@@ -27,47 +27,56 @@ export default class ArtistPopup extends React.Component {
 	}
 
 	render() {
-		const { photos, isVisible } = this.props;
+		let { selectedImages, isVisible, index } = this.props;
 		return (
-			<Modal isVisible={isVisible} style={{margin: 0}}>
-			<View style={styles.container}>
-				<ImageBackground
-				style={[styles.container, {position: 'absolute', opacity: 0.2}]}
-				source={Assets.bg1}
-				resizeMode="repeat"
-				/>
+			<Modal
+				isVisible={isVisible}
+				style={{ margin: 1 }}
+				onModalShow={() => this._carousel.snapToItem(index)}
+			>
+				<View style={styles.container}>
+					<ImageBackground
+						style={[styles.container, { position: 'absolute', opacity: 0.3 }]}
+						source={Assets.bg1}
+						resizeMode="repeat"
+					/>
+
 					<View
 						style={{
-							height: '100%',
+							height: '85%',
 							width: '100%',
 							backgroundColor: 'transparent',
 							alignItems: 'center',
-              justifyContent: 'center'
+							justifyContent: 'center'
 						}}
 					>
 						<Carousel
 							ref={c => {
 								this._carousel = c;
 							}}
-							data={[1, 2, 3]}
-							renderItem={item => (
-								<Image
-									source={Assets.robotdev}
-									resizeMode="contain"
-									style={{ width: '100%'}}
-								/>
-							)}
+							data={selectedImages}
+							renderItem={item => {
+								return (
+									<Image
+										source={{ uri: item.item.image }}
+										resizeMode="contain"
+										style={{
+											alignSelf: 'center',
+											width: width * 0.95,
+											height: height * 0.7,
+											marginTop: 50
+										}}
+									/>
+								);
+							}}
 							sliderWidth={width}
 							itemWidth={width}
 							slidewidth={width}
-							sliderHeight={height}
-							itemHeight={height}
-							slideheight={height}
 							horizontal
-							layout={'default'}
+							layout={'stack'}
 							onSnapToItem={index => this.setState({ index })}
 							slideStyle={{
-								alignSelf: 'center'
+								alignSelf: 'center',
 							}}
 							containerCustomStyle={{
 								backgroundColor: 'transparent'
@@ -78,6 +87,12 @@ export default class ArtistPopup extends React.Component {
 				<View style={{ position: 'absolute', bottom: 0, left: 0, flex: 1 }}>
 					<Footer />
 				</View>
+				<TouchableOpacity
+					style={styles.close}
+					onPress={() => this.props.onClose()}
+				>
+					<Image source={Assets.close} resizeMode={'contain'} style={{width: 35}}/>
+				</TouchableOpacity>
 			</Modal>
 		);
 	}
@@ -87,5 +102,13 @@ const styles = StyleSheet.create({
 	container: {
 		height: '100%',
 		width: '100%'
+	},
+	close: {
+		position: 'absolute',
+		top: 30,
+		right: 30,
+		height: 40,
+		width: 35,
+		justifyContent: 'center'
 	}
 });
