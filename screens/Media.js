@@ -12,6 +12,7 @@ import {
   FlatList
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
+import MediaPopup from './MediaPopup';
 import Layout, * as layout from '../constants/Layout';
 
 import * as __GStyles from '../styles';
@@ -24,14 +25,19 @@ export default class Media extends React.Component {
 
     this.state = {
       active: 'pics',
+      showSlider: false,
+      index: 0,
       yearsExpanded: false,
       imagesYears: [],
       selectedImages: [],
       yearsColors: [Colors.pinkish, Colors.greenish, Colors.redish, Colors.rose]
+
     };
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
+
+    this.openSwiper = this.openSwiper.bind(this)
   }
 
   changeLayout = () => {
@@ -85,6 +91,13 @@ export default class Media extends React.Component {
 
   _keyExtractor(item, idx) {
     return idx + '';
+  }
+
+  openSwiper(index){
+    this.setState({
+      showSlider: true,
+      index
+    })
   }
 
   render() {
@@ -222,15 +235,17 @@ export default class Media extends React.Component {
                 numColumns={2}
                 columnWrapperStyle={{ margin: 2 }}
                 renderItem={({ item, index }) => (
-                  <Image
-                    key={index}
-                    source={{
-                      uri: item.image,
-                      width: 200,
-                      height: 200
-                    }}
-                    style={styles.cardImg}
-                  />
+                  <TouchableOpacity onPress={() => this.openSwiper(index)}>
+                    <Image
+                      key={index}
+                      source={{
+                        uri: item.image,
+                        width: 200,
+                        height: 200
+                      }}
+                      style={styles.cardImg}
+                    />
+                  </TouchableOpacity>
                 )}
               />
             </View>
@@ -250,6 +265,12 @@ export default class Media extends React.Component {
             </View>
           ) : null}
         </View>
+        <MediaPopup
+          isVisible={this.state.showSlider}
+          index={this.state.index}
+          selectedImages={this.state.selectedImages}
+          onClose={() => this.setState({ showSlider: false})}
+        />
       </View>
     );
   }

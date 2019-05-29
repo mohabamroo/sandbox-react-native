@@ -6,6 +6,7 @@ const __pattern = __path + '/patterns';
 const __Artists = __path + '/artists';
 const __icons = __path + '/icons';
 export default {
+
   logo: require(`${__path}/logo.png`),
   tmpIcon: require(`${__path}/tmpIcon.png`),
   bg1: require(`${__pattern}/bg1.png`),
@@ -28,5 +29,7 @@ export default {
   lineupIco: require(`${__icons}/MENU-lineup.png`),
   mediaIco: require(`${__icons}/MENU-media.png`),
   scheduleIco: require(`${__icons}/MENU-schedule.png`),
-  playIco: require(`${__icons}/play-btn.png`)
+  playIco: require(`${__icons}/play-btn.png`),
+  robotdev: require(`${__path}/robot-dev.png`),
+  close: require(`${__path}/close.png`)
 };

@@ -13,6 +13,7 @@ import { Zocial, EvilIcons } from '@expo/vector-icons';
 import Layout from '../constants/Layout';
 import Footer from '../components/Footer';
 import { likeArtist } from '../Config/ExternalURL';
+import Assets from '../constants/Assets';
 
 export default class ArtistPopup extends React.Component {
 	constructor() {
@@ -57,9 +58,9 @@ export default class ArtistPopup extends React.Component {
 					<Text style={styles.artistName}>{artist.artist_name}</Text>
 					<TouchableOpacity
 						onPress={() => this.props.onClose()}
-						style={[styles.close, { backgroundColor: color1 }]}
+						style={styles.close}
 					>
-						<Text style={styles.x}>X</Text>
+						<Image source={Assets.close} resizeMode={'contain'} style={{width: 30}}/>
 					</TouchableOpacity>
 					<View style={[styles.triangle2, { borderTopColor: color1 }]} />
           <TouchableOpacity style={styles.icon} onPress={() =>  Linking.openURL(artist.artist_soundcloud)}>
@@ -148,15 +149,10 @@ const styles = StyleSheet.create({
 		color: 'white',
 		fontWeight: 'bold'
 	},
-	x: {
-		color: 'white',
-		textAlign: 'center',
-		fontSize: 20
-	},
 	close: {
 		position: 'absolute',
 		top: -10,
-		right: -5,
+		right: -2,
 		height: 25,
 		width: 20,
 		justifyContent: 'center'
