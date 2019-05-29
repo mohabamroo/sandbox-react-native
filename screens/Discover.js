@@ -6,14 +6,17 @@ import {
 	Text,
 	Dimensions,
 	ImageBackground,
+	TouchableOpacity,
 	Image
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
+import { Entypo } from '@expo/vector-icons';
 import HeaderComponent from '../components/HeaderComponent';
 import VisibilityView from '../components/VisibilityView';
 import { DiscoverDB } from '../Config/DB';
 import * as __GStyles from '../styles';
 import Assets from '../constants/Assets';
+import Footer from '../components/Footer';
 
 const { height, width } = Dimensions.get('window');
 
@@ -25,7 +28,6 @@ export default class Discover extends React.Component {
 			places: false,
 			colors: [
 				'#7bc19e',
-				'#e9655d',
 				'#ffeb59',
 				'#60a383',
 				'#837563',
@@ -33,7 +35,8 @@ export default class Discover extends React.Component {
 				'#f8b7bb',
 				'#f069a7',
 				'#fde9d6'
-			]
+			],
+			showAll: false
 		};
 	}
 
@@ -57,7 +60,7 @@ export default class Discover extends React.Component {
 	render() {
 		return (
 			<View style={__GStyles.default.container}>
-				<HeaderComponent navigation={this.props.navigation} />
+				<HeaderComponent navigation={this.props.navigation} customMainStyle={{height: 40}} backButtonStyle={{top: 40}} customSubStyle={{height: 45}}/>
 				<ImageBackground
 					source={Assets.bg1}
 					style={{ width: width, height: 400 }}
@@ -74,11 +77,48 @@ export default class Discover extends React.Component {
 									key={item.location_type}
 									width={width}
 									item={item}
-									show={this.state.show[item.location_type]}
+									show={this.state.show[item.location_type] || this.state.showAll}
 								/>
 							))}
+						<View style={{ position: 'absolute', bottom: 0, flexDirection: 'row', alignItems: 'center' }}>
+							<Entypo name="location-pin" size={40} color='white'/>
+							<Text
+								style={{
+									fontSize: 18,
+									color: '#ffffff',
+									fontWeight: 'bold'
+								}}
+							>
+								Discover the Amenities
+							</Text>
+						</View>
 					</ImageBackground>
 				</ImageBackground>
+				<View
+					style={{
+						backgroundColor:'#e9655d',
+						height: 50
+					}}
+				>
+					<CheckBox
+						style={{ flex: 1, padding: 10 , height: 50}}
+						checkBoxColor={'white'}
+						checkedCheckBoxColor={'black'}
+						onClick={() => {
+							this.setState({
+								showAll: !this.state.showAll
+							});
+						}}
+						isChecked={this.state.showAll}
+						leftText={'Show All'}
+						leftTextStyle={{
+							fontSize: 16,
+							color: '#ffffff',
+							fontWeight: 'bold',
+							textAlign: 'right'
+						}}
+					/>
+				</View>
 				{this.state.places && (
 					<FlatList
 						keyExtractor={(item, index) => `${index}`}
@@ -94,29 +134,33 @@ export default class Discover extends React.Component {
 									}}
 								>
 									<CheckBox
-										style={{ flex: 1, padding: 10 }}
-                    checkBoxColor={'white'}
-                    checkedCheckBoxColor={'black'}
+										style={{ flex: 1, padding: 10, height: 50 }}
+										checkBoxColor={'white'}
+										checkedCheckBoxColor={'black'}
 										onClick={() => {
-                      show = this.state.show
-                      show[item.item.location_type] = !show[item.item.location_type]
+											show = this.state.show;
+											show[item.item.location_type] = !show[
+												item.item.location_type
+											];
 											this.setState({
 												show
 											});
 										}}
-										isChecked={this.state.show[item.item.location_type]}
-										rightText={item.item.location_type}
-                    rightTextStyle={{
-                      fontSize: 16,
-                      color: '#ffffff',
-                      fontWeight: 'bold'
-                    }}
+										isChecked={this.state.show[item.item.location_type] || this.state.showAll}
+										leftText={item.item.location_type}
+										leftTextStyle={{
+											fontSize: 16,
+											color: '#ffffff',
+											fontWeight: 'bold',
+											textAlign: 'right'
+										}}
 									/>
 								</View>
 							);
 						}}
 					/>
 				)}
+				<Footer />
 			</View>
 		);
 	}

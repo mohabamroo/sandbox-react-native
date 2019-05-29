@@ -50,7 +50,7 @@ export default class HeaderComponent extends Header {
       <View style={{ alignItems: 'center', backgroundColor: 'white' }}>
         {/** The Main bar View. */}
         {typeof mainHeader == 'object' && (
-          <View style={GStyles.default.headerAContainer}>
+          <View style={[GStyles.default.headerAContainer , this.props.customMainStyle]}>
             <ImageBackground
               source={BG}
               resizeMode="repeat"
@@ -63,7 +63,7 @@ export default class HeaderComponent extends Header {
         {typeof subHeader == 'object' && (
           <ImageBackground
             source={sBG}
-            style={GStyles.default.subHeaderContainer}
+            style={[GStyles.default.subHeaderContainer, this.props.customSubStyle]}
             resizeMode="repeat"
           >
             <View style={GStyles.default.subHeaderContent}>
@@ -76,7 +76,7 @@ export default class HeaderComponent extends Header {
         {hasBackButton && (
           <View
             onLayout={this.__onLayout.bind(this)}
-            style={[GStyles.default.backButton]}
+            style={[GStyles.default.backButton, this.props.backButtonStyle]}
           >
             <View
               style={[
