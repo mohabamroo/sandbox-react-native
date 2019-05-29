@@ -9,7 +9,7 @@ const URLs = require('../Config/ExternalURL');
 import {NavigationController} from '../navigation/index';
 
 // Import the DBs 
-import { InfoDB, SchedualDB, ArtistsDB, DiscoverDB, NewsDB, EventInfoDB } from '../Config/DB/index';
+import { InfoDB, SchedualDB, ArtistsDB, DiscoverDB, NewsDB, EventInfoDB, MediaDB } from '../Config/DB/index';
 
 export default class Loading extends Component {
 	constructor(props) {
@@ -115,7 +115,9 @@ export default class Loading extends Component {
             Schedual = await fetch((object && object.schedualLastUpdate) ? URLs.getSchedual(object.schedualLastUpdate) : URLs.getSchedual(undefined)).then((response) => response.json());
             Artists = await fetch((object && object.artistsLastUpdate) ? URLs.getArtists(object.artistsLastUpdate) : URLs.getArtists(undefined)).then((response) => response.json());
             Discover = await fetch(URLs.Discover).then((response) => response.json());
-            General = await fetch(URLs.General).then((response) => response.json());
+			General = await fetch(URLs.General).then((response) => response.json());
+			Media = await fetch(URLs.Media).then((response) => response.json());
+
             // News = await fetch((object && object.newsLastUpdate) ? URLs.getNews(object.newsLastUpdate) : URLs.getNews(undefined));
             // console.log("The news:", News);
         }catch(err){
@@ -133,7 +135,8 @@ export default class Loading extends Component {
 			InfoData: Info.data,
 			SchedualData: Schedual.data,
             ArtistsData: Artists.data,
-            General: General.data,
+			General: General.data,
+			Media: Media.data,
 			SchedualLastUpdate: Schedual.last_update,
 			ArtistsLastUpdate: Artists.last_update,
 			Discover: Discover.data
@@ -162,6 +165,8 @@ export default class Loading extends Component {
         
         const SavingGeneral = (this.state.General) ? await EventInfoDB.Set(this.state.General) : {success: true};
 
+		const SavingMedia = (this.state.Media) ? await MediaDB.Set(this.state.Media) : {success: true};
+
 		if (
 				!SavingInfo.success
 			|| !SavingSchedual.success
@@ -169,7 +174,8 @@ export default class Loading extends Component {
 			|| !SavingArtists.success
 			|| !SavingArtistslastUpdate.success
             || !SavingDiscover.success
-            || !SavingGeneral.success
+			|| !SavingGeneral.success
+			|| !SavingMedia.success
 		) { 
 			this.SavingCorruption('Info');
         }
