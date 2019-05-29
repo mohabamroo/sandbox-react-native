@@ -27,11 +27,11 @@ export default class Discover extends React.Component {
 			map: false,
 			places: false,
 			colors: [
-				'#7bc19e',
 				'#ffeb59',
 				'#60a383',
 				'#837563',
 				'#f9bb79',
+				'#e9655d',
 				'#f8b7bb',
 				'#f069a7',
 				'#fde9d6'
@@ -96,14 +96,14 @@ export default class Discover extends React.Component {
 				</ImageBackground>
 				<View
 					style={{
-						backgroundColor:'#e9655d',
+						backgroundColor: '#7bc19e',
 						height: 50
 					}}
 				>
 					<CheckBox
 						style={{ flex: 1, padding: 10 , height: 50}}
 						checkBoxColor={'white'}
-						checkedCheckBoxColor={'black'}
+						checkedCheckBoxColor={'white'}
 						onClick={() => {
 							this.setState({
 								showAll: !this.state.showAll
@@ -115,7 +115,8 @@ export default class Discover extends React.Component {
 							fontSize: 16,
 							color: '#ffffff',
 							fontWeight: 'bold',
-							textAlign: 'right'
+							textAlign: 'right',
+							marginRight: 10
 						}}
 					/>
 				</View>
@@ -136,7 +137,7 @@ export default class Discover extends React.Component {
 									<CheckBox
 										style={{ flex: 1, padding: 10, height: 50 }}
 										checkBoxColor={'white'}
-										checkedCheckBoxColor={'black'}
+										checkedCheckBoxColor={'white'}
 										onClick={() => {
 											show = this.state.show;
 											show[item.item.location_type] = !show[
@@ -152,7 +153,8 @@ export default class Discover extends React.Component {
 											fontSize: 16,
 											color: '#ffffff',
 											fontWeight: 'bold',
-											textAlign: 'right'
+											textAlign: 'right',
+											marginRight: 10
 										}}
 									/>
 								</View>
