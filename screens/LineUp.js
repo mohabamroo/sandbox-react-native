@@ -118,7 +118,9 @@ export default class LinksScreen extends React.Component {
 		this.setState(newState);
 		let currentActive = newState.active;
 		let newArr = this.state.initialArtists.filter(row => {
-			let stage = row['artist_session']['session_stage'];
+			let stage = (row['artist_session'] && row['artist_session']['session_stage'])
+				? row['artist_session']['session_stage']
+				: 'Main Stage'
 			stage = stage ? stage.replace('stage', '').toLowerCase() : stage;
 			let visible =
 				currentActive == 'all' || (stage && stage.includes(currentActive));
