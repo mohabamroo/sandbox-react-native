@@ -127,7 +127,8 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 3,
-    width: Layout.window.width / 4,
+    margin: 'auto',
+    width: 100,
     justifyContent: 'center',
     marginBottom: 5
   },

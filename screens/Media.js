@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  ScrollView,
   StyleSheet,
   View,
   TouchableOpacity,
@@ -9,20 +8,33 @@ import {
   LayoutAnimation,
   Platform,
   Image,
-  FlatList
+  FlatList,
+  Linking,
+  ImageBackground
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import MediaPopup from './MediaPopup';
 import Layout, * as layout from '../constants/Layout';
-
+import Footer from '../components/Footer';
 import * as __GStyles from '../styles';
 import { MediaDB } from '../Config/DB';
 import Colors from '../constants/Colors';
+import Assets, * as assets from '../constants/Assets';
 
 export default class Media extends React.Component {
   constructor(props) {
     super(props);
-
+    let colors = [
+      '#7bc19e',
+      '#60a484',
+      '#189aa9',
+      '#ffec59',
+      '#fabb79',
+      '#e9665d',
+      '#f8b7bb',
+      '#f069a7',
+      '#fde9d6'
+    ];
     this.state = {
       active: 'pics',
       showSlider: false,
@@ -30,14 +42,28 @@ export default class Media extends React.Component {
       yearsExpanded: false,
       imagesYears: [],
       selectedImages: [],
-      yearsColors: [Colors.pinkish, Colors.greenish, Colors.redish, Colors.rose]
-
+      yearsColors: [
+        Colors.pinkish,
+        Colors.greenish,
+        Colors.redish,
+        Colors.rose
+      ],
+      videosColors: this.shuffle(colors),
+      musicsColors: this.shuffle(colors)
     };
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
-    this.openSwiper = this.openSwiper.bind(this)
+    this.openSwiper = this.openSwiper.bind(this);
+  }
+
+  shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
   }
 
   changeLayout = () => {
@@ -69,7 +95,7 @@ export default class Media extends React.Component {
         this.setState({
           images: imagesObj,
           videos: files.videos,
-          music: files.music,
+          musics: files.musics,
           imagesYears: yearsArr,
           activeYear,
           selectedImages: imagesObj[activeYear]
@@ -86,18 +112,51 @@ export default class Media extends React.Component {
       selectedImages: this.state.images[this.state.activeYear]
     });
     this.changeLayout();
-    console.log('After changing year, ', this.state.selectedImages);
   }
 
   _keyExtractor(item, idx) {
     return idx + '';
   }
 
-  openSwiper(index){
+  openSwiper(index) {
     this.setState({
       showSlider: true,
       index
-    })
+    });
+  }
+
+  renderVideoRow(item, index, type = 'video') {
+    let backgroundColor = this.state[type + 'sColors'][
+      index % Number(this.state[type + 'sColors'].length)
+    ];
+
+    return (
+      <TouchableOpacity
+        key={index}
+        style={[
+          styles.videoRow,
+          index == this.state[type + 's'].length - 1 ? styles.footerMargin : {}
+        ]}
+        onPress={() => Linking.openURL(item[type + '_url'])}
+      >
+        <View style={styles.previewPic}>
+          <Image
+            resizeMode="cover"
+            source={{
+              uri: item[type + '_image'],
+              width: 150,
+              height: 100
+            }}
+            style={styles.videoImg}
+          />
+          <Image source={assets.default['playIco']} style={styles.playIco} />
+        </View>
+        <Text style={styles.videoTitle}>{item[type + '_title']}</Text>
+        <View
+          style={[styles.videoInfo, { borderBottomColor: backgroundColor }]}
+        />
+      </TouchableOpacity>
+    );
   }
 
   render() {
@@ -110,14 +169,14 @@ export default class Media extends React.Component {
               onPress={() => {
                 this.setState({ active: 'pics' });
               }}
-              style={{ flex: 0.5 }}
+              style={{ flex: 1 }}
             >
               <View
                 style={[
                   styles.tab,
                   {
                     backgroundColor:
-                      this.state.active == 'pics' ? '#ffec59' : 'transparent'
+                      this.state.active == 'pics' ? '#e9665d' : 'transparent'
                   }
                 ]}
               >
@@ -126,11 +185,10 @@ export default class Media extends React.Component {
                     {
                       fontWeight: 'bold',
                       fontSize: 12,
-                      color: this.state.active == 'pics' ? '#f3996e' : '#eeb8bc'
+                      color: this.state.active == 'pics' ? '#ffec59' : '#eeb8bc'
                     }
                   ]}
                 >
-                  {' '}
                   {this.state.active == 'pics' ? '>' : ''} Pictures
                 </Text>
               </View>
@@ -146,7 +204,7 @@ export default class Media extends React.Component {
                   styles.tab,
                   {
                     backgroundColor:
-                      this.state.active == 'videos' ? '#ffec59' : 'transparent'
+                      this.state.active == 'videos' ? '#e9665d' : 'transparent'
                   }
                 ]}
               >
@@ -156,11 +214,10 @@ export default class Media extends React.Component {
                       fontWeight: 'bold',
                       fontSize: 12,
                       color:
-                        this.state.active == 'videos' ? '#f3996e' : '#eeb8bc'
+                        this.state.active == 'videos' ? '#ffec59' : '#eeb8bc'
                     }
                   ]}
                 >
-                  {' '}
                   {this.state.active == 'videos' ? '>' : ''} Videos
                 </Text>
               </View>
@@ -176,7 +233,7 @@ export default class Media extends React.Component {
                   styles.tab,
                   {
                     backgroundColor:
-                      this.state.active == 'music' ? '#ffec59' : 'transparent'
+                      this.state.active == 'music' ? '#e9665d' : 'transparent'
                   }
                 ]}
               >
@@ -186,11 +243,10 @@ export default class Media extends React.Component {
                       fontWeight: 'bold',
                       fontSize: 12,
                       color:
-                        this.state.active == 'music' ? '#f3996e' : '#eeb8bc'
+                        this.state.active == 'music' ? '#ffec59' : '#eeb8bc'
                     }
                   ]}
                 >
-                  {' '}
                   {this.state.active == 'music' ? '>' : ''} Music
                 </Text>
               </View>
@@ -233,9 +289,15 @@ export default class Media extends React.Component {
                 data={this.state.selectedImages}
                 keyExtractor={this._keyExtractor}
                 numColumns={2}
-                columnWrapperStyle={{ margin: 2 }}
                 renderItem={({ item, index }) => (
-                  <TouchableOpacity onPress={() => this.openSwiper(index)}>
+                  <TouchableOpacity
+                    style={[
+                      index == this.state.selectedImages.length - 1
+                        ? styles.footerMargin
+                        : {}
+                    ]}
+                    onPress={() => this.openSwiper(index)}
+                  >
                     <Image
                       key={index}
                       source={{
@@ -253,24 +315,49 @@ export default class Media extends React.Component {
 
           {/* Videos Tab */}
           {this.state.active == 'videos' ? (
-            <View>
-              <Text>Videos</Text>
-            </View>
+            <ImageBackground
+              resizeMode="repeat"
+              source={Assets.bg5}
+              style={{ width: '100%' }}
+            >
+              <FlatList
+                style={styles.videosContainer}
+                data={this.state.videos}
+                keyExtractor={this._keyExtractor}
+                renderItem={({ item, index }) =>
+                  this.renderVideoRow(item, index, 'video')
+                }
+              />
+            </ImageBackground>
           ) : null}
 
           {/* Music Tab */}
           {this.state.active == 'music' ? (
-            <View>
-              <Text>Music</Text>
-            </View>
+            <ImageBackground
+              resizeMode="repeat"
+              source={Assets.bg5}
+              style={{ width: '100%' }}
+            >
+              <FlatList
+                style={styles.videosContainer}
+                data={this.state.musics}
+                keyExtractor={this._keyExtractor}
+                renderItem={({ item, index }) =>
+                  this.renderVideoRow(item, index, 'music')
+                }
+              />
+            </ImageBackground>
           ) : null}
         </View>
+
         <MediaPopup
           isVisible={this.state.showSlider}
           index={this.state.index}
           selectedImages={this.state.selectedImages}
-          onClose={() => this.setState({ showSlider: false})}
+          onClose={() => this.setState({ showSlider: false })}
         />
+
+        <Footer />
       </View>
     );
   }
@@ -330,5 +417,65 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     fontWeight: 'bold',
     padding: 5
+  },
+  videoTitle: {
+    color: 'white',
+    fontWeight: 'bold',
+    position: 'absolute',
+    top: '35%',
+    marginLeft: Layout.window.width / 2.5,
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'column',
+    width: (Layout.window.width * 3) / 5,
+    zIndex: 10
+  },
+  videosContainer: { color: 'red' },
+  videoImg: {
+    height: '100%',
+    width: Layout.window.width / 2.5
+  },
+  paddingDiv: {
+    height: Layout.window.height / 4
+  },
+  footerMargin: {
+    marginBottom: Layout.window.height / 3
+  },
+  previewPic: {
+    position: 'relative',
+    flex: 1,
+    justifyContent: 'center'
+  },
+  playIco: {
+    position: 'absolute',
+    height: 30,
+    width: 30,
+    top: '35%',
+    flex: 1,
+    alignItems: 'center',
+    bottom: 0,
+    right: 0,
+    left: 40
+  },
+  videoRow: {
+    flex: 1,
+    flexDirection: 'row',
+    width: '100%',
+    height: Layout.window.width / 3,
+    overflow: 'hidden',
+    position: 'relative'
+  },
+  videoInfo: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    width: 0,
+    height: 0,
+    borderStyle: 'solid',
+    borderRightWidth: Layout.window.width * 0.75,
+    borderBottomWidth: Layout.window.width * 2.1,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    transform: [{ rotate: '180deg' }]
   }
 });
