@@ -31,16 +31,9 @@ export default class ArtistPopup extends React.Component {
 		return (
 			<Modal
 				isVisible={isVisible}
-				style={{ margin: 1 }}
 				onModalShow={() => this._carousel.snapToItem(index)}
 			>
 				<View style={styles.container}>
-					<ImageBackground
-						style={[styles.container, { position: 'absolute', opacity: 0.3 }]}
-						source={Assets.bg1}
-						resizeMode="repeat"
-					/>
-
 					<View
 						style={{
 							height: '85%',
@@ -84,14 +77,14 @@ export default class ArtistPopup extends React.Component {
 						/>
 					</View>
 				</View>
-				<View style={{ position: 'absolute', bottom: 0, left: 0, flex: 1 }}>
+				<View style={{ position: 'absolute', bottom: -20, left: -20, flex: 1 }}>
 					<Footer />
 				</View>
 				<TouchableOpacity
 					style={styles.close}
 					onPress={() => this.props.onClose()}
 				>
-					<Image source={Assets.close} resizeMode={'contain'} style={{width: 35}}/>
+					<Image source={Assets.close} resizeMode={'contain'} style={{width: 40}}/>
 				</TouchableOpacity>
 			</Modal>
 		);
@@ -107,8 +100,8 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		top: 30,
 		right: 30,
-		height: 40,
-		width: 35,
+		height: 50,
+		width: 40,
 		justifyContent: 'center'
 	}
 });
