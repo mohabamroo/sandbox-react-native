@@ -110,7 +110,7 @@ export default createAppContainer(
           title: {
             text: 'Media',
             fontColor: 'yellow',
-            bgColor: 'pink',
+            bgColor: '#f069a7',
             colorBack: 'white',
             bgBack: 'green'
           },
