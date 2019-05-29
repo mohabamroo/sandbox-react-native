@@ -130,8 +130,10 @@ export default createAppContainer(
         params: {
           title: {
             text: 'Discover',
-            fontColor: 'yellow',
-            bgColor: 'blue'
+            fontColor: '#ffec59',
+            bgColor: '#e9665d',
+            bgBack: '#189aa9',
+            colorBack: '#ffe958'
           },
           mainHeader: {
             bg: 'bg1'
