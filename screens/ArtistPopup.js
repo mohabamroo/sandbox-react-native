@@ -151,10 +151,10 @@ const styles = StyleSheet.create({
 	},
 	close: {
 		position: 'absolute',
-		top: -10,
-		right: -2,
-		height: 25,
-		width: 20,
+		top: -30,
+		right: -20,
+		height: 50,
+		width: 40,
 		justifyContent: 'center'
 	},
 	description: {

@@ -66,7 +66,7 @@ export default class ArtistPopup extends React.Component {
 							itemWidth={width}
 							slidewidth={width}
 							horizontal
-							layout={'stack'}
+							layout={'default'}
 							onSnapToItem={index => this.setState({ index })}
 							slideStyle={{
 								alignSelf: 'center',
@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
 	},
 	close: {
 		position: 'absolute',
-		top: 30,
-		right: 30,
+		top: 20,
+		right: 10,
 		height: 50,
 		width: 40,
 		justifyContent: 'center'
