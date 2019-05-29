@@ -37,7 +37,6 @@ export default class ArtistPopup extends React.Component {
 
 	render() {
 		let { artist, color1, color2 } = this.props;
-		console.log('ARTIST', artist);
 		return (
 			<Modal isVisible={this.props.isVisible}>
 				<View style={[styles.container, { backgroundColor: color1 }]}>
