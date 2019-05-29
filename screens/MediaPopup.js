@@ -7,7 +7,8 @@ import {
 	Text,
 	Image,
 	TouchableOpacity,
-	Dimensions
+	Dimensions,
+	ImageBackground
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Carousel from 'react-native-snap-carousel';
@@ -28,8 +29,13 @@ export default class ArtistPopup extends React.Component {
 	render() {
 		const { photos, isVisible } = this.props;
 		return (
-			<Modal isVisible={false}>
-				<View style={[styles.container]}>
+			<Modal isVisible={isVisible} style={{margin: 0}}>
+			<View style={styles.container}>
+				<ImageBackground
+				style={[styles.container, {position: 'absolute', opacity: 0.2}]}
+				source={Assets.bg1}
+				resizeMode="repeat"
+				/>
 					<View
 						style={{
 							height: '100%',
@@ -48,7 +54,7 @@ export default class ArtistPopup extends React.Component {
 								<Image
 									source={Assets.robotdev}
 									resizeMode="contain"
-									style={{ alignSelf: 'center', width: '100%'}}
+									style={{ width: '100%'}}
 								/>
 							)}
 							sliderWidth={width}
@@ -60,15 +66,16 @@ export default class ArtistPopup extends React.Component {
 							horizontal
 							layout={'default'}
 							onSnapToItem={index => this.setState({ index })}
+							slideStyle={{
+								alignSelf: 'center'
+							}}
 							containerCustomStyle={{
-								height: '100%',
-								width: '100%',
 								backgroundColor: 'transparent'
 							}}
 						/>
 					</View>
 				</View>
-				<View style={{ position: 'absolute', bottom: -20, left: -20, flex: 1 }}>
+				<View style={{ position: 'absolute', bottom: 0, left: 0, flex: 1 }}>
 					<Footer />
 				</View>
 			</Modal>
@@ -78,7 +85,7 @@ export default class ArtistPopup extends React.Component {
 
 const styles = StyleSheet.create({
 	container: {
-		height: '70%',
+		height: '100%',
 		width: '100%'
 	}
 });

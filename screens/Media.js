@@ -16,7 +16,8 @@ export default class Media extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: 'pics'
+      active: 'pics',
+      showSlider: true
     };
   }
   render() {
@@ -117,7 +118,7 @@ export default class Media extends React.Component {
           </View>
         </View>
         <ScrollView style={styles.container} />
-        <MediaPopup />
+        <MediaPopup isVisible={this.state.showSlider}/>
       </View>
     );
   }
