@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
     overflow:'hidden'
   },
   footerImage: {
-    width: 220
+    width: 200
   }
 });

@@ -69,7 +69,8 @@ export default class ArtistPopup extends React.Component {
 					<ScrollView
 						style={[styles.textArea, { backgroundColor: color1 }]}
 						contentContainerStyle={{
-							padding: 10
+							padding: 20,
+							paddingBottom: 200
 						}}
 					>
 						<Text style={styles.description}>{artist.artist_description}</Text>
@@ -158,9 +159,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center'
 	},
 	description: {
-		position: 'absolute',
-		right: 5,
-		top: Layout.window.width * 0.05,
 		fontSize: 14,
 		color: 'white',
 		fontWeight: '200'
