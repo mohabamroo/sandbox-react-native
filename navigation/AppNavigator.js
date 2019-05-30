@@ -1,8 +1,6 @@
 import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 
-import HeaderComponent from '../components/HeaderComponent';
-
 import Loading from '../screens/Loading';
 import HomeScreen from '../screens/HomeScreen';
 import LineUp from '../screens/LineUp';
@@ -15,7 +13,6 @@ import Safety from '../screens/Safety';
 import Rules from '../screens/Rules';
 import Policies from '../screens/Policies';
 
-import * as assets from '../constants/Assets';
 import FQAs from '../screens/FQAs';
 import Partners from '../screens/Partners';
 
@@ -90,14 +87,16 @@ export default createAppContainer(
         params: {
           title: {
             text: 'Balance',
-            fontColor: 'yellow',
-            bgColor: 'blue'
+            fontColor: '#FFEC59',
+            bgColor: '#FBBC78',
+            colorBack: '#FFEC59',
+            bgBack: '#189AA8'
           },
           mainHeader: {
             bg: 'bg1'
           },
           subHeader: {
-            bg: 'circ2'
+            bg: 'circ5'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
