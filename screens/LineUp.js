@@ -21,6 +21,7 @@ import Layout from '../constants/Layout';
 
 export default class LinksScreen extends React.Component {
   ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+
   constructor(props) {
     super(props);
     this.state = {
@@ -35,6 +36,7 @@ export default class LinksScreen extends React.Component {
       color2: '#fff'
     };
   }
+
   async componentDidMount() {
     let artists = await ArtistsDB.Get();
     artists = artists.map(x => {
@@ -83,8 +85,8 @@ export default class LinksScreen extends React.Component {
           <View style={styles.sessionInfo}>
             <Text style={styles.sessionDay}>
               {row['artist_session'] && row['artist_session']['session_stage']
-                ? row['artist_session']['session_stage']
-                : 'Main Stage'}
+                ? row['artist_session']['session_stage'].toUpperCase()
+                : 'MAIN STAGE'}
             </Text>
             <Text style={styles.sessionTime}>
               {row['artist_session'] && row['artist_session']['session_day']
@@ -117,6 +119,7 @@ export default class LinksScreen extends React.Component {
       </TouchableOpacity>
     );
   }
+
   section() {
     return;
   }
@@ -352,10 +355,12 @@ const styles = StyleSheet.create({
   sessionDay: {
     color: '#fff',
     fontWeight: 'bold',
-    textAlign: 'right'
+    textAlign: 'right',
+    fontSize: 14
   },
   sessionTime: {
-    color: '#fff'
+    color: '#fff',
+    fontSize: 10
   },
   footerMargin: {
     marginBottom: Layout.window.height / 3

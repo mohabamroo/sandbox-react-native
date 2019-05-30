@@ -12,14 +12,13 @@ export default {
   noticeBackground: tintColor,
   noticeText: '#fff',
   // The news Section ...
-  newsLabelBG: 'orange',
+  newsLabelBG: '#E9665C',
   newsLabelFontColor: '#fff',
-  newsFooterBG: 'blue',
+  newsFooterBG: '#008691',
   newsFooterText: '#fff',
   greenish: '#61A485',
   rose: '#F169A7',
   redish: '#E9665C',
   pinkish: '#F8B7BB',
   yellowish: '#FFE958'
-
 };

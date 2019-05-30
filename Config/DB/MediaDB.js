@@ -6,7 +6,7 @@ const naming = 'MediaFiles';
 
 class MediaFilesDB {
   Get() {
-    // this should return all the data in InfoDB.
+    // this should return all the data in MediaFilesDB.
     return new Promise((resolve, reject) => {
       AsyncStorage.getItem(naming).then(
         success => {
@@ -21,7 +21,6 @@ class MediaFilesDB {
     });
   }
   Set(InfoContent) {
-    // set / Replace the InfoContent.
     return new Promise((resolve, reject) => {
       AsyncStorage.setItem(naming, JSON.stringify(InfoContent)).then(
         success => {

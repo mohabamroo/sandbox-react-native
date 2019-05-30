@@ -21,7 +21,7 @@ export class Boxes extends React.Component {
             onPress={() => {
               this.props.NACController.direct('LineUp');
             }}
-            style={[styles.box, { backgroundColor: 'rgb(241, 225, 101)' }]}
+            style={[styles.box, { backgroundColor: '#f7e25b' }]}
           >
             <View style={styles.boxBtn}>
               <Image
@@ -36,7 +36,7 @@ export class Boxes extends React.Component {
             onPress={() => {
               this.props.NACController.direct('Schedule');
             }}
-            style={[styles.box, { backgroundColor: 'rgb(120, 163, 132)' }]}
+            style={[styles.box, { backgroundColor: '#61A485' }]}
           >
             <View style={styles.boxBtn}>
               <Image
@@ -51,7 +51,7 @@ export class Boxes extends React.Component {
             onPress={() => {
               this.props.NACController.direct('Balance');
             }}
-            style={[styles.box, { backgroundColor: 'rgb(234, 186, 124)' }]}
+            style={[styles.box, { backgroundColor: '#f9bb79' }]}
           >
             <View style={styles.boxBtn}>
               <Image
@@ -68,7 +68,7 @@ export class Boxes extends React.Component {
             onPress={() => {
               this.props.NACController.direct('Media');
             }}
-            style={[styles.box, { backgroundColor: 'rgb(212, 105, 163)' }]}
+            style={[styles.box, { backgroundColor: '#ef69a7' }]}
           >
             <View style={styles.boxBtn}>
               <Image
@@ -98,7 +98,7 @@ export class Boxes extends React.Component {
             onPress={() => {
               this.props.NACController.direct('Info');
             }}
-            style={[styles.box, { backgroundColor: 'rgb(146, 192, 157)' }]}
+            style={[styles.box, { backgroundColor: '#7ac19d' }]}
           >
             <View style={styles.boxBtn}>
               <Image
