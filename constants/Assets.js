@@ -32,9 +32,10 @@ export default {
   playIco: require(`${__icons}/play-btn.png`),
   robotdev: require(`${__path}/robot-dev.png`),
   close: require(`${__path}/close.png`),
-
   rules: require(`${__icons}/INFO-rules.png`),
   bus_routes: require(`${__icons}/INFO-shuttle.png`),
+  heart_on: require(`${__icons}/heart-on.png`),
+  heart_off: require(`${__icons}/heart-off.png`),
   faqs: require(`${__icons}/INFO-faq.png`),
   policies: require(`${__path}/tmpIcon.png`),
   safety: require(`${__icons}/INFO-safety.png`),
