@@ -17,6 +17,7 @@ import FQAs from '../screens/FQAs';
 import Partners from '../screens/Partners';
 import Profile from '../screens/Profile';
 import ProfileScreen from '../screens/Profile';
+import BusRoutes from '../screens/BusRoutes';
 
 export default createAppContainer(
   createStackNavigator(
@@ -257,6 +258,27 @@ export default createAppContainer(
         params: {
           title: {
             text: 'Info',
+            fontColor: '#ffec59',
+            bgColor: '#7bc19e',
+            bgBack: '#189aa9',
+            colorBack: '#ffec59'
+          },
+          mainHeader: {
+            bg: 'bg1'
+          },
+          subHeader: {
+            bg: 'info'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      bus_routes: {
+        screen: BusRoutes,
+        params: {
+          title: {
+            text: 'Bus Routes',
             fontColor: '#ffec59',
             bgColor: '#7bc19e',
             bgBack: '#189aa9',

@@ -42,7 +42,7 @@ export default class Rules extends React.Component {
   }
   _renderContent(content, index){
       return (
-        <View style={[styles.contentContainer, {backgroundColor: this.state.colors[index]}]}>
+        <View style={[styles.contentContainer, {backgroundColor: this.state.colors[index % this.state.colors.length]}]}>
             {this.returnRules(content.rules)}
           
         </View>

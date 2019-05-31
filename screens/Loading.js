@@ -110,7 +110,6 @@ export default class Loading extends Component {
       let schedualLastUpdate = await SchedualDB.GetLastUpdate();
       let ArtistsLastUpdate = await ArtistsDB.GetLastUpdate();
       let newsLastUpdate = await NewsDB.GetLastUpdate();
-      console.log('newsLastUpdate', newsLastUpdate);
       if (schedualLastUpdate && ArtistsLastUpdate) {
         // should return with an object.
         return resolve({
@@ -144,7 +143,6 @@ export default class Loading extends Component {
           ? URLs.getArtists(this.formateDate(new Date()))
           : URLs.getArtists(undefined)
       ).then(response => response.json());
-      console.log('TCL: Loading -> DownloadTheData -> Artists', Artists);
       Discover = await fetch(URLs.Discover).then(response => response.json());
       General = await fetch(URLs.General).then(response => response.json());
       Media = await fetch(URLs.Media).then(response => response.json());
@@ -154,7 +152,6 @@ export default class Loading extends Component {
           ? URLs.getNews(object.newsLastUpdate)
           : URLs.getNews(undefined)
       ).then(response => response.json());
-      console.log('News fetcheddd:', News);
     } catch (err) {
       console.log('Error while downloading', err);
       this.InternetCorruption();
@@ -237,10 +234,6 @@ export default class Loading extends Component {
       ? await NewsDB.Set(this.state.News)
       : { success: true };
     console.log('saved new data');
-    console.log(
-      'TCL: Loading -> proccess -> this.state.NewsLastUpdate',
-      this.state.NewsLastUpdate
-    );
     const SavingNewslastUpdate = await NewsDB.SetLastUpdate(
       this.state.NewsLastUpdate
     );
