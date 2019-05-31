@@ -116,6 +116,8 @@ export default class HomeScreen extends React.Component {
                 </TouchableOpacity>
               </View>
             </ImageBackground>
+          </View>
+          <ScrollView style={{marginTop: -10}}>
             <View style={styles.counter}>
               {this.state.timeState == 1 && (
                 <View style={styles.seeYouContainer}>
@@ -127,9 +129,7 @@ export default class HomeScreen extends React.Component {
                   <Text style={styles.dotsText}> ... </Text>
                 </View>
               )}
-            </View>
-          </View>
-          <ScrollView>
+              </View>
             <CurrentlyPlaying />
             <Boxes NACController={this.navigationController} />
             {/** The boxes area */}
@@ -139,8 +139,8 @@ export default class HomeScreen extends React.Component {
             <News />
             <View style={styles.paddingDiv} />
           </ScrollView>
-          <Footer />
         </View>
+        <Footer />
       </ImageBackground>
     );
   }

@@ -1,9 +1,9 @@
 {
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://27-u43.islam-elgohary.sandbox-react-native.exp.direct",
-  "packagerNgrokUrl": "https://packager.27-u43.islam-elgohary.sandbox-react-native.exp.direct",
-  "ngrokPid": 4827,
+  "expoServerNgrokUrl": "https://27-u43.mohabamroo.sandbox-react.exp.direct",
+  "packagerNgrokUrl": "https://packager.27-u43.mohabamroo.sandbox-react.exp.direct",
+  "ngrokPid": 1496,
   "devToolsPort": 19002,
-  "packagerPort": 19003,
-  "packagerPid": 4794
+  "packagerPort": 19001,
+  "packagerPid": 29552
 }
