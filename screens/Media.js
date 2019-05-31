@@ -20,6 +20,7 @@ import * as __GStyles from '../styles';
 import { MediaDB } from '../Config/DB';
 import Colors from '../constants/Colors';
 import Assets, * as assets from '../constants/Assets';
+import Accordion from 'react-native-collapsible/Accordion';
 
 export default class Media extends React.Component {
   constructor(props) {
@@ -37,6 +38,10 @@ export default class Media extends React.Component {
     ];
     this.state = {
       active: 'pics',
+      images: {},
+      videos: [],
+      musics: [],
+      imagesArr: [],
       showSlider: false,
       index: 0,
       yearsExpanded: false,
@@ -49,7 +54,8 @@ export default class Media extends React.Component {
         Colors.rose
       ],
       videosColors: this.shuffle(colors),
-      musicsColors: this.shuffle(colors)
+      musicsColors: this.shuffle(colors),
+      activeSection: []
     };
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -82,6 +88,14 @@ export default class Media extends React.Component {
     MediaDB.Get()
       .then(files => {
         files = files || {};
+        files.images = files.images.map((x, idx) => {
+          return {
+            ...x,
+            backgroundColor: this.state.yearsColors[
+              idx % Number(this.state.yearsColors.length)
+            ]
+          };
+        });
         yearsArr = files.images.map((x, idx) => {
           return {
             label: x.year,
@@ -92,8 +106,13 @@ export default class Media extends React.Component {
         });
         let imagesObj = this.arrayToObject(files.images);
         let activeYear = yearsArr[0].label;
+        console.log(
+          'TCL: Media -> componentDidMount -> files.images',
+          files.images
+        );
         this.setState({
           images: imagesObj,
+          imagesArr: files.images,
           videos: files.videos,
           musics: files.musics,
           imagesYears: yearsArr,
@@ -123,6 +142,54 @@ export default class Media extends React.Component {
       showSlider: true,
       index
     });
+  }
+  _renderSectionTitle(content, index) {
+    return <View />;
+  }
+  _renderHeader(section, index) {
+    return (
+      <View
+        style={[
+          styles.accordionHeader,
+          { backgroundColor: section.backgroundColor }
+        ]}
+      >
+        <Text style={styles.yearItem}>{section.year}</Text>
+      </View>
+    );
+  }
+  _renderContent(section, index) {
+    return (
+      <FlatList
+        style={styles.imagesContainer}
+        data={section.images}
+        keyExtractor={this._keyExtractor}
+        numColumns={2}
+        renderItem={({ item, index }) => (
+          <TouchableOpacity
+            style={[
+              index == section.images.length - 1 ? styles.footerMargin : {}
+            ]}
+            onPress={() => this.openSwiper(index)}
+          >
+            <Image
+              key={index}
+              source={{
+                uri: item.image,
+                width: 200,
+                height: 200
+              }}
+              style={styles.cardImg}
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
+        )}
+      />
+    );
+  }
+  _onChange(activeSection) {
+    console.log('TCL: Media -> _onChange -> activeSection', activeSection);
+    this.setState({ activeSection });
   }
 
   renderVideoRow(item, index, type = 'video') {
@@ -259,8 +326,16 @@ export default class Media extends React.Component {
 
           {/* Images Tab */}
           {this.state.active == 'pics' ? (
-            <View >
-              <View style={styles.btnTextHolder}>
+            <View>
+              <Accordion
+                activeSections={this.state.activeSection}
+                sections={this.state.imagesArr}
+                renderSectionTitle={this._renderSectionTitle.bind(this)}
+                renderHeader={this._renderHeader.bind(this)}
+                renderContent={this._renderContent.bind(this)}
+                onChange={this._onChange.bind(this)}
+              />
+              {/* <View style={styles.btnTextHolder}>
                 <TouchableOpacity
                   activeOpacity={0.8}
                   onPress={this.changeLayout}
@@ -286,35 +361,7 @@ export default class Media extends React.Component {
                     </TouchableOpacity>
                   ))}
                 </View>
-              </View>
-              {/* Images List */}
-              <FlatList
-                style={styles.imagesContainer}
-                data={this.state.selectedImages}
-                keyExtractor={this._keyExtractor}
-                numColumns={2}
-                renderItem={({ item, index }) => (
-                  <TouchableOpacity
-                    style={[
-                      index == this.state.selectedImages.length - 1
-                        ? styles.footerMargin
-                        : {}
-                    ]}
-                    onPress={() => this.openSwiper(index)}
-                  >
-                    <Image
-                      key={index}
-                      source={{
-                        uri: item.image,
-                        width: 200,
-                        height: 200
-                      }}
-                      style={styles.cardImg}
-                      resizeMode='cover'
-                    />
-                  </TouchableOpacity>
-                )}
-              />
+              </View> */}
             </View>
           ) : null}
 
@@ -395,7 +442,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
+    fontSize: 15
   },
   text: {
     fontSize: 17,
@@ -424,6 +472,7 @@ const styles = StyleSheet.create({
     color: Colors.yellowish,
     paddingLeft: 15,
     fontWeight: 'bold',
+    fontSize: 15,
     padding: 5
   },
   videoTitle: {
@@ -485,5 +534,8 @@ const styles = StyleSheet.create({
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
     transform: [{ rotate: '180deg' }]
+  },
+  accordionHeader: {
+    padding: 7
   }
 });
