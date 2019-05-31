@@ -66,11 +66,11 @@ export default class Loading extends Component {
       console.log('The status: ', status);
       if (!status) {
         // should check the offline content.
-        let schedual = await SchedualDB.Get();
+        let schedule = await SchedualDB.Get();
         let artist = await ArtistsDB.Get();
         let Info = await InfoDB.Get();
         let General = await EventInfoDB.Get();
-        if (!schedual || !artist || !Info || !General) {
+        if (!schedule || !artist || !Info || !General) {
           _this.setState({
             loadingName:
               'There seems to be an issue with your internet connection, please check and try again later.'
@@ -89,7 +89,7 @@ export default class Loading extends Component {
           if (
             success &&
             success.artistsLastUpdate &&
-            success.schedualLastUpdate
+            success.scheduleLastUpdate
           ) {
             console.log('from one');
             _this.DownloadTheData(success);
@@ -107,15 +107,14 @@ export default class Loading extends Component {
       /**
        * Should check for the lastUpdated content from the DBs.
        */
-      let schedualLastUpdate = await SchedualDB.GetLastUpdate();
+      let scheduleLastUpdate = await SchedualDB.GetLastUpdate();
       let ArtistsLastUpdate = await ArtistsDB.GetLastUpdate();
       let newsLastUpdate = await NewsDB.GetLastUpdate();
-      console.log('newsLastUpdate', newsLastUpdate);
-      if (schedualLastUpdate && ArtistsLastUpdate) {
+      if (scheduleLastUpdate && ArtistsLastUpdate) {
         // should return with an object.
         return resolve({
           artistsLastUpdate: ArtistsLastUpdate,
-          schedualLastUpdate: schedualLastUpdate,
+          scheduleLastUpdate: scheduleLastUpdate,
           newsLastUpdate
         });
       } else {
@@ -131,30 +130,46 @@ export default class Loading extends Component {
     // should start loading each element and proccess the element.
     // first : Load the Artists and save into the SQLlight.
     this.setState({ loading: true, internetErrror: false });
-    let Info, Schedual, Artists, Discover, News, General;
+    let Info, Schedule, Artists, Discover, News, General;
     try {
-      Info = await fetch(URLs.info).then(response => response.json());
-      Schedual = await fetch(
-        object && object.schedualLastUpdate
-          ? URLs.getSchedual(object.schedualLastUpdate)
+      Info = await fetch(URLs.info)
+        .then(response => response.text())
+        .then(dataStr => {
+          // FIXME: tags in backend response, should be removed
+          let jsonStart = dataStr.indexOf('{');
+          dataStr = dataStr.substring(jsonStart, dataStr.length);
+          let data = JSON.parse(dataStr);
+          return data;
+        });
+      Schedule = await fetch(
+        object && object.scheduleLastUpdate
+          ? URLs.getSchedual(object.scheduleLastUpdate)
           : URLs.getSchedual(undefined)
       ).then(response => response.json());
+      console.log('Parsed Schedule');
+
       Artists = await fetch(
         object && object.artistsLastUpdate
           ? URLs.getArtists(this.formateDate(new Date()))
           : URLs.getArtists(undefined)
       ).then(response => response.json());
-      console.log('TCL: Loading -> DownloadTheData -> Artists', Artists);
+      console.log('Parsed artists');
+
       Discover = await fetch(URLs.Discover).then(response => response.json());
+      console.log('Parsed discover');
+
       General = await fetch(URLs.General).then(response => response.json());
+      console.log('Parsed general');
+
       Media = await fetch(URLs.Media).then(response => response.json());
+      console.log('Parsed media');
 
       News = await fetch(
         object && object.newsLastUpdate
           ? URLs.getNews(object.newsLastUpdate)
           : URLs.getNews(undefined)
       ).then(response => response.json());
-      console.log('News fetcheddd:', News);
+      console.log('Parsed news');
     } catch (err) {
       console.log('Error while downloading', err);
       this.InternetCorruption();
@@ -163,7 +178,7 @@ export default class Loading extends Component {
     if (
       General.status !== 200 ||
       Info.status !== 200 ||
-      Schedual.status !== 200 ||
+      Schedule.status !== 200 ||
       Artists.status !== 200 ||
       Discover.status !== 200 ||
       News.status !== 200
@@ -176,11 +191,11 @@ export default class Loading extends Component {
     this.setState(
       {
         InfoData: Info.data,
-        SchedualData: Schedual.data,
+        SchedualData: Schedule.data,
         ArtistsData: Artists.data,
         General: General.data,
         Media: Media.data,
-        SchedualLastUpdate: Schedual.last_update,
+        scheduleLastUpdate: Schedule.last_update,
         ArtistsLastUpdate: Artists.last_update,
         Discover: Discover.data,
         News: News.data,
@@ -205,10 +220,10 @@ export default class Loading extends Component {
     const SavingSchedual = this.state.SchedualData
       ? await SchedualDB.Set(this.state.SchedualData)
       : { success: true };
-    const SavingScheduallastUpdate = await SchedualDB.SetLastUpdate(
-      this.state.SchedualLastUpdate
+    const SavingScheduleLastUpdate = await SchedualDB.SetLastUpdate(
+      this.state.scheduleLastUpdate
     );
-    console.log('Saved schedual');
+    console.log('Saved schedule');
 
     const SavingArtists = this.state.ArtistsData
       ? await ArtistsDB.Set(this.state.ArtistsData)
@@ -237,10 +252,6 @@ export default class Loading extends Component {
       ? await NewsDB.Set(this.state.News)
       : { success: true };
     console.log('saved new data');
-    console.log(
-      'TCL: Loading -> proccess -> this.state.NewsLastUpdate',
-      this.state.NewsLastUpdate
-    );
     const SavingNewslastUpdate = await NewsDB.SetLastUpdate(
       this.state.NewsLastUpdate
     );
@@ -249,7 +260,7 @@ export default class Loading extends Component {
     if (
       !SavingInfo.success ||
       !SavingSchedual.success ||
-      !SavingScheduallastUpdate.success ||
+      !SavingScheduleLastUpdate.success ||
       !SavingArtists.success ||
       !SavingArtistslastUpdate.success ||
       !SavingDiscover.success ||

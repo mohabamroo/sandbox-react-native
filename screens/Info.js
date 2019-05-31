@@ -30,24 +30,34 @@ export default class Info extends React.Component {
         '#f8b7bb',
         '#60a484',
         '#fabb79',
-        '#e9665d',
+        // '#e9665d',
         '#ffec59'
       ],
       mapNaming: {
-        rules: 'Festival rules',
-        bus_routes: 'SHUTTLE BUSES & ROUTES',
-        faqs: 'FAQs',
-        policies: 'policies',
-        safety: 'Safety & medical info',
-        partners: 'partners, Sponsors & credit'
+        rules: { label: 'Festival rules', order: 1 },
+        bus_routes: { label: 'SHUTTLE BUSES & ROUTES', order: 2 },
+        faqs: { label: 'FAQs', order: 3 },
+        policies: { label: 'policies', order: 4 },
+        safety: { label: 'Safety & medical info', order: 5 },
+        partners: { label: 'partners, Sponsors & credit', order: 6 }
       }
     };
   }
   async componentDidMount() {
     // loading the information page content
     let info = await InfoDB.Get();
+    delete info['policies'];
+    const ordered = {};
+    let self = this;
+    Object.keys(info)
+      .sort(function(x, y) {
+        return self.state.mapNaming[x].order - self.state.mapNaming[y].order;
+      })
+      .forEach(function(key) {
+        ordered[key] = info[key];
+      });
     let infoMainSections = new Array();
-    for (let i in info) {
+    for (let i in ordered) {
       infoMainSections.push(i);
     }
     this.setState({
@@ -79,7 +89,7 @@ export default class Info extends React.Component {
           />
           <Text style={styles.text}>
             {String(
-              this.state.mapNaming[row] ? this.state.mapNaming[row] : row
+              this.state.mapNaming[row] ? this.state.mapNaming[row].label : row
             ).toUpperCase()}
           </Text>
         </View>
@@ -89,9 +99,11 @@ export default class Info extends React.Component {
   checkInfoAndGo(row) {
     if (this.state.wholeInfo[row]) {
       this.navigationController.direct(row, {
-        header: this.state.mapNaming[row],
+        header: this.state.mapNaming[row].label,
         in: this.state.wholeInfo[row]
       });
+    } else {
+      console.log('Missing info section: Info -> checkInfoAndGo -> row', row);
     }
   }
   render() {
@@ -137,14 +149,15 @@ const styles = StyleSheet.create({
     paddingBottom: 20
   },
   icon: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     marginRight: '5%'
   },
   text: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 18
+    fontSize: 18,
+    maxWidth: 200
   },
   footerMargin: {
     marginBottom: Layout.window.height / 4.5
