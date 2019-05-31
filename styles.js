@@ -16,8 +16,8 @@ export default StyleSheet.create({
     },
     // The headerAContainer is for the main header which is the dots pattern.
     headerAContainer: {
-        width: '100%', 
-        height: layout.default.headerAHeight, 
+        width: '100%',
+        height: 40,
         backgroundColor: "white"
     },
     imageBGPatternCurved: {
@@ -26,8 +26,8 @@ export default StyleSheet.create({
     },
     subHeaderContainer: {
         width: '100%',
-        height: 60,
-        paddingTop: 10,
+        height: 55,
+        paddingTop: 12,
         backgroundColor: "transparent",
         // transform: [
         //     {rotate: layout.default.rotationHeader}
@@ -39,13 +39,14 @@ export default StyleSheet.create({
         marginTop: -5,
     },
     subHeaderContentView: {
-        flex: 1, 
-        width: '100%', 
+        flex: 1,
+        width: '100%',
         height: '100%',
         alignItems: 'flex-end',
         justifyContent: 'center',
         overflow: "hidden",
-        paddingRight: '5%'
+        paddingRight: '5%',
+        transform: [{ skewY: '-2deg' }]
     },
     pageTitleBox: {
         justifyContent: 'center',
@@ -64,10 +65,10 @@ export default StyleSheet.create({
     backButton: {
         flex: 1,
         position: 'absolute',
-        top: layout.default.headerAHeight,
+        top: 40,
         left: 10,
         justifyContent: 'center',
         alignItems: 'center'
-        
+
     }
 })

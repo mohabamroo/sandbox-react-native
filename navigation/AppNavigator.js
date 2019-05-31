@@ -110,11 +110,11 @@ export default createAppContainer(
             text: 'Media',
             fontColor: 'yellow',
             bgColor: '#f069a7',
-            colorBack: 'white',
-            bgBack: 'green'
+            colorBack: '#ffec59',
+            bgBack: '#189aa9'
           },
           mainHeader: {
-            bg: 'bg2'
+            bg: 'bg2b'
           },
           subHeader: {
             bg: 'circ6'

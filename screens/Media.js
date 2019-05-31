@@ -255,7 +255,7 @@ export default class Media extends React.Component {
 
           {/* Images Tab */}
           {this.state.active == 'pics' ? (
-            <View>
+            <View >
               <View style={styles.btnTextHolder}>
                 <TouchableOpacity
                   activeOpacity={0.8}
@@ -306,6 +306,7 @@ export default class Media extends React.Component {
                         height: 200
                       }}
                       style={styles.cardImg}
+                      resizeMode='cover'
                     />
                   </TouchableOpacity>
                 )}
@@ -366,15 +367,15 @@ export default class Media extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: Colors.greenish,
+    alignItems: 'center'
   },
   imagesContainer: {
-    backgroundColor: Colors.greenish
+    backgroundColor: 'transparent'
   },
   cardImg: {
     flex: 1,
-    width: 200,
-    height: 200
+    width: Layout.window.width / 2
   },
   backGround: {
     width: '100%',
@@ -401,12 +402,15 @@ const styles = StyleSheet.create({
   btnText: {
     textAlign: 'left',
     color: Colors.yellowish,
-    fontSize: 20
+    fontSize: 20,
+    fontWeight: 'bold'
   },
 
   btnTextHolder: {
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.5)'
+    borderWidth: 0,
+    borderColor: 'rgba(0,0,0,0.5)',
+    marginBottom: 5,
+    marginTop: 5
   },
   Btn: {
     padding: 10,

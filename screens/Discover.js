@@ -60,7 +60,7 @@ export default class Discover extends React.Component {
 	render() {
 		return (
 			<View style={__GStyles.default.container}>
-				<HeaderComponent navigation={this.props.navigation} customMainStyle={{height: 40}} backButtonStyle={{top: 40}} customSubStyle={{height: 45}}/>
+				<HeaderComponent navigation={this.props.navigation} />
 				<ImageBackground
 					source={Assets.bg1}
 					style={{ width: width, height: 400 }}

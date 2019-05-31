@@ -11,6 +11,7 @@ export default {
   bg1: require(`${__pattern}/bg1.png`),
   bg4: require(`${__pattern}/bg4_1.png`),
   bg2: require(`${__pattern}/bg2.png`),
+  bg2b: require(`${__pattern}/bg2b.png`),
   bg5: require(`${__pattern}/bg5.png`),
   circ1: require(`${__pattern}/circ1.png`),
   circ2: require(`${__pattern}/circ2.png`),
