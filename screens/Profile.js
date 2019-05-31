@@ -1,25 +1,22 @@
 import React from 'react';
 import {
   ScrollView,
-  Image,
   ListView,
   StyleSheet,
-  TouchableOpacity,
   View,
-  Text,
-  AppState,
   ImageBackground
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import ArtistPopup from './ArtistPopup';
 import Footer from '../components/Footer';
-import Assets, * as assets from '../constants/Assets';
+import Assets from '../constants/Assets';
 
 import * as __GStyles from '../styles';
-import { ArtistsDB } from '../Config/DB';
-import Layout from '../constants/Layout';
+import { FavoritesDB } from '../Config/DB';
 import ArtistRow from '../components/ArtistRow';
 import { Label } from '../components/Label';
+const URLs = require('../Config/ExternalURL');
+
 export default class ProfileScreen extends React.Component {
   ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
@@ -34,24 +31,45 @@ export default class ProfileScreen extends React.Component {
       current_artist: null,
       show_popup: false,
       color1: '#fff',
-      color2: '#fff'
+      color2: '#fff',
+      userID: 38
     };
   }
 
   async componentDidMount() {
-    let artists = await ArtistsDB.Get();
-    artists = artists.map(x => {
-      return { ...x, visible: true };
-    });
-    let dsData = this.ds.cloneWithRows(artists);
-    this.setState({
-      artists: dsData,
-      currentCount: dsData.getRowCount(),
-      initialArtists: artists,
-      appState: AppState.currentState
-    });
+    // fetch favorites
+    FavoritesDB.Get()
+      .then(artists => {
+        if (artists == null) {
+          throw new Error('Null cache');
+        } else {
+          this.setArtists(artists);
+        }
+      })
+      .catch(err => {
+        console.log('failed to fetch from cache', err);
+        fetch(URLs.getFavorites(this.state.userID))
+          .then(response => response.json())
+          .then(apiResponse => {
+            if (apiResponse.Status == 200) {
+              this.setArtists(apiResponse.data);
+              FavoritesDB.Set(apiResponse.data);
+            }
+          })
+          .catch(err => {
+            // FIXME: what to do on internet corruption
+            console.log('TCL: ProfileScreen -> componentDidMount -> err', err);
+          });
+      });
   }
 
+  setArtists(artists) {
+    artists = artists.filter(x => x.artist_session);
+    let dsData = this.ds.cloneWithRows(artists);
+    this.setState({
+      artists: dsData
+    });
+  }
   componentWillUnmount() {}
 
   renderArtist(row, L, index) {

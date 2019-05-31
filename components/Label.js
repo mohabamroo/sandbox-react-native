@@ -10,7 +10,6 @@ import * as layout from '../constants/Layout';
 export class Label extends React.Component{
     render(){
         const {title, text} = this.props;
-        console.log("TCL: Label -> render -> title", title)
         const fontSize = title.fontSize ? title.fontSize : layout.default.labelTextSize;
         return (
             <View style={[GStyles.default.pageTitleBox, GStyles.default.LabelsPaddings, {backgroundColor: title.bgColor}]}>
