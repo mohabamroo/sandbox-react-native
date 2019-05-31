@@ -51,7 +51,7 @@ export default class ArtistPopup extends React.Component {
 							this._likeArtist({ artist_id: artist.artist_id, user_id: 1 })
 						}
 					>
-						<EvilIcons name="heart" size={40} color="white" />
+						<Image source={Assets.heart_off} style={{ width: 25, height: 25 }} resizeMode={'contain'}/>
 					</TouchableOpacity>
 					<View style={[styles.triangle, { borderBottomColor: color2 }]} />
 					<Text style={styles.artistName}>{artist.artist_name}</Text>
@@ -105,8 +105,8 @@ const styles = StyleSheet.create({
 	},
 	like: {
 		position: 'absolute',
-		top: 10,
-		left: 10
+		top: 15,
+		left: 15
 	},
 	triangle: {
 		position: 'absolute',
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
 	},
 	artistName: {
 		position: 'absolute',
-		right: 5,
+		right: 17,
 		top: Layout.window.width * 0.05,
 		fontSize: 25,
 		color: 'white',
