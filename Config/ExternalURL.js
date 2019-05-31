@@ -31,9 +31,9 @@ module.exports = {
 	},
 	getArtists: (lastDate) => { 
 		if (lastDate) {
-			return `https://sandboxfestival.com/wp-json/sandbox/get/artists/${lastDate}`
+			return `https://sandboxfestival.com/wp-json/sandbox/get/v2/artists/${lastDate}`
 		} else { 
-			return "https://sandboxfestival.com/wp-json/sandbox/get/artists/null"
+			return "https://sandboxfestival.com/wp-json/sandbox/get/v2/artists/null"
 		}
 	},
 }

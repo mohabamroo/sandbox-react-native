@@ -10,7 +10,6 @@ import * as assets from '../constants/Assets';
 export class Boxes extends React.Component {
   constructor(props) {
     super(props);
-    console.log('assets: ', assets.default['circ2']);
   }
 
   render() {

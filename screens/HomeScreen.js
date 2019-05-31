@@ -97,13 +97,14 @@ export default class HomeScreen extends React.Component {
             >
               <View style={styles.textContainer}>
                 <Text style={styles.beforeActivationTextBG}>
-                  You did not activate you pass yet ?!
+                  You did not activate you pass yet?!
                 </Text>
                 <TouchableOpacity
                   activeOpacity={0.9}
                   style={styles.buttonActivate}
                   onPress={() => {
                     console.log('Press');
+                    this.navigationController.direct('Profile');
                   }}
                 >
                   <View>
@@ -146,8 +147,7 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   imageBG: {
     width: '100%',
-    height: '100%',
-    flex: 1
+    height: '110%'
   },
   profileBG: {
     width: '100%',

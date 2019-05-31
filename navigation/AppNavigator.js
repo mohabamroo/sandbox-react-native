@@ -15,6 +15,8 @@ import Policies from '../screens/Policies';
 
 import FQAs from '../screens/FQAs';
 import Partners from '../screens/Partners';
+import Profile from '../screens/Profile';
+import ProfileScreen from '../screens/Profile';
 
 export default createAppContainer(
   createStackNavigator(
@@ -110,8 +112,8 @@ export default createAppContainer(
             text: 'Media',
             fontColor: 'yellow',
             bgColor: '#f069a7',
-            colorBack: '#ffec59',
-            bgBack: '#189aa9'
+            colorBack: '#FFEC5A',
+            bgBack: '#189AA8'
           },
           mainHeader: {
             bg: 'bg2b'
@@ -265,6 +267,27 @@ export default createAppContainer(
           },
           subHeader: {
             bg: 'info'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      Profile: {
+        screen: ProfileScreen,
+        params: {
+          title: {
+            text: 'Your pass',
+            fontColor: '#7bc19e',
+            bgColor: '#ffe958',
+            bgBack: '#7bc19e',
+            colorBack: '#ffe958'
+          },
+          mainHeader: {
+            bg: 'bg4'
+          },
+          subHeader: {
+            bg: 'circ4'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
