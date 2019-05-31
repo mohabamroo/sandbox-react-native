@@ -13,6 +13,7 @@ import { NavigationController } from '../navigation/index';
 import HeaderComponent from '../components/HeaderComponent';
 import Footer from '../components/Footer';
 import Quadrilateral from '../components/Quadrilateral';
+import CurrentlyPlaying from '../components/CurrentlyPlaying';
 
 // import the page components
 import { Boxes } from '../components/Boxes';
@@ -129,6 +130,7 @@ export default class HomeScreen extends React.Component {
             </View>
           </View>
           <ScrollView>
+            <CurrentlyPlaying />
             <Boxes NACController={this.navigationController} />
             {/** The boxes area */}
 
