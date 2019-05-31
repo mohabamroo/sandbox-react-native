@@ -10,7 +10,8 @@ import {
   Image,
   FlatList,
   Linking,
-  ImageBackground
+  ImageBackground,
+  ScrollView
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import MediaPopup from './MediaPopup';
@@ -106,10 +107,7 @@ export default class Media extends React.Component {
         });
         let imagesObj = this.arrayToObject(files.images);
         let activeYear = yearsArr[0].label;
-        console.log(
-          'TCL: Media -> componentDidMount -> files.images',
-          files.images
-        );
+
         this.setState({
           images: imagesObj,
           imagesArr: files.images,
@@ -137,8 +135,9 @@ export default class Media extends React.Component {
     return idx + '';
   }
 
-  openSwiper(index) {
+  openSwiper(index, sectionIdx) {
     this.setState({
+      selectedImages: this.state.imagesArr[sectionIdx].images,
       showSlider: true,
       index
     });
@@ -158,19 +157,21 @@ export default class Media extends React.Component {
       </View>
     );
   }
-  _renderContent(section, index) {
+  _renderContent(section, sectionIndex) {
     return (
       <FlatList
-        style={styles.imagesContainer}
+        style={[
+          styles.imagesContainer,
+          sectionIndex == this.state.imagesArr.length - 1
+            ? styles.footerMargin
+            : {}
+        ]}
         data={section.images}
         keyExtractor={this._keyExtractor}
         numColumns={2}
         renderItem={({ item, index }) => (
           <TouchableOpacity
-            style={[
-              index == section.images.length - 1 ? styles.footerMargin : {}
-            ]}
-            onPress={() => this.openSwiper(index)}
+            onPress={() => this.openSwiper(index, sectionIndex)}
           >
             <Image
               key={index}
@@ -188,7 +189,6 @@ export default class Media extends React.Component {
     );
   }
   _onChange(activeSection) {
-    console.log('TCL: Media -> _onChange -> activeSection', activeSection);
     this.setState({ activeSection });
   }
 
@@ -326,7 +326,7 @@ export default class Media extends React.Component {
 
           {/* Images Tab */}
           {this.state.active == 'pics' ? (
-            <View>
+            <ScrollView>
               <Accordion
                 activeSections={this.state.activeSection}
                 sections={this.state.imagesArr}
@@ -362,7 +362,7 @@ export default class Media extends React.Component {
                   ))}
                 </View>
               </View> */}
-            </View>
+            </ScrollView>
           ) : null}
 
           {/* Videos Tab */}
