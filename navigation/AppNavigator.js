@@ -111,15 +111,15 @@ export default createAppContainer(
           title: {
             text: 'Media',
             fontColor: 'yellow',
-            bgColor: '#f069a7',
-            colorBack: '#FFEC5A',
-            bgBack: '#189AA8'
+            bgColor: 'rgb(242,132,181)',
+            colorBack: '#ffec59',
+            bgBack: '#189aa9'
           },
           mainHeader: {
             bg: 'bg2b'
           },
           subHeader: {
-            bg: 'circ6'
+            bg: 'circb'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({

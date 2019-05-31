@@ -69,7 +69,7 @@ export default class HeaderComponent extends Header {
 					<View
 						style={{
 							width: '100%',
-							transform: [{ skewY: '2deg' }],
+							transform: [{ skewY: '1deg' }],
 							height: 45,
 							backgroundColor: 'transparent'
 						}}
@@ -83,7 +83,7 @@ export default class HeaderComponent extends Header {
 							resizeMode="repeat"
 						>
 							<View style={GStyles.default.subHeaderContent}>
-								<View style={[GStyles.default.subHeaderContentView]}>
+								<View style={[GStyles.default.subHeaderContentView, {marginBottom: 10}]}>
 									{title.text && <Label title={title} text={header} />}
 								</View>
 							</View>

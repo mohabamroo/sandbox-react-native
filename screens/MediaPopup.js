@@ -50,16 +50,25 @@ export default class ArtistPopup extends React.Component {
 							data={selectedImages}
 							renderItem={item => {
 								return (
-									<Image
+									<View>
+									<ImageBackground
 										source={{ uri: item.item.image }}
 										resizeMode="contain"
 										style={{
 											alignSelf: 'center',
 											width: width * 0.95,
-											height: height * 0.7,
+											height: 265,
 											marginTop: 50
 										}}
-									/>
+									>
+									<TouchableOpacity
+										style={styles.close}
+										onPress={() => this.props.onClose()}
+									>
+										<Image source={Assets.close} resizeMode={'contain'} style={{width: 20}}/>
+									</TouchableOpacity>
+									</ImageBackground>
+									</View>
 								);
 							}}
 							sliderWidth={width}
@@ -80,12 +89,7 @@ export default class ArtistPopup extends React.Component {
 				<View style={{ position: 'absolute', bottom: -20, left: -20, flex: 1 }}>
 					<Footer />
 				</View>
-				<TouchableOpacity
-					style={styles.close}
-					onPress={() => this.props.onClose()}
-				>
-					<Image source={Assets.close} resizeMode={'contain'} style={{width: 40}}/>
-				</TouchableOpacity>
+
 			</Modal>
 		);
 	}
@@ -98,10 +102,10 @@ const styles = StyleSheet.create({
 	},
 	close: {
 		position: 'absolute',
-		top: 20,
-		right: 10,
-		height: 50,
-		width: 40,
+		top: 5,
+		right: 5,
+		height: 20,
+		width: 20,
 		justifyContent: 'center'
 	}
 });

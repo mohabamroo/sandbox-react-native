@@ -161,19 +161,21 @@ export default class Media extends React.Component {
 
   render() {
     return (
+
       <ImageBackground
         resizeMode="repeat"
         source={Assets.bg2}
         style={__GStyles.default.container}
       >
         <HeaderComponent navigation={this.props.navigation} />
+
         <View style={styles.container}>
           <View style={styles.tabsContainer}>
             <TouchableOpacity
               onPress={() => {
                 this.setState({ active: 'pics' });
               }}
-              style={{ flex: 1 }}
+              style={{ flex: 0.5}}
             >
               <View
                 style={[
@@ -201,7 +203,7 @@ export default class Media extends React.Component {
               onPress={() => {
                 this.setState({ active: 'videos' });
               }}
-              style={{ flex: 1 }}
+              style={{ flex: 0.5 }}
             >
               <View
                 style={[
@@ -230,7 +232,7 @@ export default class Media extends React.Component {
               onPress={() => {
                 this.setState({ active: 'music' });
               }}
-              style={{ flex: 1 }}
+              style={{ flex: 0.5 }}
             >
               <View
                 style={[
@@ -386,7 +388,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   tabsContainer: {
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: '#fde9d6'
