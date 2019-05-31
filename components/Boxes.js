@@ -17,6 +17,7 @@ export class Boxes extends React.Component {
       <View style={styles.container}>
         <View style={styles.subContainer}>
           <TouchableOpacity
+            activeOpacity={0.95}
             onPress={() => {
               this.props.NACController.direct('LineUp');
             }}
@@ -32,6 +33,7 @@ export class Boxes extends React.Component {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
+            activeOpacity={0.95}
             onPress={() => {
               this.props.NACController.direct('Schedule');
             }}
@@ -47,6 +49,7 @@ export class Boxes extends React.Component {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
+            activeOpacity={0.95}
             onPress={() => {
               this.props.NACController.direct('Balance');
             }}
@@ -64,6 +67,7 @@ export class Boxes extends React.Component {
         </View>
         <View style={styles.subContainer}>
           <TouchableOpacity
+            activeOpacity={0.95}
             onPress={() => {
               this.props.NACController.direct('Media');
             }}
@@ -79,6 +83,7 @@ export class Boxes extends React.Component {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
+            activeOpacity={0.95}
             onPress={() => {
               this.props.NACController.direct('Discover');
             }}
@@ -94,6 +99,7 @@ export class Boxes extends React.Component {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
+            activeOpacity={0.95}
             onPress={() => {
               this.props.NACController.direct('Info');
             }}
