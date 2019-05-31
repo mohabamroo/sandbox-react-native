@@ -9,7 +9,7 @@ export default {
   logo: require(`${__path}/logo.png`),
   tmpIcon: require(`${__path}/tmpIcon.png`),
   bg1: require(`${__pattern}/bg1.png`),
-  bg4: require(`${__pattern}/bg4_1.png`),
+  bg4: require(`${__pattern}/bg4.png`),
   bg2: require(`${__pattern}/bg2.png`),
   bg5: require(`${__pattern}/bg5.png`),
   circ1: require(`${__pattern}/circ1.png`),

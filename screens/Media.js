@@ -109,7 +109,7 @@ export default class Media extends React.Component {
   handleYearChange(newState) {
     this.setState({
       ...newState,
-      selectedImages: this.state.images[this.state.activeYear]
+      selectedImages: this.state.images[newState.activeYear]
     });
     this.changeLayout();
   }
@@ -161,7 +161,11 @@ export default class Media extends React.Component {
 
   render() {
     return (
-      <View style={__GStyles.default.container}>
+      <ImageBackground
+        resizeMode="repeat"
+        source={Assets.bg2}
+        style={__GStyles.default.container}
+      >
         <HeaderComponent navigation={this.props.navigation} />
         <View style={styles.container}>
           <View style={styles.tabsContainer}>
@@ -358,7 +362,7 @@ export default class Media extends React.Component {
         />
 
         <Footer />
-      </View>
+      </ImageBackground>
     );
   }
 }

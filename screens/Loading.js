@@ -31,6 +31,7 @@ export default class Loading extends Component {
     };
     this.navigationController = new NavigationController(this.props.navigation);
   }
+
   refresh(callback) {
     httpAddress = URLs.baseURL; //the site i'm building the app for
     var xhr = new XMLHttpRequest();
@@ -57,6 +58,7 @@ export default class Loading extends Component {
     };
     xhr.send();
   }
+
   async componentDidMount() {
     const _this = this;
     // check the internet connection...
@@ -99,6 +101,7 @@ export default class Loading extends Component {
       }
     });
   }
+
   async checkForDownloadableContent() {
     return new Promise(async (resolve, reject) => {
       /**
@@ -121,6 +124,7 @@ export default class Loading extends Component {
       }
     });
   }
+
   async DownloadTheData(object) {
     console.log('DOWNLOADING START');
     // object maybe undefined
@@ -137,9 +141,10 @@ export default class Loading extends Component {
       ).then(response => response.json());
       Artists = await fetch(
         object && object.artistsLastUpdate
-          ? URLs.getArtists(object.artistsLastUpdate)
+          ? URLs.getArtists(this.formateDate(new Date()))
           : URLs.getArtists(undefined)
       ).then(response => response.json());
+      console.log('TCL: Loading -> DownloadTheData -> Artists', Artists);
       Discover = await fetch(URLs.Discover).then(response => response.json());
       General = await fetch(URLs.General).then(response => response.json());
       Media = await fetch(URLs.Media).then(response => response.json());
@@ -187,6 +192,7 @@ export default class Loading extends Component {
       }
     );
   }
+
   async proccess() {
     console.log('PROCCESS');
     this.setState({
@@ -256,6 +262,7 @@ export default class Loading extends Component {
     }
     this.navigationController.reset('Home');
   }
+
   SavingCorruption() {
     this.setState({
       loading: false,
@@ -265,6 +272,7 @@ export default class Loading extends Component {
         'There seems to be an issue with your internet connection, please check and try again later.'
     });
   }
+
   InternetCorruption() {
     this.setState({
       loading: false,
@@ -274,12 +282,21 @@ export default class Loading extends Component {
         'There seems to be an issue with your internet connection, please check and try again later.'
     });
   }
+
   componentWillUnmount() {}
+
+  formateDate(jsDate) {
+    // d-M-Y-H-i
+    let formattedDate =
+      jsDate.getDate() + '-' + jsDate.getMonth() + '-' + jsDate.getYear();
+    console.log('TCL: Loading -> formateDate -> formattedDate', formattedDate);
+    return formattedDate;
+  }
   render() {
     return (
       <View style={styles.container}>
         <Text>
-          {this.state.loadingName ? this.state.loadingName : 'Loading'}
+          {this.state.loadingName ? this.state.loadingName : 'Loading...'}
         </Text>
       </View>
     );
