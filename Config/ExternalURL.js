@@ -26,9 +26,9 @@ module.exports = {
   },
   getSchedual: lastDate => {
     if (lastDate) {
-      return `https://sandboxfestival.com/wp-json/sandbox/get/home_schedule/${lastDate}`;
+      return `https://sandboxfestival.com/wp-json/sandbox/get/v2/home_schedule/${lastDate}`;
     } else {
-      return 'https://sandboxfestival.com/wp-json/sandbox/get/home_schedule/null';
+      return 'https://sandboxfestival.com/wp-json/sandbox/get/v2/home_schedule/null';
     }
   },
   getArtists: lastDate => {

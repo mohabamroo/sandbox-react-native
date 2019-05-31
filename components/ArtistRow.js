@@ -20,6 +20,7 @@ export default class ArtistRow extends React.Component {
       <TouchableOpacity
         style={[this.props.lastRow ? styles.footerMargin : {}]}
         onPress={() => this.props.click()}
+        activeOpacity={0.95}
       >
         <View key={index} style={styles.artistRow}>
           <Image source={{ uri: row.artist_image }} style={styles.image} />
