@@ -55,6 +55,7 @@ export default class LinksScreen extends React.Component {
   componentWillUnmount() {}
 
   renderArtist(row, L, index) {
+    
     let color = this.state.colors[index % Number(this.state.colors.length)];
     let color2 = this.state.colors2[index % Number(this.state.colors2.length)];
     return (

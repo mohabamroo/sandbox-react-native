@@ -116,7 +116,7 @@ export default createAppContainer(
             bgBack: '#189AA8'
           },
           mainHeader: {
-            bg: 'bg2'
+            bg: 'bg2b'
           },
           subHeader: {
             bg: 'circ6'
