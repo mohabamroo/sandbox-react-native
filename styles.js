@@ -40,13 +40,11 @@ export default StyleSheet.create({
     },
     subHeaderContentView: {
         flex: 1,
-        width: '100%',
-        height: '100%',
         alignItems: 'flex-end',
         justifyContent: 'center',
+        marginRight: 10,
         overflow: "hidden",
-        paddingRight: '5%',
-        transform: [{ skewY: '-2deg' }]
+        transform: [{ skewY: '-1deg' }]
     },
     pageTitleBox: {
         justifyContent: 'center',
@@ -54,8 +52,8 @@ export default StyleSheet.create({
         backgroundColor: 'rgb(217, 110, 98)'
     },
     LabelsPaddings: {
-        paddingLeft: 15,
-        paddingRight: 15,
+        paddingLeft: 8,
+        paddingRight: 8,
         paddingTop: 5,
         paddingBottom: 5
     },

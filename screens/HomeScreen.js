@@ -147,7 +147,7 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   imageBG: {
     width: '100%',
-    height: '110%'
+    height: '100%'
   },
   profileBG: {
     width: '100%',
