@@ -93,7 +93,7 @@ export default class ArtistPopup extends React.Component {
   render() {
     let { artist, color1, color2 } = this.props;
     return (
-      <Modal isVisible={this.props.isVisible}>
+      <Modal isVisible={this.props.isVisible} hasBackdrop={false} animationInTiming={500}>
         <View style={[styles.container, { backgroundColor: color1 }]}>
           <Image
             source={{ uri: artist.artist_image }}
@@ -144,9 +144,6 @@ export default class ArtistPopup extends React.Component {
           >
             <Text style={styles.description}>{artist.artist_description}</Text>
           </ScrollView>
-        </View>
-        <View style={{ position: 'absolute', bottom: -20, left: -20, flex: 1 }}>
-          <Footer />
         </View>
       </Modal>
     );

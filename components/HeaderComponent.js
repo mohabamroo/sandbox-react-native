@@ -47,7 +47,7 @@ export default class HeaderComponent extends Header {
 				: 'white';
 		const hasBackButton = !this.props.navigation.isFirstRouteInParent();
 		return (
-			<View style={{ alignItems: 'center', backgroundColor: 'white' }}>
+			<View style={{ alignItems: 'center' }}>
 				{/** The Main bar View. */}
 				{typeof mainHeader == 'object' && (
 					<View
@@ -83,7 +83,7 @@ export default class HeaderComponent extends Header {
 							resizeMode="repeat"
 						>
 							<View style={GStyles.default.subHeaderContent}>
-								<View style={[GStyles.default.subHeaderContentView, {marginBottom: 10}]}>
+								<View style={GStyles.default.subHeaderContentView}>
 									{title.text && <Label title={title} text={header} />}
 								</View>
 							</View>
@@ -91,34 +91,24 @@ export default class HeaderComponent extends Header {
 					</View>
 				)}
 				{hasBackButton && (
-					<View
+					<TouchableHighlight
+						underlayColor={layout.default.underlayColor}
 						onLayout={this.__onLayout.bind(this)}
-						style={[GStyles.default.backButton, this.props.backButtonStyle]}
+						style={[GStyles.default.backButton, this.props.backButtonStyle, { backgroundColor: title.bgBack }]}
+						onPress={() => {
+							this.props.navigation.goBack();
+						}}
 					>
-						<View
-							style={[
-								GStyles.default.LabelsPaddings,
-								{ top: this.state.marginTop, backgroundColor: title.bgBack }
-							]}
+						<Text
+							style={{
+								color: title.colorBack,
+								fontWeight: 'bold',
+								fontSize: layout.default.backTextSize
+							}}
 						>
-							<TouchableHighlight
-								underlayColor={layout.default.underlayColor}
-								onPress={() => {
-									this.props.navigation.goBack();
-								}}
-							>
-								<Text
-									style={{
-										color: title.colorBack,
-										fontWeight: 'bold',
-										fontSize: layout.default.backTextSize
-									}}
-								>
-									BACK
-								</Text>
-							</TouchableHighlight>
-						</View>
-					</View>
+							BACK
+						</Text>
+					</TouchableHighlight>
 				)}
 			</View>
 		);
