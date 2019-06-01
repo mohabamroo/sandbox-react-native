@@ -157,11 +157,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     textAlign: 'right',
-    fontSize: 14
+    fontSize: 12
   },
   sessionTime: {
     color: '#fff',
-    fontSize: 10,
+    fontSize: 8,
     textAlign: 'right'
   },
   footerMargin: {

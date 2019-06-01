@@ -96,7 +96,7 @@ export default class CurrentlyPlaying extends React.Component {
   							]}
   						/>
               <Text style={{ position: 'absolute',top: 5, right: 0, color: 'white', fontSize: 16, width: Layout.window.width * 0.3, fontWeight: 'bold'}}>{main.artistName}</Text>
-              <Text style={{ position: 'absolute',bottom: 5, right: 5, color: '#e9665d', fontSize: 12, width: Layout.window.width * 0.15, fontWeight: 'bold', textAlign: 'right'}}>MAIN STAGE</Text>
+              <Text style={{ position: 'absolute',bottom: 5, right: 5, color: '#e9665d', fontSize: 10, width: Layout.window.width * 0.15, fontWeight: 'bold', textAlign: 'right'}}>MAIN STAGE</Text>
   					</View>
           )}
           { sandbox && (
@@ -132,7 +132,7 @@ export default class CurrentlyPlaying extends React.Component {
               ]}
             />
             <Text style={{ position: 'absolute',top: 5, right: 0, color: 'white', fontSize: 16, width: Layout.window.width * 0.3, fontWeight: 'bold'}}>{sandbox.artistName}</Text>
-            <Text style={{ position: 'absolute',bottom: 5, right: 5, color: '#e9665d', fontSize: 12, width: Layout.window.width * 0.15, fontWeight: 'bold', textAlign: 'right'}}>SANDBOX STAGE</Text>
+            <Text style={{ position: 'absolute',bottom: 5, right: 5, color: '#e9665d', fontSize: 10, width: Layout.window.width * 0.15, fontWeight: 'bold', textAlign: 'right'}}>SANDBOX STAGE</Text>
           </View>
           )}
 				</View>

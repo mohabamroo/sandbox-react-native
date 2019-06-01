@@ -53,7 +53,7 @@ export default createAppContainer(
           title: {
             text: 'Line Up',
             fontColor: '#7bc19e',
-            bgColor: '#ffe958',
+            bgColor: 'rgb(254, 236, 116)',
             bgBack: '#7bc19e',
             colorBack: '#ffe958'
           },
@@ -73,7 +73,7 @@ export default createAppContainer(
         params: {
           title: {
             text: 'Schedule',
-            fontColor: 'yellow',
+            fontColor: 'rgb(254, 236, 116)',
             bgColor: 'blue'
           },
           mainHeader: {
