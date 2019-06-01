@@ -68,11 +68,13 @@ export default class CurrentlyPlaying extends React.Component {
 				>
 					{main && (
             <View style={{ width: '50%', height: '100%' }}>
-              <Image
-                source={{ uri: main.artistImage}}
-                style={styles.image}
-                resizeMode={'cover'}
-              />
+              <TouchableOpacity onPress={() => this.props.showDetials(main)}>
+                <Image
+                  source={{ uri: main.artistImage}}
+                  style={styles.image}
+                  resizeMode={'cover'}
+                />
+              </TouchableOpacity>
               <TouchableOpacity
     						style={{
               		position: 'absolute',
@@ -102,11 +104,13 @@ export default class CurrentlyPlaying extends React.Component {
 					<View
 						style={{ width: '50%', height: '100%' }}
 					>
-            <Image
-              source={{ uri: sandbox.artistImage }}
-              style={styles.image}
-              resizeMode={'cover'}
-            />
+            <TouchableOpacity onPress={() => this.props.showDetials(sandbox)}>
+              <Image
+                source={{ uri: sandbox.artistImage }}
+                style={styles.image}
+                resizeMode={'cover'}
+              />
+            </TouchableOpacity>
             <TouchableOpacity
               style={{
                 position: 'absolute',

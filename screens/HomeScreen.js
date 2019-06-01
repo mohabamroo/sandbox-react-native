@@ -15,13 +15,14 @@ import HeaderComponent from '../components/HeaderComponent';
 import Footer from '../components/Footer';
 import Quadrilateral from '../components/Quadrilateral';
 import CurrentlyPlaying from '../components/CurrentlyPlaying';
+import ArtistPopup from './ArtistPopup';
 
 // import the page components
 import { Boxes } from '../components/Boxes';
 import { News } from '../components/News';
 import Assets from '../constants/Assets';
 import Layout from '../constants/Layout';
-import { EventInfoDB, SchedualDB } from '../Config/DB';
+import { EventInfoDB, SchedualDB, ArtistsDB } from '../Config/DB';
 
 // const start_days = [moment]
 
@@ -44,7 +45,9 @@ export default class HomeScreen extends React.Component {
 		this.navigationController = new NavigationController(this.props.navigation);
 		this.state = {
 			timeState: 2,
-			currentEvents: null
+			currentEvents: null,
+      current_artist: false,
+      show_popup: false
 		};
 		this.handleSchedule = this.handleSchedule.bind(this);
 	}
@@ -84,7 +87,7 @@ export default class HomeScreen extends React.Component {
 		) {
 			day = 'day3';
 		} else {
-      return
+      // return
     }
 
     let hour = now.get('hour')
@@ -93,6 +96,7 @@ export default class HomeScreen extends React.Component {
     minute = minute > 30 ? '30' : '00'
 
     time = hour+':'+minute
+
     this.setState({
       currentEvents: {
         sandbox: schedule[day][time]['sandBoxStage'],
@@ -105,11 +109,13 @@ export default class HomeScreen extends React.Component {
 		// check the timestate..
 		let general = await EventInfoDB.Get();
 		let schedule = await SchedualDB.Get();
+    let artists = await ArtistsDB.Get();
 		console.log('TCL: HomeScreen -> componentDidMount -> general', general);
 		this.setState(
 			{
 				general,
-				schedule
+				schedule,
+        artists
 			},
 			() => {
 				this.handleState();
@@ -117,6 +123,15 @@ export default class HomeScreen extends React.Component {
 		);
 		this.handleSchedule();
 	}
+
+  showDetials(artistInfo){
+    current_artist = this.state.artists.filter(x => x.artist_id == artistInfo.artistId)[0]
+    this.setState({
+      show_popup: true,
+      current_artist
+    })
+  }
+
 	handleState() {
 		// check for after event state.
 		let endDateObject = this.state.general
@@ -140,6 +155,7 @@ export default class HomeScreen extends React.Component {
 		}
 	}
 	render() {
+
 		return (
 			<ImageBackground
 				source={Assets.bg1}
@@ -191,7 +207,7 @@ export default class HomeScreen extends React.Component {
 								</View>
 							)}
 						</View>
-						{this.state.currentEvents && <CurrentlyPlaying currentEvents={this.state.currentEvents}/>}
+						{this.state.currentEvents && <CurrentlyPlaying currentEvents={this.state.currentEvents} showDetials={(artist) => this.showDetials(artist)}/>}
 						<Boxes NACController={this.navigationController} />
 						{/** The boxes area */}
 
@@ -201,6 +217,15 @@ export default class HomeScreen extends React.Component {
 						<View style={styles.paddingDiv} />
 					</ScrollView>
 				</View>
+        {this.state.current_artist && (
+          <ArtistPopup
+            isVisible={this.state.show_popup}
+            artist={this.state.current_artist}
+            color1={'#7bc19e'}
+            color2={'#f8b7bb'}
+            onClose={() => this.setState({ show_popup: false })}
+          />
+        )}
 				<Footer />
 			</ImageBackground>
 		);
