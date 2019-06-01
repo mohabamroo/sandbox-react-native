@@ -246,6 +246,19 @@ export default class LinksScreen extends React.Component {
             onClose={() => this.setState({ show_popup: false })}
           />
         )}
+        {this.state.show_popup && (
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              height: '100%',
+              width: '100%',
+              opacity: 0.8,
+              backgroundColor: 'black'
+            }}
+          />
+        )}
         <Footer />
       </View>
     );

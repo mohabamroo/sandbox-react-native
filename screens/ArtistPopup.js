@@ -9,7 +9,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { Zocial, EvilIcons } from '@expo/vector-icons';
+import { Entypo, EvilIcons } from '@expo/vector-icons';
 import Layout from '../constants/Layout';
 import Footer from '../components/Footer';
 import { likeArtist, removeArtistLike } from '../Config/ExternalURL';
@@ -90,7 +90,7 @@ export default class ArtistPopup extends React.Component {
   render() {
     let { artist, color1, color2 } = this.props;
     return (
-      <Modal isVisible={this.props.isVisible}>
+      <Modal isVisible={this.props.isVisible} hasBackdrop={false} animationInTiming={500}>
         <View style={[styles.container, { backgroundColor: color1 }]}>
           <Image
             source={{ uri: artist.artist_image }}
@@ -130,7 +130,7 @@ export default class ArtistPopup extends React.Component {
             style={styles.icon}
             onPress={() => Linking.openURL(artist.artist_soundcloud)}
           >
-            <Zocial name="soundcloud" size={22} color="orange" />
+            <Entypo name="soundcloud" size={28} color="orange" />
           </TouchableOpacity>
           <ScrollView
             style={[styles.textArea, { backgroundColor: color1 }]}
@@ -141,9 +141,6 @@ export default class ArtistPopup extends React.Component {
           >
             <Text style={styles.description}>{artist.artist_description}</Text>
           </ScrollView>
-        </View>
-        <View style={{ position: 'absolute', bottom: -20, left: -20, flex: 1 }}>
-          <Footer />
         </View>
       </Modal>
     );

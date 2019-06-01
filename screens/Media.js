@@ -372,11 +372,7 @@ export default class Media extends React.Component {
 
           {/* Videos Tab */}
           {this.state.active == 'videos' ? (
-            <ImageBackground
-              resizeMode="repeat"
-              source={Assets.bg5}
-              style={{ width: '100%' }}
-            >
+            <View style={{ width: '100%', flex: 1, backgroundColor: 'transparent' }}>
               <FlatList
                 style={styles.videosContainer}
                 data={this.state.videos}
@@ -385,16 +381,12 @@ export default class Media extends React.Component {
                   this.renderVideoRow(item, index, 'video')
                 }
               />
-            </ImageBackground>
+            </View>
           ) : null}
 
           {/* Music Tab */}
           {this.state.active == 'music' ? (
-            <ImageBackground
-              resizeMode="repeat"
-              source={Assets.bg5}
-              style={{ width: '100%' }}
-            >
+          <View style={{ width: '100%', flex: 1, backgroundColor: 'transparent' }}>
               <FlatList
                 style={styles.videosContainer}
                 data={this.state.musics}
@@ -403,7 +395,7 @@ export default class Media extends React.Component {
                   this.renderVideoRow(item, index, 'music')
                 }
               />
-            </ImageBackground>
+            </View>
           ) : null}
         </View>
 
@@ -423,7 +415,6 @@ export default class Media extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.greenish,
     alignItems: 'center'
   },
   imagesContainer: {
@@ -492,7 +483,7 @@ const styles = StyleSheet.create({
     width: (Layout.window.width * 3) / 5,
     zIndex: 10
   },
-  videosContainer: { color: 'red' },
+  videosContainer: { backgroundColor: 'transparent' },
   videoImg: {
     height: '100%',
     width: Layout.window.width / 2.5
