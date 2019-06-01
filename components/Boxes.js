@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import Layout from '../constants/Layout';
 import * as assets from '../constants/Assets';
 
@@ -16,11 +16,12 @@ export class Boxes extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.subContainer}>
-          <TouchableOpacity
-            activeOpacity={0.95}
+          <TouchableHighlight
             onPress={() => {
               this.props.NACController.direct('LineUp');
             }}
+            underlayColor={'rgb(255,255,255)'}
+            activeOpacity={0.05}
             style={[styles.box, { backgroundColor: '#f7e25b' }]}
           >
             <View style={styles.boxBtn}>
@@ -31,12 +32,13 @@ export class Boxes extends React.Component {
               />
               <Text style={styles.boxText}>LINE UP</Text>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.95}
+          </TouchableHighlight>
+          <TouchableHighlight
             onPress={() => {
               this.props.NACController.direct('Schedule');
             }}
+            underlayColor={'rgb(255,255,255)'}
+            activeOpacity={0.05}
             style={[styles.box, { backgroundColor: '#61A485' }]}
           >
             <View style={styles.boxBtn}>
@@ -47,12 +49,14 @@ export class Boxes extends React.Component {
               />
               <Text style={styles.boxText}>SCHEDULE</Text>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.95}
+          </TouchableHighlight>
+          <TouchableHighlight
+
             onPress={() => {
               this.props.NACController.direct('Balance');
             }}
+            underlayColor={'rgb(255,255,255)'}
+            activeOpacity={0.05}
             style={[styles.box, { backgroundColor: '#f9bb79' }]}
           >
             <View style={styles.boxBtn}>
@@ -63,14 +67,15 @@ export class Boxes extends React.Component {
               />
               <Text style={styles.boxText}>BALANCE</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableHighlight>
         </View>
         <View style={styles.subContainer}>
-          <TouchableOpacity
-            activeOpacity={0.95}
+          <TouchableHighlight
             onPress={() => {
               this.props.NACController.direct('Media');
             }}
+            underlayColor={'rgb(255,255,255)'}
+            activeOpacity={0.05}
             style={[styles.box, { backgroundColor: '#ef69a7' }]}
           >
             <View style={styles.boxBtn}>
@@ -81,12 +86,13 @@ export class Boxes extends React.Component {
               />
               <Text style={styles.boxText}>MEDIA</Text>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.95}
+          </TouchableHighlight>
+          <TouchableHighlight
             onPress={() => {
               this.props.NACController.direct('Discover');
             }}
+            underlayColor={'rgb(255,255,255)'}
+            activeOpacity={0.05}
             style={[styles.box, { backgroundColor: 'rgb(205, 102, 93)' }]}
           >
             <View style={styles.boxBtn}>
@@ -97,12 +103,13 @@ export class Boxes extends React.Component {
               />
               <Text style={styles.boxText}>DISCOVER</Text>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.95}
+          </TouchableHighlight>
+          <TouchableHighlight
             onPress={() => {
               this.props.NACController.direct('Info');
             }}
+            underlayColor={'rgb(255,255,255)'}
+            activeOpacity={0.05}
             style={[styles.box, { backgroundColor: '#7ac19d' }]}
           >
             <View style={styles.boxBtn}>
@@ -113,7 +120,7 @@ export class Boxes extends React.Component {
               />
               <Text style={styles.boxText}>INFO</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableHighlight>
         </View>
       </View>
     );

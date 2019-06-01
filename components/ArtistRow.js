@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View, Text, TouchableHighlight } from 'react-native';
 
 import Layout from '../constants/Layout';
 
@@ -17,10 +17,9 @@ export default class ArtistRow extends React.Component {
     let { artist: row, index, color, color2 } = this.props;
 
     return (
-      <TouchableOpacity
+      <TouchableHighlight
         style={[this.props.lastRow ? styles.footerMargin : {}]}
         onPress={() => this.props.click()}
-        activeOpacity={0.95}
       >
         <View key={index} style={styles.artistRow}>
           <Image source={{ uri: row.artist_image }} style={styles.image} />
@@ -67,7 +66,7 @@ export default class ArtistRow extends React.Component {
             />
           </View>
         </View>
-      </TouchableOpacity>
+      </TouchableHighlight>
     );
   }
 }
