@@ -87,7 +87,7 @@ export default class HomeScreen extends React.Component {
 		) {
 			day = 'day3';
 		} else {
-      // return
+      return
     }
 
     let hour = now.get('hour')
