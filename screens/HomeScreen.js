@@ -55,7 +55,6 @@ export default class HomeScreen extends React.Component {
 
   handleSchedule() {
     let { schedule } = this.state;
-
     days = Object.keys(schedule);
     let now = moment();
     // If festival has not started or has ended
@@ -96,7 +95,6 @@ export default class HomeScreen extends React.Component {
     minute = minute > 30 ? '30' : '00';
 
     time = hour + ':' + minute;
-
     this.setState({
       currentEvents: {
         sandbox: schedule[day][time]['sandBoxStage'],
@@ -104,6 +102,7 @@ export default class HomeScreen extends React.Component {
       }
     });
   }
+
 
   async componentDidMount() {
     // check the timestate..

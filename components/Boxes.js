@@ -20,8 +20,6 @@ export class Boxes extends React.Component {
             onPress={() => {
               this.props.NACController.direct('LineUp');
             }}
-            underlayColor={'rgb(255,255,255)'}
-            activeOpacity={0.05}
             style={[styles.box, { backgroundColor: '#f7e25b' }]}
           >
             <View style={styles.boxBtn}>
@@ -148,7 +146,6 @@ const styles = StyleSheet.create({
     height: Layout.window.width / 3,
     justifyContent: 'center',
     padding: 10,
-    textAlign: 'center',
     alignItems: 'center'
   },
   boxBtn: {
