@@ -3,47 +3,173 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  TouchableHighlight
+} from 'react-native';
 import Layout from '../constants/Layout';
+import Assets, * as assets from '../constants/Assets';
 
-export class Boxes extends React.Component{
-    render(){
-        return (
-            <View style={styles.container}>
-                <View style={styles.subContainer}>
-                    <TouchableOpacity onPress={()=>{this.props.NACController.direct('LineUp')}} style={[styles.box, {backgroundColor: 'rgb(241, 225, 101)'}]}><View><Text style={styles.boxText}>LINE UP</Text></View></TouchableOpacity>
-                    <TouchableOpacity onPress={()=>{this.props.NACController.direct('Schedule')}} style={[styles.box, {backgroundColor: 'rgb(120, 163, 132)'}]}><View><Text style={styles.boxText}>SCHEDULE</Text></View></TouchableOpacity>
-                    <TouchableOpacity onPress={()=>{this.props.NACController.direct('Balance')}} style={[styles.box, {backgroundColor: 'rgb(234, 186, 124)'}]}><View><Text style={styles.boxText}>BALANCE</Text></View></TouchableOpacity>
-                </View>
-                <View style={styles.subContainer}>
-                    <TouchableOpacity onPress={()=>{this.props.NACController.direct('Media')}} style={[styles.box, {backgroundColor: 'rgb(212, 105, 163)'}]}><View><Text style={styles.boxText}>MEDIA</Text></View></TouchableOpacity>
-                    <TouchableOpacity onPress={()=>{this.props.NACController.direct('Discover')}} style={[styles.box, {backgroundColor: 'rgb(205, 102, 93)'}]}><View><Text style={styles.boxText}>DISCOVER</Text></View></TouchableOpacity>
-                    <TouchableOpacity onPress={()=>{this.props.NACController.direct('Info')}} style={[styles.box, {backgroundColor: 'rgb(146, 192, 157)'}]}><View><Text style={styles.boxText}>INFO</Text></View></TouchableOpacity>
-                </View>
+export class Boxes extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.subContainer}>
+          <TouchableHighlight
+            onPress={() => {
+              this.props.NACController.direct('LineUp');
+            }}
+            underlayColor={'rgb(255,255,255)'}
+            activeOpacity={0.05}
+            style={[styles.box, { backgroundColor: '#f7e25b' }]}
+          >
+            <View style={styles.boxBtn}>
+              <Image
+                source={assets.default['lineupIco']}
+                style={styles.image}
+                resizeMode="contain"
+              />
+              <Text style={styles.boxText}>LINE UP</Text>
             </View>
-        )
-    }
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => {
+              this.props.NACController.direct('Schedule');
+            }}
+            underlayColor={'rgb(255,255,255)'}
+            activeOpacity={0.05}
+            style={[styles.box, { backgroundColor: '#61A485' }]}
+          >
+            <View style={styles.boxBtn}>
+              <Image
+                source={assets.default['scheduleIco']}
+                style={styles.image}
+                resizeMode="contain"
+              />
+              <Text style={styles.boxText}>SCHEDULE</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => {
+              this.props.NACController.direct('Balance');
+            }}
+            underlayColor={'rgb(255,255,255)'}
+            activeOpacity={0.05}
+            style={[styles.box, { backgroundColor: '#f9bb79' }]}
+          >
+            <View style={styles.boxBtn}>
+              <Image
+                source={assets.default['balanceIco']}
+                style={styles.image}
+                resizeMode="contain"
+              />
+              <Text style={styles.boxText}>BALANCE</Text>
+            </View>
+          </TouchableHighlight>
+        </View>
+        <View style={styles.subContainer}>
+          <TouchableHighlight
+            onPress={() => {
+              this.props.NACController.direct('Media');
+            }}
+            underlayColor={'rgb(255,255,255)'}
+            activeOpacity={0.05}
+            style={[styles.box, { backgroundColor: '#ef69a7' }]}
+          >
+            <View style={styles.boxBtn}>
+              <Image
+                source={assets.default['mediaIco']}
+                style={styles.image}
+                resizeMode="contain"
+              />
+              <Text style={styles.boxText}>MEDIA</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => {
+              this.props.NACController.direct('Discover');
+            }}
+            underlayColor={'rgb(255,255,255)'}
+            activeOpacity={0.05}
+            style={[styles.box, { backgroundColor: 'rgb(205, 102, 93)' }]}
+          >
+            <View style={styles.boxBtn}>
+              <Image
+                source={assets.default['discoverIco']}
+                style={styles.image}
+                resizeMode="contain"
+              />
+              <Text style={styles.boxText}>DISCOVER</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => {
+              this.props.NACController.direct('Info');
+            }}
+            underlayColor={'rgb(255,255,255)'}
+            activeOpacity={0.05}
+            style={[styles.box, { backgroundColor: '#7ac19d' }]}
+          >
+            <View style={styles.boxBtn}>
+              <Image
+                source={assets.default['infoIco']}
+                style={styles.image}
+                resizeMode="contain"
+              />
+              <Text style={styles.boxText}>INFO</Text>
+            </View>
+          </TouchableHighlight>
+        </View>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        flex: 1,
-        flexDirection: "column"
-    },
-    subContainer: {
-        flex: 1,
-        flexDirection: "row",
-    },
-    box: {
-        flex: 1,
-        height: Layout.window.width / 3,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    boxText: {
-        fontWeight: 'bold',
-        fontSize: 16,
-        color: '#fff'
-    }
-})
+  container: {
+    width: '100%',
+    flex: 1,
+    flexDirection: 'column'
+  },
+  subContainer: {
+    flex: 1,
+    flexDirection: 'row'
+  },
+  image: {
+    flex: 2,
+    margin: 'auto',
+    width: 50,
+    justifyContent: 'center'
+  },
+  box: {
+    flex: 1,
+    height: Layout.window.width / 3,
+    justifyContent: 'center',
+    padding: 10,
+    textAlign: 'center',
+    alignItems: 'center'
+  },
+  boxBtn: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  boxText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    flex: 1,
+    justifyContent: 'center',
+    color: '#fff',
+    textAlign: 'center'
+  }
+});

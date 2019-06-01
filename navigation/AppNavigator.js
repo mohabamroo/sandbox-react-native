@@ -77,7 +77,7 @@ export default createAppContainer(
             bgColor: '#60a484',
             bgBack: '#189aa9',
             colorBack: '#ffe958',
-            isrepated:true
+            isrepated: true
           },
           mainHeader: {
             bg: 'bg2'
@@ -340,7 +340,7 @@ export default createAppContainer(
       }
     },
     {
-      initialRouteName: 'DataActivation',
+      initialRouteName: 'Home',
       mode: 'card',
       navigationOptions: {
         animationEnabled: true

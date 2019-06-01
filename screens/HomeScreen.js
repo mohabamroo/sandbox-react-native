@@ -8,18 +8,24 @@ import {
   ImageBackground,
   Button
 } from 'react-native';
+import moment from 'moment';
 import * as __GStyles from '../styles';
 import { NavigationController } from '../navigation/index';
 import HeaderComponent from '../components/HeaderComponent';
 import Footer from '../components/Footer';
 import Quadrilateral from '../components/Quadrilateral';
+import CurrentlyPlaying from '../components/CurrentlyPlaying';
+import ArtistPopup from './ArtistPopup';
 
 // import the page components
 import { Boxes } from '../components/Boxes';
 import { News } from '../components/News';
-import Assets from '../constants/Assets';
+import Assets, * as assets from '../constants/Assets';
 import Layout from '../constants/Layout';
-import { EventInfoDB } from '../Config/DB';
+import { CountDownTimer } from '../components/CountDownTimer';
+import { EventInfoDB, SchedualDB, ArtistsDB } from '../Config/DB';
+
+// const start_days = [moment]
 
 export default class HomeScreen extends React.Component {
   __navigationOptions = {
@@ -39,22 +45,95 @@ export default class HomeScreen extends React.Component {
     super(props);
     this.navigationController = new NavigationController(this.props.navigation);
     this.state = {
-      timeState: 2
+      timeState: 2,
+      currentEvents: null,
+      current_artist: false,
+      show_popup: false
     };
+    this.handleSchedule = this.handleSchedule.bind(this);
   }
+
+  handleSchedule() {
+    let { schedule } = this.state;
+
+    days = Object.keys(schedule);
+    let now = moment();
+    // If festival has not started or has ended
+    let day = '';
+    if (
+      now.isAfter(
+        moment().set({ year: 2019, month: 5, date: 13, hour: 12, minute: 59 })
+      ) &&
+      now.isBefore(
+        moment().set({ year: 2019, month: 5, date: 14, hour: 12, minute: 15 })
+      )
+    ) {
+      day = 'day1';
+    } else if (
+      now.isAfter(
+        moment().set({ year: 2019, month: 5, date: 14, hour: 12, minute: 59 })
+      ) &&
+      now.isBefore(
+        moment().set({ year: 2019, month: 5, date: 15, hour: 11, minute: 59 })
+      )
+    ) {
+      day = 'day2';
+    } else if (
+      now.isAfter(
+        moment().set({ year: 2019, month: 5, date: 15, hour: 12, minute: 59 })
+      ) &&
+      now.isBefore(
+        moment().set({ year: 2019, month: 5, date: 16, hour: 15, minute: 59 })
+      )
+    ) {
+      day = 'day3';
+    } else {
+      return;
+    }
+    let hour = now.get('hour');
+    hour = ('0' + hour).slice(-2);
+    let minute = now.get('minute');
+    minute = minute > 30 ? '30' : '00';
+
+    time = hour + ':' + minute;
+
+    this.setState({
+      currentEvents: {
+        sandbox: schedule[day][time]['sandBoxStage'],
+        main: schedule[day][time]['MainStage']
+      }
+    });
+  }
+
   async componentDidMount() {
     // check the timestate..
     let general = await EventInfoDB.Get();
+    let schedule = await SchedualDB.Get();
+    let artists = await ArtistsDB.Get();
     console.log('TCL: HomeScreen -> componentDidMount -> general', general);
     this.setState(
       {
-        general
+        general,
+        schedule,
+        artists
       },
       () => {
         this.handleState();
       }
     );
+    this.handleSchedule();
   }
+
+  showDetials(artistInfo) {
+    current_artist = this.state.artists.filter(
+      x => x.artist_id == artistInfo.artistId
+    )[0];
+    this.setState({
+      show_popup: true,
+      current_artist
+    });
+  }
+
   handleState() {
     // check for after event state.
     let endDateObject = this.state.general
@@ -103,8 +182,7 @@ export default class HomeScreen extends React.Component {
                   activeOpacity={0.9}
                   style={styles.buttonActivate}
                   onPress={() => {
-                    this.navigationController.direct('Activation1')
-                    
+                    this.navigationController.direct('Activation1');
                   }}
                 >
                   <View>
@@ -115,6 +193,8 @@ export default class HomeScreen extends React.Component {
                 </TouchableOpacity>
               </View>
             </ImageBackground>
+          </View>
+          <ScrollView style={{ marginTop: -10 }}>
             <View style={styles.counter}>
               {this.state.timeState == 1 && (
                 <View style={styles.seeYouContainer}>
@@ -127,8 +207,12 @@ export default class HomeScreen extends React.Component {
                 </View>
               )}
             </View>
-          </View>
-          <ScrollView>
+            {this.state.currentEvents && (
+              <CurrentlyPlaying
+                currentEvents={this.state.currentEvents}
+                showDetials={artist => this.showDetials(artist)}
+              />
+            )}
             <Boxes NACController={this.navigationController} />
             {/** The boxes area */}
 
@@ -139,6 +223,16 @@ export default class HomeScreen extends React.Component {
           </ScrollView>
           <Footer />
         </View>
+        {this.state.current_artist && (
+          <ArtistPopup
+            isVisible={this.state.show_popup}
+            artist={this.state.current_artist}
+            color1={'#7bc19e'}
+            color2={'#f8b7bb'}
+            onClose={() => this.setState({ show_popup: false })}
+          />
+        )}
+        <Footer />
       </ImageBackground>
     );
   }
@@ -185,7 +279,7 @@ const styles = StyleSheet.create({
   seeYou: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: '#fff'
+    color: '#FFEB5C'
   },
   seeYouContainer: {
     flex: 1,

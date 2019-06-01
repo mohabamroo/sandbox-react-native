@@ -7,15 +7,20 @@ import {
   TouchableOpacity,
   View,
   Text,
+  AppState,
   ImageBackground,
-  AppState
+  TouchableHighlight
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
+import ArtistPopup from './ArtistPopup';
+import Footer from '../components/Footer';
+import { FavoritesDB } from '../Config/DB';
 
 import * as __GStyles from '../styles';
 import { ArtistsDB } from '../Config/DB';
 import Assets from '../constants/Assets';
 import Layout from '../constants/Layout';
+import ArtistRow from '../components/ArtistRow';
 
 export default class LinksScreen extends React.Component {
   ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -33,11 +38,13 @@ export default class LinksScreen extends React.Component {
     artists = artists.map(x => {
       return { ...x, visible: true };
     });
+    let dsData = this.ds.cloneWithRows(artists);
     this.setState({
       artists: this.ds.cloneWithRows(artists),
       initialArtists: artists,
       appState: AppState.currentState
     });
+    this.fetchFavorites();
   }
 
   componentWillUnmount() {}
@@ -46,52 +53,22 @@ export default class LinksScreen extends React.Component {
     let color = this.state.colors[index % Number(this.state.colors.length)];
     let color2 = this.state.colors2[index % Number(this.state.colors2.length)];
     return (
-      <View key={index} style={styles.artistRow}>
-        <Image source={{ uri: row.artist_image }} style={styles.image} />
-        <View
-          style={[
-            styles.triangle,
-            styles.triangleDown,
-            styles.nameArea,
-            { borderBottomColor: color }
-          ]}
-        />
-        <Text style={styles.artistName}>{row['artist_name']}</Text>
-        {/**<Image source={Assets.artist1} style={styles.artistsRowImage} /> */}
-        <View style={styles.sessionInfo}>
-          <Text style={styles.sessionDay}>
-            {row['artist_session'] && row['artist_session']['session_stage']
-              ? row['artist_session']['session_stage']
-              : 'Main Stage'}
-          </Text>
-          <Text style={styles.sessionTime}>
-            {row['artist_session']
-              ? row['artist_session']['session_day'] +
-                ', ' +
-                row['artist_session']['session_start_time'] +
-                ' - ' +
-                row['artist_session']['session_end_time']
-              : ''}
-          </Text>
-        </View>
-        <View
-          style={[
-            styles.triangle2,
-            styles.triangleCornerBottomRight,
-            styles.footerArea,
-            { borderTopColor: color2 }
-          ]}
-        >
-          <View
-            style={{
-              flex: 1,
-              width: Layout.window.width,
-              height: Layout.window.width,
-              backgroundColor: 'red'
-            }}
-          />
-        </View>
-      </View>
+      <ArtistRow
+        index={index}
+        artist={row}
+        color={color}
+        color2={color2}
+        lastRow={index == this.state.currentCount - 1}
+        click={() =>
+          this.setState({
+            show_popup: true,
+            current_artist: row,
+            current_artist_idx: index,
+            color1: color,
+            color2
+          })
+        }
+      />
     );
   }
   section() {
@@ -113,11 +90,38 @@ export default class LinksScreen extends React.Component {
     });
   };
 
+  fetchFavorites() {
+    let initialArtists = this.state.initialArtists;
+    // artists: dsData,
+    FavoritesDB.Get().then(artists => {
+      artists.forEach(likedArtist => {
+        if (likedArtist && likedArtist.artist_id) {
+          initialArtists.forEach((artist, index) => {
+            if (artist.artist_id == likedArtist.artist_id) {
+              console.log(
+                'TCL: LinksScreen -> fetchFavorites -> likedArtist.artist_id',
+                likedArtist.artist_id
+              );
+              initialArtists[index]['liked'] = true;
+            }
+          });
+        }
+      });
+
+      let dsData = this.ds.cloneWithRows(initialArtists);
+      this.setState({ artists: dsData });
+    });
+  }
+
   render() {
     return (
       <View style={__GStyles.default.container}>
         <HeaderComponent navigation={this.props.navigation} />
-        <View style={styles.container}>
+        <ImageBackground
+          resizeMode="repeat"
+          source={Assets.bg4}
+          style={[styles.container, { width: '100%' }]}
+        >
           <View style={styles.tabsContainer}>
             <TouchableOpacity
               onPress={() => {
@@ -143,7 +147,6 @@ export default class LinksScreen extends React.Component {
                     }
                   ]}
                 >
-                  {' '}
                   {this.state.active == 'all' ? '>' : ''} All
                 </Text>
               </View>
@@ -172,7 +175,6 @@ export default class LinksScreen extends React.Component {
                     }
                   ]}
                 >
-                  {' '}
                   {this.state.active == 'main' ? '>' : ''} Main Stage
                 </Text>
               </View>
@@ -204,7 +206,6 @@ export default class LinksScreen extends React.Component {
                     }
                   ]}
                 >
-                  {' '}
                   {this.state.active == 'sandbox' ? '>' : ''} Sandbox Stage
                 </Text>
               </View>
@@ -236,7 +237,6 @@ export default class LinksScreen extends React.Component {
                     }
                   ]}
                 >
-                  {' '}
                   {this.state.active == 'morning' ? '>' : ''} Morning Stage
                 </Text>
               </View>
@@ -250,7 +250,18 @@ export default class LinksScreen extends React.Component {
               enableEmptySections={this.section}
             />
           </ScrollView>
-        </View>
+        </ImageBackground>
+        {this.state.current_artist && (
+          <ArtistPopup
+            isVisible={this.state.show_popup}
+            artist={this.state.current_artist}
+            color1={this.state.color1}
+            color2={this.state.color2}
+            notifyParent={() => this.fetchFavorites()}
+            onClose={() => this.setState({ show_popup: false })}
+          />
+        )}
+        <Footer />
       </View>
     );
   }
