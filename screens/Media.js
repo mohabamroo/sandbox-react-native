@@ -374,7 +374,7 @@ export default class Media extends React.Component {
           {this.state.active == 'videos' ? (
             <ImageBackground
               resizeMode="repeat"
-              source={Assets.bg5}
+              source={Assets.bg2}
               style={{ width: '100%' }}
             >
               <FlatList
@@ -392,7 +392,7 @@ export default class Media extends React.Component {
           {this.state.active == 'music' ? (
             <ImageBackground
               resizeMode="repeat"
-              source={Assets.bg5}
+              source={Assets.bg2}
               style={{ width: '100%' }}
             >
               <FlatList
