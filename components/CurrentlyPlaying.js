@@ -7,7 +7,6 @@ import Assets from '../constants/Assets';
 
 export default class CurrentlyPlaying extends React.Component {
 	render() {
-    console.log('CURRENT', this.props.currentEvents.sandbox)
     let { sandbox, main } = this.props.currentEvents;
 		return (
 			<View style={styles.container}>
@@ -28,7 +27,7 @@ export default class CurrentlyPlaying extends React.Component {
 						}}
 					>
 						<View style={styles.play} />
-						<Text style={{ color: '#f3996e', fontSize: 15 }}>NOW PLAYING</Text>
+						<Text style={{ color: '#f3996e', fontSize: 12 }}>NOW PLAYING</Text>
 					</View>
 					<View
 						style={{
@@ -52,7 +51,7 @@ export default class CurrentlyPlaying extends React.Component {
 								marginRight: 10
 							}}
 						/>
-						<Text style={{ color: '#f3996e', fontSize: 15 }}>
+						<Text style={{ color: '#f3996e', fontSize: 12 }}>
 							WHAT IS PLAYING NEXT?!
 						</Text>
 					</View>
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
 	triangle: {
 		position: 'absolute',
 		top: 0,
-		right: '60%',
+		right: '59.9%',
 		width: 0,
 		height: 0,
 		borderBottomWidth: 35,

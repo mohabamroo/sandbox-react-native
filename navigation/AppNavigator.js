@@ -318,7 +318,7 @@ export default createAppContainer(
       }
     },
     {
-      initialRouteName: 'Home',
+      initialRouteName: 'Loading',
       mode: 'card',
       navigationOptions: {
         animationEnabled: true

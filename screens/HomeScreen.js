@@ -87,7 +87,7 @@ export default class HomeScreen extends React.Component {
 		) {
 			day = 'day3';
 		} else {
-      return
+      // return
     }
 
     let hour = now.get('hour')
@@ -96,7 +96,8 @@ export default class HomeScreen extends React.Component {
     minute = minute > 30 ? '30' : '00'
 
     time = hour+':'+minute
-
+		day = 'day1'
+		time= '11:30'
     this.setState({
       currentEvents: {
         sandbox: schedule[day][time]['sandBoxStage'],
@@ -109,6 +110,7 @@ export default class HomeScreen extends React.Component {
 		// check the timestate..
 		let general = await EventInfoDB.Get();
 		let schedule = await SchedualDB.Get();
+		console.log(schedule)
     let artists = await ArtistsDB.Get();
 		console.log('TCL: HomeScreen -> componentDidMount -> general', general);
 		this.setState(
