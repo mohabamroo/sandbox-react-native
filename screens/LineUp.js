@@ -105,6 +105,7 @@ export default class LinksScreen extends React.Component {
     });
   };
 
+  // FIXME: weird logic on dislike, what about stage filtering
   fetchFavorites() {
     let initialArtists = this.state.initialArtists;
     // artists: dsData,
@@ -113,16 +114,13 @@ export default class LinksScreen extends React.Component {
         if (likedArtist && likedArtist.artist_id) {
           initialArtists.forEach((artist, index) => {
             if (artist.artist_id == likedArtist.artist_id) {
-              console.log(
-                'TCL: LinksScreen -> fetchFavorites -> likedArtist.artist_id',
-                likedArtist.artist_id
-              );
               initialArtists[index]['liked'] = true;
             }
           });
         }
       });
-
+      // changing state
+      console.log('Changing state');
       let dsData = this.ds.cloneWithRows(initialArtists);
       this.setState({ artists: dsData });
     });
