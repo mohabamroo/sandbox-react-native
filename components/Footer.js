@@ -10,7 +10,7 @@ export default class Footer extends React.Component {
     return (
       <View style={styles.footerContainer}>
         <Image
-          resizeMode="cover"
+          resizeMode="stretch"
           source={Assets.logo}
           style={styles.footerImage}
         />
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     width: 220,
-    height: Layout.window.height / 4,
+    height: 200,
     backgroundColor: 'transparent',
     justifyContent: 'center',
     overflow: 'hidden'

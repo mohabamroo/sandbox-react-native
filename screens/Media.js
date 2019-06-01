@@ -11,7 +11,8 @@ import {
   FlatList,
   Linking,
   ImageBackground,
-  ScrollView
+  ScrollView,
+  TouchableHighlight
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import MediaPopup from './MediaPopup';
@@ -170,8 +171,7 @@ export default class Media extends React.Component {
         keyExtractor={this._keyExtractor}
         numColumns={2}
         renderItem={({ item, index }) => (
-          <TouchableOpacity
-            activeOpacity={0.9}
+          <TouchableHighlight
             onPress={() => this.openSwiper(index, sectionIndex)}
           >
             <Image
@@ -184,7 +184,7 @@ export default class Media extends React.Component {
               style={styles.cardImg}
               resizeMode="cover"
             />
-          </TouchableOpacity>
+          </TouchableHighlight>
         )}
       />
     );
@@ -199,31 +199,34 @@ export default class Media extends React.Component {
     ];
 
     return (
-      <TouchableOpacity
+      <TouchableHighlight
         key={index}
         style={[
           styles.videoRow,
           index == this.state[type + 's'].length - 1 ? styles.footerMargin : {}
         ]}
         onPress={() => Linking.openURL(item[type + '_url'])}
+
       >
-        <View style={styles.previewPic}>
-          <Image
-            resizeMode="cover"
-            source={{
-              uri: item[type + '_image'],
-              width: 150,
-              height: 100
-            }}
-            style={styles.videoImg}
+        <View style={{flex: 1}}>
+          <View style={styles.previewPic}>
+            <Image
+              resizeMode="cover"
+              source={{
+                uri: item[type + '_image'],
+                width: 150,
+                height: 100
+              }}
+              style={styles.videoImg}
+            />
+            <Image source={assets.default['playIco']} style={styles.playIco} />
+          </View>
+          <Text style={styles.videoTitle}>{item[type + '_title']}</Text>
+          <View
+            style={[styles.videoInfo, { borderBottomColor: backgroundColor }]}
           />
-          <Image source={assets.default['playIco']} style={styles.playIco} />
         </View>
-        <Text style={styles.videoTitle}>{item[type + '_title']}</Text>
-        <View
-          style={[styles.videoInfo, { borderBottomColor: backgroundColor }]}
-        />
-      </TouchableOpacity>
+      </TouchableHighlight>
     );
   }
 

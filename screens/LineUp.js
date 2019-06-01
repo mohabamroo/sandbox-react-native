@@ -8,7 +8,8 @@ import {
   View,
   Text,
   AppState,
-  ImageBackground
+  ImageBackground,
+  TouchableHighlight
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import ArtistPopup from './ArtistPopup';
