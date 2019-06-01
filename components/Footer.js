@@ -9,8 +9,9 @@ export default class Footer extends React.Component {
   render() {
     return (
       <View style={styles.footerContainer}>
+        {/* FIXME: */}
         <Image
-          resizeMode="cover"
+          resizeMode="contain"
           source={Assets.logo}
           style={styles.footerImage}
         />
@@ -21,17 +22,16 @@ export default class Footer extends React.Component {
 
 const styles = StyleSheet.create({
   footerContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    width: 220,
+    width: Layout.window.width / 1.5,
     height: Layout.window.height / 4,
     backgroundColor: 'transparent',
     justifyContent: 'center',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
     overflow: 'hidden'
   },
   footerImage: {
-    width: 220,
-    height: '100%'
+    width: Layout.window.width / 1.5
   }
 });

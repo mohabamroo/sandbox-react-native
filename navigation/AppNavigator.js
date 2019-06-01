@@ -1,6 +1,8 @@
 import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 
+import HeaderComponent from '../components/HeaderComponent';
+
 import Loading from '../screens/Loading';
 import HomeScreen from '../screens/HomeScreen';
 import LineUp from '../screens/LineUp';
@@ -12,12 +14,12 @@ import Info from '../screens/Info';
 import Safety from '../screens/Safety';
 import Rules from '../screens/Rules';
 import Policies from '../screens/Policies';
-
+import Activation1 from '../screens/Activation1';
+import ConfirmActivation from '../screens/ConfirmActivation';
+import DataActivation from '../screens/DataActivation';
+import * as assets from '../constants/Assets';
 import FQAs from '../screens/FQAs';
 import Partners from '../screens/Partners';
-import Profile from '../screens/Profile';
-import ProfileScreen from '../screens/Profile';
-import BusRoutes from '../screens/BusRoutes';
 
 export default createAppContainer(
   createStackNavigator(
@@ -38,7 +40,7 @@ export default createAppContainer(
             bgColor: 'green'
           },
           mainHeader: {
-            bg: 'bg1'
+            bg: 'bg4'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
@@ -72,6 +74,28 @@ export default createAppContainer(
           title: {
             text: 'Schedule',
             fontColor: 'yellow',
+            bgColor: '#60a484',
+            bgBack: '#189aa9',
+            colorBack: '#ffe958',
+            isrepated:true
+          },
+          mainHeader: {
+            bg: 'bg2'
+          },
+          subHeader: {
+            bg: 'info'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      Balance: {
+        screen: Balance,
+        params: {
+          title: {
+            text: 'Balance',
+            fontColor: 'yellow',
             bgColor: 'blue'
           },
           mainHeader: {
@@ -85,42 +109,84 @@ export default createAppContainer(
           header: null
         })
       },
-      Balance: {
-        screen: Balance,
-        params: {
-          title: {
-            text: 'Balance',
-            fontColor: '#FFEC59',
-            bgColor: '#FBBC78',
-            colorBack: '#FFEC59',
-            bgBack: '#189AA8'
-          },
-          mainHeader: {
-            bg: 'bg1'
-          },
-          subHeader: {
-            bg: 'circ5'
-          }
-        },
-        navigationOptions: ({ navigation, screenProps }) => ({
-          header: null
-        })
-      },
       Media: {
         screen: Media,
         params: {
           title: {
             text: 'Media',
             fontColor: 'yellow',
-            bgColor: 'rgb(242,132,181)',
-            colorBack: '#ffec59',
-            bgBack: '#189aa9'
+            bgColor: 'pink',
+            colorBack: 'white',
+            bgBack: 'green'
           },
           mainHeader: {
-            bg: 'bg2b'
+            bg: 'bg2'
           },
           subHeader: {
-            bg: 'circb'
+            bg: 'circ6'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      Activation1: {
+        screen: Activation1,
+        params: {
+          title: {
+            text: 'Activation',
+            fontColor: 'yellow',
+            bgColor: '#e9665d',
+            bgBack: '#189aa9',
+            colorBack: '#ffec59'
+          },
+          mainHeader: {
+            bg: 'bg2'
+          },
+          subHeader: {
+            bg: 'circ2'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      ConfirmActivation: {
+        screen: ConfirmActivation,
+        params: {
+          title: {
+            text: 'Activation',
+            fontColor: 'yellow',
+            bgColor: '#e9665d',
+            bgBack: '#189aa9',
+            colorBack: '#ffec59'
+          },
+          mainHeader: {
+            bg: 'bg2'
+          },
+          subHeader: {
+            bg: 'circ2'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      DataActivation: {
+        screen: DataActivation,
+        params: {
+          title: {
+            text: 'Activation',
+            fontColor: 'yellow',
+            bgColor: '#e9665d',
+            bgBack: '#189aa9',
+            colorBack: '#ffec59'
+          },
+          mainHeader: {
+            bg: 'bg2'
+          },
+          subHeader: {
+            bg: 'circ2'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
@@ -132,10 +198,8 @@ export default createAppContainer(
         params: {
           title: {
             text: 'Discover',
-            fontColor: '#ffec59',
-            bgColor: '#e9665d',
-            bgBack: '#189aa9',
-            colorBack: '#ffe958'
+            fontColor: 'yellow',
+            bgColor: 'blue'
           },
           mainHeader: {
             bg: 'bg1'
@@ -222,7 +286,7 @@ export default createAppContainer(
             colorBack: '#ffec59'
           },
           mainHeader: {
-            bg: 'bg1'
+            bg: 'bg2'
           },
           subHeader: {
             bg: 'info'
@@ -270,55 +334,13 @@ export default createAppContainer(
             bg: 'info'
           }
         },
-        navigationOptions: ({ navigation, screenProps }) => ({
-          header: null
-        })
-      },
-      bus_routes: {
-        screen: BusRoutes,
-        params: {
-          title: {
-            text: 'Bus Routes',
-            fontColor: '#ffec59',
-            bgColor: '#7bc19e',
-            bgBack: '#189aa9',
-            colorBack: '#ffec59'
-          },
-          mainHeader: {
-            bg: 'bg1'
-          },
-          subHeader: {
-            bg: 'info'
-          }
-        },
-        navigationOptions: ({ navigation, screenProps }) => ({
-          header: null
-        })
-      },
-      Profile: {
-        screen: ProfileScreen,
-        params: {
-          title: {
-            text: 'Your pass',
-            fontColor: '#7bc19e',
-            bgColor: '#ffe958',
-            bgBack: '#7bc19e',
-            colorBack: '#ffe958'
-          },
-          mainHeader: {
-            bg: 'bg4'
-          },
-          subHeader: {
-            bg: 'circ4'
-          }
-        },
-        navigationOptions: ({ navigation, screenProps }) => ({
+        navigationOpartnersptions: ({ navigation, screenProps }) => ({
           header: null
         })
       }
     },
     {
-      initialRouteName: 'Loading',
+      initialRouteName: 'DataActivation',
       mode: 'card',
       navigationOptions: {
         animationEnabled: true

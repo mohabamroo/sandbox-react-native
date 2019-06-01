@@ -13,7 +13,6 @@ import { NavigationController } from '../navigation/index';
 import HeaderComponent from '../components/HeaderComponent';
 import Footer from '../components/Footer';
 import Quadrilateral from '../components/Quadrilateral';
-import CurrentlyPlaying from '../components/CurrentlyPlaying';
 
 // import the page components
 import { Boxes } from '../components/Boxes';
@@ -98,14 +97,14 @@ export default class HomeScreen extends React.Component {
             >
               <View style={styles.textContainer}>
                 <Text style={styles.beforeActivationTextBG}>
-                  You did not activate you pass yet?!
+                  You did not activate you pass yet ?!
                 </Text>
                 <TouchableOpacity
                   activeOpacity={0.9}
                   style={styles.buttonActivate}
                   onPress={() => {
-                    console.log('Press');
-                    this.navigationController.direct('Profile');
+                    this.navigationController.direct('Activation1')
+                    
                   }}
                 >
                   <View>
@@ -116,8 +115,6 @@ export default class HomeScreen extends React.Component {
                 </TouchableOpacity>
               </View>
             </ImageBackground>
-          </View>
-          <ScrollView style={{marginTop: -10}}>
             <View style={styles.counter}>
               {this.state.timeState == 1 && (
                 <View style={styles.seeYouContainer}>
@@ -129,8 +126,9 @@ export default class HomeScreen extends React.Component {
                   <Text style={styles.dotsText}> ... </Text>
                 </View>
               )}
-              </View>
-            <CurrentlyPlaying />
+            </View>
+          </View>
+          <ScrollView>
             <Boxes NACController={this.navigationController} />
             {/** The boxes area */}
 
@@ -139,8 +137,8 @@ export default class HomeScreen extends React.Component {
             <News />
             <View style={styles.paddingDiv} />
           </ScrollView>
+          <Footer />
         </View>
-        <Footer />
       </ImageBackground>
     );
   }
@@ -149,7 +147,8 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   imageBG: {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    flex: 1
   },
   profileBG: {
     width: '100%',
