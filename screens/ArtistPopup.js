@@ -9,7 +9,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { Zocial, EvilIcons } from '@expo/vector-icons';
+import { Entypo, EvilIcons } from '@expo/vector-icons';
 import Layout from '../constants/Layout';
 import Footer from '../components/Footer';
 import { likeArtist, removeArtistLike } from '../Config/ExternalURL';
@@ -133,7 +133,7 @@ export default class ArtistPopup extends React.Component {
             style={styles.icon}
             onPress={() => Linking.openURL(artist.artist_soundcloud)}
           >
-            <Zocial name="soundcloud" size={22} color="orange" />
+            <Entypo name="soundcloud" size={28} color="orange" />
           </TouchableOpacity>
           <ScrollView
             style={[styles.textArea, { backgroundColor: color1 }]}
