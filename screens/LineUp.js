@@ -14,6 +14,7 @@ import HeaderComponent from '../components/HeaderComponent';
 import ArtistPopup from './ArtistPopup';
 import Footer from '../components/Footer';
 import Assets, * as assets from '../constants/Assets';
+import { FavoritesDB } from '../Config/DB';
 
 import * as __GStyles from '../styles';
 import { ArtistsDB } from '../Config/DB';
@@ -43,7 +44,6 @@ export default class LinksScreen extends React.Component {
     artists = artists.map(x => {
       return { ...x, visible: true };
     });
-    console.log('TCL: LinksScreen -> componentDidMount -> artists', artists);
     let dsData = this.ds.cloneWithRows(artists);
     this.setState({
       artists: dsData,
@@ -51,12 +51,12 @@ export default class LinksScreen extends React.Component {
       initialArtists: artists,
       appState: AppState.currentState
     });
+    this.fetchFavorites();
   }
 
   componentWillUnmount() {}
 
   renderArtist(row, L, index) {
-
     let color = this.state.colors[index % Number(this.state.colors.length)];
     let color2 = this.state.colors2[index % Number(this.state.colors2.length)];
     return (
@@ -70,6 +70,7 @@ export default class LinksScreen extends React.Component {
           this.setState({
             show_popup: true,
             current_artist: row,
+            current_artist_idx: index,
             color1: color,
             color2
           })
@@ -102,6 +103,29 @@ export default class LinksScreen extends React.Component {
       currentCount: newDS.getRowCount()
     });
   };
+
+  fetchFavorites() {
+    let initialArtists = this.state.initialArtists;
+    // artists: dsData,
+    FavoritesDB.Get().then(artists => {
+      artists.forEach(likedArtist => {
+        if (likedArtist && likedArtist.artist_id) {
+          initialArtists.forEach((artist, index) => {
+            if (artist.artist_id == likedArtist.artist_id) {
+              console.log(
+                'TCL: LinksScreen -> fetchFavorites -> likedArtist.artist_id',
+                likedArtist.artist_id
+              );
+              initialArtists[index]['liked'] = true;
+            }
+          });
+        }
+      });
+
+      let dsData = this.ds.cloneWithRows(initialArtists);
+      this.setState({ artists: dsData });
+    });
+  }
 
   render() {
     return (
@@ -219,6 +243,7 @@ export default class LinksScreen extends React.Component {
             artist={this.state.current_artist}
             color1={this.state.color1}
             color2={this.state.color2}
+            notifyParent={() => this.fetchFavorites()}
             onClose={() => this.setState({ show_popup: false })}
           />
         )}
