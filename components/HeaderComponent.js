@@ -70,8 +70,8 @@ export default class HeaderComponent extends Header {
 						style={{
 							width: '100%',
 							transform: [{ skewY: '1deg' }],
-							height: 45,
-							backgroundColor: 'transparent'
+							height: 55,
+							backgroundColor: 'transparent',
 						}}
 					>
 						<ImageBackground

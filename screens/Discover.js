@@ -31,7 +31,6 @@ export default class Discover extends React.Component {
 				'#60a383',
 				'rgb(36,154,167)',
 				'#ffeb59',
-				'#837563',
 				'#f9bb79',
 				'#e9655d',
 				'#f8b7bb',
