@@ -20,6 +20,7 @@ import * as __GStyles from '../styles';
 import { ArtistsDB } from '../Config/DB';
 import Layout from '../constants/Layout';
 import ArtistRow from '../components/ArtistRow';
+
 export default class LinksScreen extends React.Component {
   ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
@@ -111,7 +112,10 @@ export default class LinksScreen extends React.Component {
         if (likedArtist && likedArtist.artist_id) {
           initialArtists.forEach((artist, index) => {
             if (artist.artist_id == likedArtist.artist_id) {
-              console.log("TCL: LinksScreen -> fetchFavorites -> likedArtist.artist_id", likedArtist.artist_id)
+              console.log(
+                'TCL: LinksScreen -> fetchFavorites -> likedArtist.artist_id',
+                likedArtist.artist_id
+              );
               initialArtists[index]['liked'] = true;
             }
           });

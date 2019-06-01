@@ -141,9 +141,10 @@ export default class Loading extends Component {
           let data = JSON.parse(dataStr);
           return data;
         });
+        // object.scheduleLastUpdate
       Schedule = await fetch(
         object && object.scheduleLastUpdate
-          ? URLs.getSchedual(object.scheduleLastUpdate)
+          ? URLs.getSchedual(undefined)
           : URLs.getSchedual(undefined)
       ).then(response => response.json());
       console.log('Parsed Schedule');
@@ -223,7 +224,7 @@ export default class Loading extends Component {
     const SavingScheduleLastUpdate = await SchedualDB.SetLastUpdate(
       this.state.scheduleLastUpdate
     );
-    console.log('Saved schedule');
+    console.log('dule');
 
     const SavingArtists = this.state.ArtistsData
       ? await ArtistsDB.Set(this.state.ArtistsData)

@@ -8,20 +8,25 @@ import {
   ImageBackground,
   Button
 } from 'react-native';
+import moment from 'moment';
 import * as __GStyles from '../styles';
 import { NavigationController } from '../navigation/index';
 import HeaderComponent from '../components/HeaderComponent';
 import Footer from '../components/Footer';
 import Quadrilateral from '../components/Quadrilateral';
 import CurrentlyPlaying from '../components/CurrentlyPlaying';
+import ArtistPopup from './ArtistPopup';
 
 // import the page components
 import { Boxes } from '../components/Boxes';
 import { News } from '../components/News';
 import Assets from '../constants/Assets';
 import Layout from '../constants/Layout';
-import { EventInfoDB } from '../Config/DB';
 import { CountDownTimer } from '../components/CountDownTimer';
+import { EventInfoDB, SchedualDB, ArtistsDB } from '../Config/DB';
+
+// const start_days = [moment]
+
 export default class HomeScreen extends React.Component {
   __navigationOptions = {
     title: {
@@ -36,46 +41,99 @@ export default class HomeScreen extends React.Component {
       bg: 'circ2'
     }
   };
-
-  recursiveFunc(endDateTime) {
-    const self = this;
-    setTimeout(() => {
-      const newEndedFlag = Math.floor((endDateTime - new Date()) / 1000);
-      self.setState({
-        endedFlag: newEndedFlag <= 0
-      });
-      this.recursiveFunc(endDateTime);
-    }, 5 * 1000);
-  }
-
   constructor(props) {
     super(props);
     this.navigationController = new NavigationController(this.props.navigation);
-    const startDateTime = new Date('2019-06-13T13:00:00Z');
-    const endDateTime = new Date('2019-06-16T04:00:00Z');
-    const diff = Math.floor((startDateTime - new Date()) / 1000);
-    const endedFlag = Math.floor((endDateTime - new Date()) / 1000);
-    this.recursiveFunc(endDateTime);
     this.state = {
       timeState: 2,
-      startDateTime,
-      countDown: diff,
-      endedFlag: endedFlag <= 0
+      currentEvents: null,
+      current_artist: false,
+      show_popup: false
     };
+    this.handleSchedule = this.handleSchedule.bind(this);
   }
+
+  handleSchedule() {
+    let { schedule } = this.state;
+
+    days = Object.keys(schedule);
+    let now = moment();
+    // If festival has not started or has ended
+    let day = '';
+    if (
+      now.isAfter(
+        moment().set({ year: 2019, month: 5, date: 13, hour: 12, minute: 59 })
+      ) &&
+      now.isBefore(
+        moment().set({ year: 2019, month: 5, date: 14, hour: 12, minute: 15 })
+      )
+    ) {
+      day = 'day1';
+    } else if (
+      now.isAfter(
+        moment().set({ year: 2019, month: 5, date: 14, hour: 12, minute: 59 })
+      ) &&
+      now.isBefore(
+        moment().set({ year: 2019, month: 5, date: 15, hour: 11, minute: 59 })
+      )
+    ) {
+      day = 'day2';
+    } else if (
+      now.isAfter(
+        moment().set({ year: 2019, month: 5, date: 15, hour: 12, minute: 59 })
+      ) &&
+      now.isBefore(
+        moment().set({ year: 2019, month: 5, date: 16, hour: 15, minute: 59 })
+      )
+    ) {
+      day = 'day3';
+    } else {
+      return;
+    }
+    let hour = now.get('hour');
+    hour = ('0' + hour).slice(-2);
+    let minute = now.get('minute');
+    minute = minute > 30 ? '30' : '00';
+
+    time = hour + ':' + minute;
+
+    this.setState({
+      currentEvents: {
+        sandbox: schedule[day][time]['sandBoxStage'],
+        main: schedule[day][time]['MainStage']
+      }
+    });
+  }
+
   async componentDidMount() {
     // check the timestate..
     let general = await EventInfoDB.Get();
+    let schedule = await SchedualDB.Get();
+    let artists = await ArtistsDB.Get();
     console.log('TCL: HomeScreen -> componentDidMount -> general', general);
     this.setState(
       {
-        general
+        general,
+        schedule,
+        artists
       },
       () => {
         this.handleState();
       }
     );
+    this.handleSchedule();
   }
+
+  showDetials(artistInfo) {
+    current_artist = this.state.artists.filter(
+      x => x.artist_id == artistInfo.artistId
+    )[0];
+    this.setState({
+      show_popup: true,
+      current_artist
+    });
+  }
+
   handleState() {
     // check for after event state.
     let endDateObject = this.state.general
@@ -136,23 +194,26 @@ export default class HomeScreen extends React.Component {
                 </TouchableOpacity>
               </View>
             </ImageBackground>
-            {this.state.countDown > 0 ? (
-              <CountDownTimer
-                duration={this.state.countDown}
-                startDateTime={this.state.startDateTime}
-              />
-            ) : null}
           </View>
           <ScrollView style={{ marginTop: -10 }}>
-            {this.state.endedFlag && (
-              <View style={styles.counter}>
+            <View style={styles.counter}>
+              {this.state.timeState == 1 && (
                 <View style={styles.seeYouContainer}>
-                  <Text style={styles.seeYou}>SEE YOU NEXT YEAR!</Text>
+                  <Text style={styles.seeYou}>SEE YOU NEXT YEAR</Text>
                 </View>
-              </View>
+              )}
+              {this.state.timeState == 2 && (
+                <View style={styles.seeYouContainer}>
+                  <Text style={styles.dotsText}> ... </Text>
+                </View>
+              )}
+            </View>
+            {this.state.currentEvents && (
+              <CurrentlyPlaying
+                currentEvents={this.state.currentEvents}
+                showDetials={artist => this.showDetials(artist)}
+              />
             )}
-
-            <CurrentlyPlaying />
             <Boxes NACController={this.navigationController} />
             {/** The boxes area */}
 
@@ -162,6 +223,15 @@ export default class HomeScreen extends React.Component {
             <View style={styles.paddingDiv} />
           </ScrollView>
         </View>
+        {this.state.current_artist && (
+          <ArtistPopup
+            isVisible={this.state.show_popup}
+            artist={this.state.current_artist}
+            color1={'#7bc19e'}
+            color2={'#f8b7bb'}
+            onClose={() => this.setState({ show_popup: false })}
+          />
+        )}
         <Footer />
       </ImageBackground>
     );
