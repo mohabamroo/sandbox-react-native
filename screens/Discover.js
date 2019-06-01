@@ -27,9 +27,10 @@ export default class Discover extends React.Component {
 			map: false,
 			places: false,
 			colors: [
-				'#ffeb59',
+				'#7bc19e',
 				'#60a383',
-				'#837563',
+				'rgb(36,154,167)',
+				'#ffeb59',
 				'#f9bb79',
 				'#e9655d',
 				'#f8b7bb',
@@ -63,13 +64,13 @@ export default class Discover extends React.Component {
 				<HeaderComponent navigation={this.props.navigation} />
 				<ImageBackground
 					source={Assets.bg1}
-					style={{ width: width, height: 400 }}
+					style={{ width: width, height: width }}
 					resizeMode={'repeat'}
 				>
 					<ImageBackground
 						source={{ uri: this.state.map.location_image }}
-						style={{ width: width, height: 400 }}
-						resizeMode={'stretch'}
+						style={{ width: width, height: width }}
+						resizeMode={'contain'}
 					>
 						{this.state.places &&
 							this.state.places.map(item => (
@@ -94,38 +95,45 @@ export default class Discover extends React.Component {
 						</View>
 					</ImageBackground>
 				</ImageBackground>
-				<View
-					style={{
-						backgroundColor: '#7bc19e',
-						height: 50
-					}}
-				>
-					<CheckBox
-						style={{ flex: 1, padding: 10 , height: 50}}
-						checkBoxColor={'white'}
-						checkedCheckBoxColor={'white'}
-						onClick={() => {
-							this.setState({
-								showAll: !this.state.showAll
-							});
-						}}
-						isChecked={this.state.showAll}
-						leftText={'Show All'}
-						leftTextStyle={{
-							fontSize: 16,
-							color: '#ffffff',
-							fontWeight: 'bold',
-							textAlign: 'right',
-							marginRight: 10
-						}}
-					/>
-				</View>
+
 				{this.state.places && (
 					<FlatList
 						keyExtractor={(item, index) => `${index}`}
 						data={this.state.places}
 						style={{ width: '100%' }}
 						renderItem={item => {
+							if (item.index == 0){
+								return (
+									<View
+										style={{
+											backgroundColor: this.state.colors[
+												item.index % Number(this.state.colors.length)
+											],
+											height: 50
+										}}
+									>
+										<CheckBox
+											style={{ flex: 1, padding: 10 , height: 50}}
+											checkBoxColor={'white'}
+											checkedCheckBoxColor={'white'}
+											onClick={() => {
+												this.setState({
+													showAll: !this.state.showAll
+												});
+											}}
+											isChecked={this.state.showAll}
+											leftText={'Show All'}
+											leftTextStyle={{
+												fontSize: 16,
+												color: '#ffffff',
+												fontWeight: 'bold',
+												textAlign: 'right',
+												marginRight: 10
+											}}
+										/>
+									</View>
+								)
+							}
 							return (
 								<View
 									style={{

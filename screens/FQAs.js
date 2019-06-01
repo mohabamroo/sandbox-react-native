@@ -21,7 +21,17 @@ export default class FQAs extends React.Component {
     super(props);
     this.state = {
       content: this.props.navigation.state.params.in || [],
-      colors: ['#008691', '#f8b7bb', '#60a484', '#e9665d'],
+      colors:  [
+				'#7bc19e',
+				'#60a383',
+				'rgb(36,154,167)',
+				'#ffeb59',
+				'#f9bb79',
+				'#e9655d',
+				'#f8b7bb',
+				'#f069a7',
+				'#fde9d6'
+			],
       activeSection: [0]
     };
   }
@@ -49,7 +59,7 @@ export default class FQAs extends React.Component {
       for (let n in arr[i].answer) {
         answers.push(
           <Text key={'answer' + i + n} style={styles.answer}>
-            - {arr[i].answer[n]}
+            {arr[i].answer[n]}
           </Text>
         );
       }

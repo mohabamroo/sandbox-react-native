@@ -135,7 +135,7 @@ export default createAppContainer(
           title: {
             text: 'Discover',
             fontColor: '#ffec59',
-            bgColor: '#e9665d',
+            bgColor: 'rgb(237,126,114)',
             bgBack: '#189aa9',
             colorBack: '#ffe958'
           },
@@ -156,7 +156,7 @@ export default createAppContainer(
           title: {
             text: 'Info',
             fontColor: '#ffec59',
-            bgColor: '#7bc19e',
+            bgColor: 'rgb(142,201,174)',
             bgBack: '#189aa9',
             colorBack: '#ffec59'
           },

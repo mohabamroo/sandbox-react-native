@@ -17,7 +17,7 @@ export default StyleSheet.create({
   // The headerAContainer is for the main header which is the dots pattern.
   headerAContainer: {
     width: '100%',
-    height: 60
+    height: 55
   },
   imageBGPatternCurved: {
     width: '100%',
@@ -33,8 +33,7 @@ export default StyleSheet.create({
   },
   subHeaderContent: {
     height: '100%',
-    width: '100%',
-    marginTop: -5
+    width: '100%'
   },
   subHeaderContentView: {
     flex: 1,
@@ -62,7 +61,7 @@ export default StyleSheet.create({
   backButton: {
     flex: 1,
     position: 'absolute',
-    top: 45,
+    top: 40,
     left: 10,
     justifyContent: 'center',
     alignItems: 'center',
