@@ -1,0 +1,50 @@
+/**
+ * The boxes component in the Home page.
+ */
+
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import Layout from '../constants/Layout';
+import * as assets from '../constants/Assets';
+import CountDown from 'react-native-countdown-component';
+export class CountDownTimer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      eventStartTime: this.props.startDateTime,
+      duration: this.props.duration
+    };
+  }
+
+  render() {
+    return (
+      <View style={styles.counterContainer}>
+        <CountDown
+          size={30}
+          until={this.state.duration}
+          onFinish={() => alert('Finished')}
+          digitStyle={{
+            backgroundColor: 'transparent'
+          }}
+          digitTxtStyle={{ color: '#FFEB5C', fontSize: 56 }}
+          timeLabelStyle={{ color: 'white', marginTop: -85, fontSize: 12 }}
+          separatorStyle={{ color: '#FFEB5C', marginTop: 60, borderRadius: 0 }}
+          timeToShow={['D', 'H', 'M', 'S']}
+          timeLabels={{ d: 'Days', h: 'Hours', m: 'Minutes', s: 'Seconds' }}
+          showSeparator={true}
+        />
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  counterContainer: {
+    backgroundColor: '#7bc19e',
+    width: '100%',
+    zIndex: 2,
+    marginTop: -10,
+    marginBottom: 10,
+    paddingBottom: 15
+  }
+});

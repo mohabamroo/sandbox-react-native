@@ -20,7 +20,7 @@ import { News } from '../components/News';
 import Assets from '../constants/Assets';
 import Layout from '../constants/Layout';
 import { EventInfoDB } from '../Config/DB';
-
+import { CountDownTimer } from '../components/CountDownTimer';
 export default class HomeScreen extends React.Component {
   __navigationOptions = {
     title: {
@@ -38,8 +38,23 @@ export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.navigationController = new NavigationController(this.props.navigation);
+    const startDateTime = new Date('2019-06-13T13:00:00Z');
+    const endDateTime = new Date('2019-06-16T04:00:00Z');
+    const diff = Math.floor((startDateTime - new Date()) / 1000);
+    const endedFlag = Math.floor((endDateTime - new Date()) / 1000);
+    const self = this;
+    setTimeout(() => {
+      const newEndedFlag = Math.floor((endDateTime - new Date()) / 1000);
+      console.log("TCL: HomeScreen -> constructor -> newEndedFlag", newEndedFlag)
+      self.setState({
+        endedFlag: newEndedFlag
+      });
+    }, 5 * 1000);
     this.state = {
-      timeState: 2
+      timeState: 2,
+      startDateTime,
+      countDown: diff,
+      endedFlag
     };
   }
   async componentDidMount() {
@@ -115,10 +130,16 @@ export default class HomeScreen extends React.Component {
                 </TouchableOpacity>
               </View>
             </ImageBackground>
+            {this.state.countDown > 0 ? (
+              <CountDownTimer
+                duration={this.state.countDown}
+                startDateTime={this.state.startDateTime}
+              />
+            ) : null}
           </View>
-          <ScrollView style={{marginTop: -10}}>
+          <ScrollView style={{ marginTop: -10 }}>
             <View style={styles.counter}>
-              {this.state.timeState == 1 && (
+              {this.state.endedFlag && (
                 <View style={styles.seeYouContainer}>
                   <Text style={styles.seeYou}>SEE YOU NEXT YEAR</Text>
                 </View>
@@ -184,7 +205,7 @@ const styles = StyleSheet.create({
   seeYou: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: '#fff'
+    color: '#FFEB5C'
   },
   seeYouContainer: {
     flex: 1,
