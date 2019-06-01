@@ -18,7 +18,9 @@ import Partners from '../screens/Partners';
 import Profile from '../screens/Profile';
 import ProfileScreen from '../screens/Profile';
 import BusRoutes from '../screens/BusRoutes';
-
+import Activation1 from '../screens/Activation1';
+import ConfirmActivation from '../screens/ConfirmActivation';
+import DataActivation from '../screens/DataActivation';
 export default createAppContainer(
   createStackNavigator(
     {
@@ -310,6 +312,69 @@ export default createAppContainer(
           },
           subHeader: {
             bg: 'circ4'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      Activation1: {
+        screen: Activation1,
+        params: {
+          title: {
+            text: 'Activation',
+            fontColor: 'yellow',
+            bgColor: '#e9665d',
+            bgBack: '#189aa9',
+            colorBack: '#ffec59'
+          },
+          mainHeader: {
+            bg: 'bg2'
+          },
+          subHeader: {
+            bg: 'circ2'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      ConfirmActivation: {
+        screen: ConfirmActivation,
+        params: {
+          title: {
+            text: 'Activation',
+            fontColor: 'yellow',
+            bgColor: '#e9665d',
+            bgBack: '#189aa9',
+            colorBack: '#ffec59'
+          },
+          mainHeader: {
+            bg: 'bg2'
+          },
+          subHeader: {
+            bg: 'circ2'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      DataActivation: {
+        screen: DataActivation,
+        params: {
+          title: {
+            text: 'Activation',
+            fontColor: 'yellow',
+            bgColor: '#e9665d',
+            bgBack: '#189aa9',
+            colorBack: '#ffec59'
+          },
+          mainHeader: {
+            bg: 'bg2'
+          },
+          subHeader: {
+            bg: 'circ2'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
