@@ -11,12 +11,12 @@ export default class VisibilityView extends React.Component {
     if(show){
       return (
 
-          <View style={{width: width, height: 400, position: 'absolute'}}>
+          <View style={{width: width, height: width, position: 'absolute'}}>
             <Image
               id={item.location_type}
               source={{ uri: item.location_image }}
               style={{ width: width, height: 400, position: 'absolute' }}
-              resizeMode={'stretch'}
+              resizeMode={'contain'}
             />
           </View>
 

@@ -31,15 +31,15 @@ export default class Info extends React.Component {
         '#60a484',
         '#fabb79',
         // '#e9665d',
-        '#ffec59'
+        'rgb(231,103,	95)'
       ],
       mapNaming: {
-        rules: { label: 'Festival rules', order: 1 },
+        rules: { label: 'Sandbox rules', order: 1 },
         bus_routes: { label: 'SHUTTLE BUSES & ROUTES', order: 2 },
         faqs: { label: 'FAQs', order: 3 },
         policies: { label: 'policies', order: 4 },
-        safety: { label: 'Safety & medical info', order: 5 },
-        partners: { label: 'partners, Sponsors & credit', order: 6 }
+        safety: { label: 'Safety & medical info', order: 6 },
+        partners: { label: 'partners, Sponsors & credit', order: 5 }
       }
     };
   }

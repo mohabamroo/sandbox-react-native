@@ -11,15 +11,25 @@ export default class Safety extends React.Component {
     super(props);
     this.state = {
       content: this.props.navigation.state.params.in || [],
-      colors: ['#008691', '#f8b7bb', '#60a484', '#e9665d'],
+      colors: [
+				'#7bc19e',
+				'#60a383',
+				'rgb(36,154,167)',
+				'#ffeb59',
+				'#f9bb79',
+				'#e9655d',
+				'#f8b7bb',
+				'#f069a7',
+				'#fde9d6'
+			],
       activeSection: [0]
     }
   }
   async componentDidMount(){
-    
+
   }
   renderRowNews(row, L, index){
-    
+
   }
   _renderSectionTitle(content, index){
     return (
@@ -51,7 +61,7 @@ export default class Safety extends React.Component {
           {/* Go ahead and delete ExpoLinksView and replace it with your
             * content, we just wanted to provide you with some helpful links */}
             <View>
-                <Accordion 
+                <Accordion
                     activeSections={this.state.activeSection}
                     sections={this.state.content}
                     renderSectionTitle={this._renderSectionTitle.bind(this)}
