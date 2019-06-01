@@ -7,6 +7,8 @@ import Assets from '../constants/Assets';
 
 export default class CurrentlyPlaying extends React.Component {
 	render() {
+    console.log('CURRENT', this.props.currentEvents.sandbox)
+    let { sandbox, main } = this.props.currentEvents;
 		return (
 			<View style={styles.container}>
 				<View
@@ -61,47 +63,54 @@ export default class CurrentlyPlaying extends React.Component {
 						flexDirection: 'row',
 						width: '100%',
 						height: 165,
-            backgroundColor: 'white'
+            backgroundColor: (!sandbox)? '#f8b7bb' :'#7bc19e'
 					}}
 				>
-					<View style={{ width: '50%', height: '100%' }}>
-            <Image
-              source={{ uri: 'https://sandboxfestival.com/wp-content/uploads/2019/04/Adham-Zahran.jpg' }}
-              style={styles.image}
-              resizeMode={'cover'}
-            />
-            <TouchableOpacity
-  						style={{
-            		position: 'absolute',
-            		top: 15,
-            		left: 10
-            	}}
-  						onPress={() => console.log('ss')}
-  					>
-  						<Image source={Assets.heart_off} style={{ width: 25, height: 25 }} resizeMode={'contain'}/>
-  					</TouchableOpacity>
-						<View
-							style={[
-								styles.triangle1,
-								{
-									position: 'absolute',
-									top: 0,
-									right: 0,
-                  borderBottomColor: '#f8b7bb'
-								}
-							]}
-						/>
-            <Text style={{ position: 'absolute',top: 5, right: 0, color: 'white', fontSize: 16, width: Layout.window.width * 0.3, fontWeight: 'bold'}}>Adham Zahran (live)</Text>
-            <Text style={{ position: 'absolute',bottom: 5, right: 5, color: '#e9665d', fontSize: 12, width: Layout.window.width * 0.15, fontWeight: 'bold', textAlign: 'right'}}>MAIN STAGE</Text>
-					</View>
+					{main && (
+            <View style={{ width: '50%', height: '100%' }}>
+              <TouchableOpacity onPress={() => this.props.showDetials(main)}>
+                <Image
+                  source={{ uri: main.artistImage}}
+                  style={styles.image}
+                  resizeMode={'cover'}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+    						style={{
+              		position: 'absolute',
+              		top: 15,
+              		left: 10
+              	}}
+    						onPress={() => console.log('ss')}
+    					>
+    						<Image source={Assets.heart_off} style={{ width: 20, height: 20 }} resizeMode={'contain'}/>
+    					</TouchableOpacity>
+  						<View
+  							style={[
+  								styles.triangle1,
+  								{
+  									position: 'absolute',
+  									top: 0,
+  									right: 0,
+                    borderBottomColor: '#f8b7bb'
+  								}
+  							]}
+  						/>
+              <Text style={{ position: 'absolute',top: 5, right: 0, color: 'white', fontSize: 16, width: Layout.window.width * 0.3, fontWeight: 'bold'}}>{main.artistName}</Text>
+              <Text style={{ position: 'absolute',bottom: 5, right: 5, color: '#e9665d', fontSize: 12, width: Layout.window.width * 0.15, fontWeight: 'bold', textAlign: 'right'}}>MAIN STAGE</Text>
+  					</View>
+          )}
+          { sandbox && (
 					<View
 						style={{ width: '50%', height: '100%' }}
 					>
-            <Image
-              source={{ uri: 'https://sandboxfestival.com/wp-content/uploads/2019/04/Traumer.jpg' }}
-              style={styles.image}
-              resizeMode={'cover'}
-            />
+            <TouchableOpacity onPress={() => this.props.showDetials(sandbox)}>
+              <Image
+                source={{ uri: sandbox.artistImage }}
+                style={styles.image}
+                resizeMode={'cover'}
+              />
+            </TouchableOpacity>
             <TouchableOpacity
               style={{
                 position: 'absolute',
@@ -110,7 +119,7 @@ export default class CurrentlyPlaying extends React.Component {
               }}
               onPress={() => console.log('ss')}
             >
-              <Image source={Assets.heart_off} style={{ width: 25, height: 25 }} resizeMode={'contain'}/>
+              <Image source={Assets.heart_off} style={{ width: 20, height: 20 }} resizeMode={'contain'}/>
             </TouchableOpacity>
             <View
               style={[
@@ -123,9 +132,10 @@ export default class CurrentlyPlaying extends React.Component {
                 }
               ]}
             />
-            <Text style={{ position: 'absolute',top: 5, right: 0, color: 'white', fontSize: 16, width: Layout.window.width * 0.3, fontWeight: 'bold'}}>Traumer</Text>
+            <Text style={{ position: 'absolute',top: 5, right: 0, color: 'white', fontSize: 16, width: Layout.window.width * 0.3, fontWeight: 'bold'}}>{sandbox.artistName}</Text>
             <Text style={{ position: 'absolute',bottom: 5, right: 5, color: '#e9665d', fontSize: 12, width: Layout.window.width * 0.15, fontWeight: 'bold', textAlign: 'right'}}>SANDBOX STAGE</Text>
           </View>
+          )}
 				</View>
 			</View>
 		);

@@ -19,6 +19,7 @@ import * as __GStyles from '../styles';
 import { ArtistsDB } from '../Config/DB';
 import Layout from '../constants/Layout';
 import ArtistRow from '../components/ArtistRow';
+
 export default class LinksScreen extends React.Component {
   ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
@@ -55,7 +56,7 @@ export default class LinksScreen extends React.Component {
   componentWillUnmount() {}
 
   renderArtist(row, L, index) {
-    
+
     let color = this.state.colors[index % Number(this.state.colors.length)];
     let color2 = this.state.colors2[index % Number(this.state.colors2.length)];
     return (
