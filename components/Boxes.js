@@ -131,11 +131,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   image: {
-    flex: 3,
+    flex: 2,
     margin: 'auto',
-    width: 100,
+    width: 50,
     justifyContent: 'center',
-    marginBottom: 5
   },
   box: {
     flex: 1,
@@ -143,6 +142,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
     textAlign: 'center',
+    alignItems: 'center'
+  },
+  boxBtn: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    flexDirection: 'column',
     alignItems: 'center'
   },
   boxText: {

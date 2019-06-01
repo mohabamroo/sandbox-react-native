@@ -36,6 +36,18 @@ export default class HomeScreen extends React.Component {
       bg: 'circ2'
     }
   };
+
+  recursiveFunc(endDateTime) {
+    const self = this;
+    setTimeout(() => {
+      const newEndedFlag = Math.floor((endDateTime - new Date()) / 1000);
+      self.setState({
+        endedFlag: newEndedFlag <= 0
+      });
+      this.recursiveFunc(endDateTime);
+    }, 5 * 1000);
+  }
+
   constructor(props) {
     super(props);
     this.navigationController = new NavigationController(this.props.navigation);
@@ -43,19 +55,12 @@ export default class HomeScreen extends React.Component {
     const endDateTime = new Date('2019-06-16T04:00:00Z');
     const diff = Math.floor((startDateTime - new Date()) / 1000);
     const endedFlag = Math.floor((endDateTime - new Date()) / 1000);
-    const self = this;
-    setTimeout(() => {
-      const newEndedFlag = Math.floor((endDateTime - new Date()) / 1000);
-      console.log("TCL: HomeScreen -> constructor -> newEndedFlag", newEndedFlag)
-      self.setState({
-        endedFlag: newEndedFlag
-      });
-    }, 5 * 1000);
+    this.recursiveFunc(endDateTime);
     this.state = {
       timeState: 2,
       startDateTime,
       countDown: diff,
-      endedFlag
+      endedFlag: endedFlag <= 0
     };
   }
   async componentDidMount() {
@@ -139,18 +144,14 @@ export default class HomeScreen extends React.Component {
             ) : null}
           </View>
           <ScrollView style={{ marginTop: -10 }}>
-            <View style={styles.counter}>
-              {this.state.endedFlag && (
+            {this.state.endedFlag && (
+              <View style={styles.counter}>
                 <View style={styles.seeYouContainer}>
-                  <Text style={styles.seeYou}>SEE YOU NEXT YEAR</Text>
+                  <Text style={styles.seeYou}>SEE YOU NEXT YEAR!</Text>
                 </View>
-              )}
-              {this.state.timeState == 2 && (
-                <View style={styles.seeYouContainer}>
-                  <Text style={styles.dotsText}> ... </Text>
-                </View>
-              )}
               </View>
+            )}
+
             <CurrentlyPlaying />
             <Boxes NACController={this.navigationController} />
             {/** The boxes area */}
