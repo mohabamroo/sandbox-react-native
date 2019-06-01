@@ -2,6 +2,7 @@ import React from 'react';
 import { Image, StyleSheet, TouchableOpacity, View, Text, TouchableHighlight } from 'react-native';
 
 import Layout from '../constants/Layout';
+import Assets from '../constants/Assets';
 
 export default class ArtistRow extends React.Component {
   constructor(props) {
@@ -23,6 +24,15 @@ export default class ArtistRow extends React.Component {
       >
         <View key={index} style={styles.artistRow}>
           <Image source={{ uri: row.artist_image }} style={styles.image} />
+          <Image
+            source={
+              row && row.liked == true
+                ? Assets.heart_on
+                : Assets.heart_off
+            }
+            style={{ width: 25, height: 25, position: 'absolute', top: 5, left: 5, zIndex: 3 }}
+            resizeMode={'contain'}
+          />
           <View
             style={[
               styles.triangle,

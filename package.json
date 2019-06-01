@@ -19,6 +19,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-check-box": "^2.1.7",
     "react-native-collapsible": "^1.4.0",
+    "react-native-countdown-component": "^2.4.0",
     "react-native-modal": "^11.0.1",
     "react-native-snap-carousel": "^3.8.0",
     "react-navigation": "^3.0.9",
