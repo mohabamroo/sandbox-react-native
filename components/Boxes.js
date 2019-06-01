@@ -136,9 +136,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   image: {
-    flex: 2,
+    flex: 1,
     margin: 'auto',
-    width: 50,
+    width: 45,
     justifyContent: 'center',
   },
   box: {
@@ -146,18 +146,20 @@ const styles = StyleSheet.create({
     height: Layout.window.width / 3,
     justifyContent: 'center',
     padding: 10,
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: 35
   },
   boxBtn: {
     flex: 1,
     display: 'flex',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    margin: 'auto'
   },
   boxText: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 14,
     flex: 1,
     justifyContent: 'center',
     color: '#fff',

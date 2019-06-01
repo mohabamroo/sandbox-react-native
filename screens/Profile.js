@@ -70,11 +70,13 @@ export default class ProfileScreen extends React.Component {
       artists: dsData
     });
   }
+
   componentWillUnmount() {}
 
   renderArtist(row, L, index) {
     let color = this.state.colors[index % Number(this.state.colors.length)];
     let color2 = this.state.colors2[index % Number(this.state.colors2.length)];
+    row.liked = true;
     return (
       <ArtistRow
         index={index}
@@ -96,6 +98,17 @@ export default class ProfileScreen extends React.Component {
 
   section() {
     return;
+  }
+
+  // FIXME: weird logic on dislike, what about stage filtering
+  fetchFavorites() {
+    let initialArtists = this.state.initialArtists;
+    // artists: dsData,
+    FavoritesDB.Get().then(artists => {
+      // changing state
+      console.log('Changing state');
+      this.setArtists(artists);
+    });
   }
 
   render() {
@@ -144,6 +157,7 @@ export default class ProfileScreen extends React.Component {
             color1={this.state.color1}
             color2={this.state.color2}
             onClose={() => this.setState({ show_popup: false })}
+            notifyParent={() => this.fetchFavorites()}
           />
         )}
         <Footer />

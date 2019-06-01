@@ -20,10 +20,7 @@ const URLs = require('../Config/ExternalURL');
 export default class ArtistPopup extends React.Component {
   constructor(props) {
     super(props);
-    console.log(
-      'TCL: ArtistPopup -> constructor -> this.props.artist',
-      this.props.artist
-    );
+
     this.state = {
       artist: this.props.artist,
       userID: 38
@@ -43,10 +40,6 @@ export default class ArtistPopup extends React.Component {
         .then(response => response.json())
         .then(apiResponse => {
           if (apiResponse.Status == 200) {
-            console.log(
-              'TCL: ArtistPopup -> refreshFavorites -> suceess',
-              apiResponse.data
-            );
             FavoritesDB.Set(apiResponse.data).then(() => res());
           } else {
             console.log(
@@ -58,7 +51,6 @@ export default class ArtistPopup extends React.Component {
         .catch(err => {
           rej(err);
           // FIXME: what to do on internet corruption
-          console.log('TCL: ProfileScreen -> componentDidMount -> err', err);
         });
     });
   }
@@ -69,17 +61,22 @@ export default class ArtistPopup extends React.Component {
     this.setState({
       artist: { ...this.state.artist, liked: newLike }
     });
-    console.log(likeArtist);
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', newLike == true ? likeArtist : removeArtistLike, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(JSON.stringify(opts));
-    xhr.onreadystatechange = e => {
-      console.log('HELLO');
-      console.log(xhr.responseText);
-      if (newLike && xhr.responseText == 1) {
+    let reqURL = newLike == true ? likeArtist : removeArtistLike;
+    var form = new FormData();
+    form.append('user_id', opts.user_id);
+    form.append('artist_id', opts.artist_id_id);
+
+    fetch(reqURL, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, application/xml, text/plain, text/html, *.*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(opts)
+    }).then(res => {
+      if (res.status == 200) {
         this.refreshFavorites().then(() => {
-          console.log('refresh cache');
+          console.log('refreshing cache');
           this.props.notifyParent();
         });
       } else {
@@ -87,7 +84,7 @@ export default class ArtistPopup extends React.Component {
           artist: { ...this.state.artist, liked: false }
         });
       }
-    };
+    });
   }
 
   render() {
