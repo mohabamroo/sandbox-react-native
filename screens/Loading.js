@@ -65,6 +65,11 @@ export default class Loading extends Component {
     this.refresh(async status => {
       console.log('The status: ', status);
       if (!status) {
+        _this.setState({
+          loadingName:
+            'There seems to be an issue with your internet connection.'
+        });
+        console.log('TCL: componentDidMount -> no internet connection', status);
         // should check the offline content.
         let schedule = await SchedualDB.Get();
         let artist = await ArtistsDB.Get();
@@ -76,7 +81,7 @@ export default class Loading extends Component {
               'There seems to be an issue with your internet connection, please check and try again later.'
           });
         } else {
-          _this.goTo('Home');
+          this.navigationController.reset('Home');
         }
       } else {
         console.log('the internet is working fine, ');
@@ -86,13 +91,15 @@ export default class Loading extends Component {
             'checked the downloadable content and the result is : ',
             success
           );
+          // FIXME: when to direct to home, what's the condition
           if (
             success &&
             success.artistsLastUpdate &&
             success.scheduleLastUpdate
           ) {
             console.log('from one');
-            _this.DownloadTheData(success);
+            this.navigationController.reset('Home');
+            // _this.DownloadTheData(success);
           } else {
             console.log('from two');
             _this.DownloadTheData(undefined);
@@ -141,11 +148,11 @@ export default class Loading extends Component {
           let data = JSON.parse(dataStr);
           return data;
         });
-        // object.scheduleLastUpdate
+      // object.scheduleLastUpdate
       Schedule = await fetch(
         object && object.scheduleLastUpdate
-          ? URLs.getSchedual(undefined)
-          : URLs.getSchedual(undefined)
+          ? URLs.scheduleURL
+          : URLs.scheduleURL
       ).then(response => response.json());
       console.log('Parsed Schedule');
 
