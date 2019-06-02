@@ -14,6 +14,7 @@ module.exports = {
   removeArtistLike:
     'https://sandboxfestival.com/wp-json/sandbox/users/remove_favorite_artist/',
   baseURL: 'https://sandboxfestival.com',
+  scheduleURL: 'https://sandboxfestival.com/wp-json/sandbox/get/v3/home_schedule/1',
   getUser: id => {
     return `https://sandboxfestival.com/wp-json/sandbox/users/get_user_data/${id}`;
   },
