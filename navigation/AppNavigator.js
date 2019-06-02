@@ -73,14 +73,16 @@ export default createAppContainer(
         params: {
           title: {
             text: 'Schedule',
-            fontColor: 'rgb(254, 236, 116)',
-            bgColor: 'blue'
+            fontColor: '#FEEC59',
+            bgColor: '#90B878',
+            bgBack: '#189AA8',
+            colorBack: '#FEED59'
           },
           mainHeader: {
-            bg: 'bg1'
+            bg: 'bg2'
           },
           subHeader: {
-            bg: 'circ2'
+            bg: 'circ3'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
