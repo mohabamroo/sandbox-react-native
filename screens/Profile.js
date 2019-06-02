@@ -158,6 +158,7 @@ export default class ProfileScreen extends React.Component {
             color2={this.state.color2}
             onClose={() => this.setState({ show_popup: false })}
             notifyParent={() => this.fetchFavorites()}
+            style={{ zIndex: 1 }}
           />
         )}
         <Footer />

@@ -17,7 +17,7 @@ export default StyleSheet.create({
   // The headerAContainer is for the main header which is the dots pattern.
   headerAContainer: {
     width: '100%',
-    height: 55,
+    height: 55
   },
   imageBGPatternCurved: {
     width: '100%'
