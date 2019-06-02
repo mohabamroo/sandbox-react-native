@@ -83,6 +83,7 @@ export default class ProfileScreen extends React.Component {
         artist={row}
         color={color}
         color2={color2}
+        notifyParent={() => this.fetchFavorites()}
         lastRow={index == this.state.currentCount - 1}
         click={() =>
           this.setState({
