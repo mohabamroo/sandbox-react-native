@@ -222,20 +222,15 @@ export default class HomeScreen extends React.Component {
             <View style={styles.paddingDiv} />
           </ScrollView>
         </View>
-        {this.state.current_artist && (
+        {this.state.current_artist && this.state.show_popup && (
           <ArtistPopup
-            isVisible={this.state.show_popup}
             artist={this.state.current_artist}
             color1={'#7bc19e'}
             color2={'#f8b7bb'}
             onClose={() => this.setState({ show_popup: false })}
           />
         )}
-				{this.state.show_popup && (
-        <View
-          style={{ position: 'absolute', top: 0, left: 0, height: '100%', width: '100%', opacity: 0.8, backgroundColor: 'black' }}
-        />
-      )}
+
         <Footer />
       </ImageBackground>
     );

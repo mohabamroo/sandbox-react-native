@@ -162,10 +162,7 @@ export default class Media extends React.Component {
     return (
       <FlatList
         style={[
-          styles.imagesContainer,
-          sectionIndex == this.state.imagesArr.length - 1
-            ? styles.footerMargin
-            : {}
+          styles.imagesContainer
         ]}
         data={section.images}
         keyExtractor={this._keyExtractor}
@@ -331,7 +328,7 @@ export default class Media extends React.Component {
 
           {/* Images Tab */}
           {this.state.active == 'pics' ? (
-            <ScrollView>
+            <ScrollView contentContainerStyle={{paddingBottom: 200}}>
               <Accordion
                 activeSections={this.state.activeSection}
                 sections={this.state.imagesArr}
@@ -340,33 +337,7 @@ export default class Media extends React.Component {
                 renderContent={this._renderContent.bind(this)}
                 onChange={this._onChange.bind(this)}
               />
-              {/* <View style={styles.btnTextHolder}>
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={this.changeLayout}
-                  style={styles.Btn}
-                >
-                  <Text style={styles.btnText}>{this.state.activeYear}</Text>
-                </TouchableOpacity>
-                <View
-                  style={{
-                    height: this.state.yearsExpanded ? null : 0,
-                    overflow: 'hidden'
-                  }}
-                >
-                  {this.state.imagesYears.map((year, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      style={[{ backgroundColor: year.backgroundColor }]}
-                      onPress={() => {
-                        this.handleYearChange({ activeYear: year.label });
-                      }}
-                    >
-                      <Text style={styles.yearItem}>{year.label}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View> */}
+
             </ScrollView>
           ) : null}
 
@@ -418,7 +389,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   imagesContainer: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   cardImg: {
     flex: 1,

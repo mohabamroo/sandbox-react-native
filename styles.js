@@ -12,7 +12,7 @@ export default StyleSheet.create({
     overflow: 'hidden'
   },
   contentContainer: {
-    paddingBottom: 100
+    paddingBottom: 200
   },
   // The headerAContainer is for the main header which is the dots pattern.
   headerAContainer: {
@@ -20,8 +20,7 @@ export default StyleSheet.create({
     height: 55
   },
   imageBGPatternCurved: {
-    width: '100%',
-    height: '110%'
+    width: '100%'
   },
   subHeaderContainer: {
     width: '100%',
