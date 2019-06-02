@@ -1,18 +1,98 @@
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View, Text, TouchableHighlight } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+  TouchableHighlight
+} from 'react-native';
+import { likeArtist, removeArtistLike } from '../Config/ExternalURL';
+import { FavoritesDB } from '../Config/DB';
 
 import Layout from '../constants/Layout';
 import Assets from '../constants/Assets';
+const URLs = require('../Config/ExternalURL');
 
 export default class ArtistRow extends React.Component {
+  preventDefault = false;
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      artist: this.props.artist,
+      user_id: 38
+    };
   }
 
   async componentDidMount() {}
 
   componentWillUnmount() {}
+
+  _handleLikeClick() {
+    console.log('like clicked');
+    this.preventDefault = true;
+    this._likeArtist();
+    this.preventDefault = false;
+  }
+
+  _likeArtist() {
+    let newLike = this.state.artist.liked == true ? false : true;
+    this.setState({
+      artist: { ...this.state.artist, liked: newLike }
+    });
+    let reqURL = newLike == true ? likeArtist : removeArtistLike;
+    let opts = {
+      artist_id: this.state.artist.artist_id,
+      user_id: this.state.user_id
+    };
+    fetch(reqURL, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, application/xml, text/plain, text/html, *.*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(opts)
+    }).then(res => {
+      if (res.status == 200) {
+        this.refreshFavorites().then(() => {
+          this.props.notifyParent();
+        });
+      } else {
+        this.setState({
+          artist: { ...this.state.artist, liked: false }
+        });
+      }
+    });
+  }
+
+  refreshFavorites() {
+    return new Promise((res, rej) => {
+      fetch(URLs.getFavorites(this.state.user_id))
+        .then(response => response.json())
+        .then(apiResponse => {
+          if (apiResponse.Status == 200) {
+            FavoritesDB.Set(apiResponse.data).then(() => res());
+          } else {
+            console.log(
+              'TCL: ArtistPopup -> refreshFavorites -> apiResponse',
+              apiResponse
+            );
+          }
+        })
+        .catch(err => {
+          rej(err);
+          // FIXME: what to do on internet corruption
+        });
+    });
+  }
+
+  handleRowClick() {
+    console.log('general row');
+    if (!this.preventDefault) {
+      console.log('Row but not heart click');
+      this.props.click();
+    }
+  }
 
   render() {
     let { artist: row, index, color, color2 } = this.props;
@@ -20,19 +100,33 @@ export default class ArtistRow extends React.Component {
     return (
       <TouchableHighlight
         style={[this.props.lastRow ? styles.footerMargin : {}]}
-        onPress={() => this.props.click()}
+        onPress={() => this.handleRowClick()}
       >
         <View key={index} style={styles.artistRow}>
           <Image source={{ uri: row.artist_image }} style={styles.image} />
-          <Image
-            source={
-              row && row.liked == true
-                ? Assets.heart_on
-                : Assets.heart_off
-            }
-            style={{ width: 25, height: 25, position: 'absolute', top: 5, left: 5, zIndex: 3 }}
-            resizeMode={'contain'}
-          />
+          <TouchableOpacity
+            style={{
+              width: 25,
+              height: 25,
+              position: 'absolute',
+              top: 5,
+              left: 5,
+              zIndex: 3
+            }}
+            activeOpacity={0.5}
+            onPress={() => this._handleLikeClick()}
+          >
+            <Image
+              source={
+                row && row.liked == true ? Assets.heart_on : Assets.heart_off
+              }
+              style={{
+                width: 25,
+                height: 25
+              }}
+              resizeMode={'contain'}
+            />
+          </TouchableOpacity>
           <View
             style={[
               styles.triangle,

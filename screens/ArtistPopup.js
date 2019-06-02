@@ -62,10 +62,6 @@ export default class ArtistPopup extends React.Component {
       artist: { ...this.state.artist, liked: newLike }
     });
     let reqURL = newLike == true ? likeArtist : removeArtistLike;
-    var form = new FormData();
-    form.append('user_id', opts.user_id);
-    form.append('artist_id', opts.artist_id_id);
-
     fetch(reqURL, {
       method: 'POST',
       headers: {

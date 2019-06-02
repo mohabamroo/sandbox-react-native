@@ -182,7 +182,7 @@ export default class HomeScreen extends React.Component {
                   style={styles.buttonActivate}
                   onPress={() => {
                     console.log('Press');
-                    this.navigationController.direct('Profile');
+                    this.navigationController.direct('Activation1');
                   }}
                 >
                   <View>
