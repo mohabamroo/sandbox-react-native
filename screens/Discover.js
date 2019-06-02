@@ -60,13 +60,14 @@ export default class Discover extends React.Component {
 
 	render() {
 		return (
+			<ImageBackground
+				source={Assets.bg1}
+				resizeMode="repeat"
+				style={styles.imageBG}
+			>
 			<View style={__GStyles.default.container}>
 				<HeaderComponent navigation={this.props.navigation} />
-				<ImageBackground
-					source={Assets.bg1}
-					style={{ width: width, height: width }}
-					resizeMode={'repeat'}
-				>
+
 					<ImageBackground
 						source={{ uri: this.state.map.location_image }}
 						style={{ width: width, height: width }}
@@ -94,7 +95,7 @@ export default class Discover extends React.Component {
 							</Text>
 						</View>
 					</ImageBackground>
-				</ImageBackground>
+				
 
 				{this.state.places && (
 					<FlatList
@@ -172,11 +173,16 @@ export default class Discover extends React.Component {
 				)}
 				<Footer />
 			</View>
+			</ImageBackground>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
+	imageBG: {
+		width: '100%',
+		height: '100%'
+	},
 	container: {
 		flex: 1,
 		paddingTop: 15,
