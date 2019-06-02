@@ -14,8 +14,18 @@ export default class Schedule extends React.Component {
 		super(props)
 
 		this.state = {
-      MainStage: [],
-      sandBoxStage: [],
+      day_1: {
+        MainStage: [],
+        sandBoxStage: [],
+      },
+      day_2: {
+        MainStage: [],
+        sandBoxStage: [],
+      },
+      day_3: {
+        MainStage: [],
+        sandBoxStage: [],
+      },
 		}
   }
   
@@ -23,22 +33,15 @@ export default class Schedule extends React.Component {
     this.fetchCategories()
   }
   fetchCategories = () => {
-    var MainStage = []
-    var sandBoxStage = []
-    fetch('https://sandboxfestival.com/wp-json/sandbox/get/v2/home_schedule/null') // Call the fetch function passing the url of the API as a parameter
+    fetch('https://sandboxfestival.com/wp-json/sandbox/get/v3/home_schedule/1')
     .then((res => res.json()))
     .then((resJson) => {
-      var schedules = resJson.data;
-      Object.getOwnPropertyNames(schedules["day1"]).forEach(itemOfDay => {
-        if(schedules["day1"][itemOfDay]["MainStage"]) {
-          MainStage.push(schedules["day1"][itemOfDay]["MainStage"])
-        }
-        if(schedules["day1"][itemOfDay]["sandBoxStage"]) {
-          sandBoxStage.push(schedules["day1"][itemOfDay]["sandBoxStage"])
-        }
-      });
-      this.setState({ MainStage, sandBoxStage })
-      // alert(JSON.stringify(resJson.data))
+      // alert(JSON.stringify(resJson))
+        this.setState({
+          day_1: { MainStage: resJson.data.day1["Main Stage"], sandBoxStage: resJson.data.day1["SANDBOX Stage"] },
+          day_2: { MainStage: resJson.data.day2["Main Stage"], sandBoxStage: resJson.data.day2["SANDBOX Stage"] },
+          day_3: { MainStage: resJson.data.day3["Main Stage"], sandBoxStage: resJson.data.day3["SANDBOX Stage"] },
+        })
     })
     .catch((err) => {
 
@@ -82,7 +85,7 @@ export default class Schedule extends React.Component {
             <FlatList
               horizontal={true}
               showsHorizontalScrollIndicator={false}
-              data={this.state.MainStage}
+              data={this.state.day_1.MainStage}
               extraData={this.state}
               keyExtractor={(item) => item.artistId}
               renderItem={({ item }) => this.renderMainStageArtiest(item)}
@@ -94,7 +97,7 @@ export default class Schedule extends React.Component {
             <FlatList
               horizontal={true}
               showsHorizontalScrollIndicator={false}
-              data={this.state.sandBoxStage}
+              data={this.state.day_1.sandBoxStage}
               extraData={this.state}
               keyExtractor={(item) => item.artistId}
               renderItem={({ item }) => this.renderSandBoxStageArtiest(item)}
