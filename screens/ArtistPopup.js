@@ -6,7 +6,8 @@ import {
   View,
   Text,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Animated
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { Entypo, EvilIcons } from '@expo/vector-icons';
@@ -23,6 +24,8 @@ export default class ArtistPopup extends React.Component {
 
     this.state = {
       artist: this.props.artist,
+      opacity: new Animated.Value(0),
+      position: new Animated.Value(Layout.window.height),
       userID: 38
     };
     this._likeArtist = this._likeArtist.bind(this);
@@ -34,25 +37,18 @@ export default class ArtistPopup extends React.Component {
       this.props.artist
     );
   }
-  refreshFavorites() {
-    return new Promise((res, rej) => {
-      fetch(URLs.getFavorites(this.state.userID))
-        .then(response => response.json())
-        .then(apiResponse => {
-          if (apiResponse.Status == 200) {
-            FavoritesDB.Set(apiResponse.data).then(() => res());
-          } else {
-            console.log(
-              'TCL: ArtistPopup -> refreshFavorites -> apiResponse',
-              apiResponse
-            );
-          }
-        })
-        .catch(err => {
-          rej(err);
-          // FIXME: what to do on internet corruption
-        });
-    });
+
+  componentWillMount() {
+    Animated.sequence([
+      Animated.timing(this.state.opacity, {
+        toValue: 1,
+        duration: 300
+      }),
+      Animated.timing(this.state.position, {
+        toValue: Layout.window.height * 0.01,
+        duration: 300
+      })
+    ]).start();
   }
 
   _likeArtist(opts) {
@@ -82,12 +78,55 @@ export default class ArtistPopup extends React.Component {
       }
     });
   }
+  refreshFavorites() {
+    return new Promise((res, rej) => {
+      fetch(URLs.getFavorites(this.state.userID))
+        .then(response => response.json())
+        .then(apiResponse => {
+          if (apiResponse.Status == 200) {
+            FavoritesDB.Set(apiResponse.data).then(() => res());
+          } else {
+            console.log(
+              'TCL: ArtistPopup -> refreshFavorites -> apiResponse',
+              apiResponse
+            );
+          }
+        })
+        .catch(err => {
+          rej(err);
+          // FIXME: what to do on internet corruption
+        });
+    });
+  }
 
   render() {
-    let { artist, color1, color2 } = this.props;
+    let { artist, color1, color2, isVisible } = this.props;
     return (
-      <Modal isVisible={this.props.isVisible} hasBackdrop={false} animationInTiming={500}>
-        <View style={[styles.container, { backgroundColor: color1 }]}>
+      <Animated.View
+        style={{
+          position: 'absolute',
+          height: Layout.window.height,
+          width: Layout.window.width,
+          opacity: this.state.opacity,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <View
+          style={{
+            position: 'absolute',
+            height: Layout.window.height * 1.2,
+            width: Layout.window.width,
+            opacity: 0.8,
+            backgroundColor: 'black'
+          }}
+        />
+        <Animated.View
+          style={[
+            styles.container,
+            { backgroundColor: color1, top: this.state.position }
+          ]}
+        >
           <Image
             source={{ uri: artist.artist_image }}
             style={styles.image}
@@ -137,8 +176,8 @@ export default class ArtistPopup extends React.Component {
           >
             <Text style={styles.description}>{artist.artist_description}</Text>
           </ScrollView>
-        </View>
-      </Modal>
+        </Animated.View>
+      </Animated.View>
     );
   }
 }
@@ -146,8 +185,8 @@ export default class ArtistPopup extends React.Component {
 const styles = StyleSheet.create({
   container: {
     marginBottom: '30%',
-    height: '70%',
-    width: '100%'
+    height: Layout.window.height * 0.7,
+    width: Layout.window.width * 0.9
   },
   icon: {
     position: 'absolute',

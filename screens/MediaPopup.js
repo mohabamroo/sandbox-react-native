@@ -44,6 +44,7 @@ export default class ArtistPopup extends React.Component {
 						}}
 					>
 						<Carousel
+							useScrollView
 							ref={c => {
 								this._carousel = c;
 							}}

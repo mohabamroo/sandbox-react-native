@@ -48,7 +48,7 @@ export default class ArtistRow extends React.Component {
     fetch(reqURL, {
       method: 'POST',
       headers: {
-        Accept: 'application/json, application/xml, text/plain, text/html, *.*',
+        Accept: 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(opts)

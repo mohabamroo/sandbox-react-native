@@ -163,12 +163,13 @@ export default class Schedule extends React.Component {
   };
   render() {
     return (
-      <View style={__GStyles.default.container}>
-        <HeaderComponent navigation={this.props.navigation} />
-        <ImageBackground
-          style={styles.container}
-          source={require('../assets/images/bgschedul.png')}
-        >
+      <ImageBackground
+        style={__GStyles.default.container}
+        source={require('../assets/images/bgschedul.png')}
+        resizeMode={'cover'}
+      >
+          <HeaderComponent navigation={this.props.navigation} />
+
           <View style={{ flexDirection: 'row' }}>
             <Image
               source={require('../assets/images/main.png')}
@@ -197,9 +198,9 @@ export default class Schedule extends React.Component {
               renderItem={({ item }) => this.renderSandBoxStageArtiest(item)}
             />
           </View>
-        </ImageBackground>
+
         <Footer />
-      </View>
+      </ImageBackground>
     );
   }
 }

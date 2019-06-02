@@ -129,13 +129,13 @@ export default class LinksScreen extends React.Component {
 
   render() {
     return (
-      <View style={__GStyles.default.container}>
-        <HeaderComponent navigation={this.props.navigation} />
+
         <ImageBackground
           resizeMode="repeat"
           source={Assets.bg4}
-          style={[styles.container, { width: '100%' }]}
+          style={__GStyles.default.container}
         >
+          <HeaderComponent navigation={this.props.navigation} />
           <View style={styles.tabsContainer}>
             <TouchableOpacity
               onPress={() => {
@@ -236,10 +236,9 @@ export default class LinksScreen extends React.Component {
               enableEmptySections={this.section}
             />
           </ScrollView>
-        </ImageBackground>
-        {this.state.current_artist && (
+
+        {this.state.current_artist && this.state.show_popup && (
           <ArtistPopup
-            isVisible={this.state.show_popup}
             artist={this.state.current_artist}
             color1={this.state.color1}
             color2={this.state.color2}
@@ -247,21 +246,8 @@ export default class LinksScreen extends React.Component {
             onClose={() => this.setState({ show_popup: false })}
           />
         )}
-        {this.state.show_popup && (
-          <View
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              height: '100%',
-              width: '100%',
-              opacity: 0.8,
-              backgroundColor: 'black'
-            }}
-          />
-        )}
         <Footer />
-      </View>
+      </ImageBackground>
     );
   }
 }
@@ -269,7 +255,8 @@ export default class LinksScreen extends React.Component {
 const styles = StyleSheet.create({
   backGround: {
     width: '100%',
-    flex: 1
+    flex: 1,
+
   },
   container: {
     flex: 1,
