@@ -185,7 +185,7 @@ export default createAppContainer(
             bg: 'bg1'
           },
           subHeader: {
-            bg: 'info'
+            bg: 'circ3'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
@@ -206,7 +206,7 @@ export default createAppContainer(
             bg: 'bg1'
           },
           subHeader: {
-            bg: 'info'
+            bg: 'circ3'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
@@ -227,7 +227,7 @@ export default createAppContainer(
             bg: 'bg1'
           },
           subHeader: {
-            bg: 'info'
+            bg: 'circ3'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
@@ -248,7 +248,7 @@ export default createAppContainer(
             bg: 'bg1'
           },
           subHeader: {
-            bg: 'info'
+            bg: 'circ3'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
@@ -269,7 +269,7 @@ export default createAppContainer(
             bg: 'bg1'
           },
           subHeader: {
-            bg: 'info'
+            bg: 'circ3'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
@@ -290,7 +290,7 @@ export default createAppContainer(
             bg: 'bg1'
           },
           subHeader: {
-            bg: 'info'
+            bg: 'circ3'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
