@@ -12,7 +12,7 @@ export default StyleSheet.create({
     overflow: 'hidden'
   },
   contentContainer: {
-    paddingBottom: 100
+    paddingBottom: 200
   },
   // The headerAContainer is for the main header which is the dots pattern.
   headerAContainer: {
