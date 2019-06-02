@@ -18,6 +18,7 @@ import Colors from '../constants/Colors';
 import Quadrilateral from './Quadrilateral';
 
 import { NewsDB } from '../Config/DB/index';
+const URLs = require('../Config/ExternalURL');
 
 export class News extends React.Component {
   ds = new ListView.DataSource({
@@ -43,14 +44,36 @@ export class News extends React.Component {
       dataSource: this.ds.cloneWithRows([])
     };
   }
+
   async componentDidMount() {
     let news = await NewsDB.Get();
+    this.setNews(news);
+    this.refreshNews();
+  }
+
+  setNews(news) {
     let dsData = this.ds.cloneWithRows(news);
     this.setState({
       dataSource: dsData,
       newsCount: dsData.getRowCount()
     });
   }
+
+  refreshNews() {
+    fetch(URLs.getNews(this.state.userID))
+      .then(response => response.json())
+      .then(apiResponse => {
+        if (apiResponse.Status == 200) {
+          this.setNews(apiResponse.data);
+          NewsDB.Set(apiResponse.data);
+        }
+      })
+      .catch(err => {
+        // FIXME: what to do on internet corruption
+        console.log('TCL: News Screen -> componentDidMount -> err', err);
+      });
+  }
+
   section() {
     return;
   }
@@ -79,6 +102,7 @@ export class News extends React.Component {
       </View>
     );
   }
+
   render() {
     return (
       <View style={styles.container}>
