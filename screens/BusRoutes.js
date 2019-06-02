@@ -21,25 +21,6 @@ import Assets from '../constants/Assets';
 
 const { height, width } = Dimensions.get('window');
 
-// <ScrollView
-//   bounces={false}
-//   style={styles.container}
-//   contentContainerStyle={__GStyles.default.contentContainer}
-// >
-//   {/* Go ahead and delete ExpoLinksView and replace it with your
-//    * content, we just wanted to provide you with some helpful links */}
-//   <View>
-//     <Accordion
-//       activeSections={this.state.activeSection}
-//       sections={this.state.content}
-//       renderSectionTitle={this._renderSectionTitle.bind(this)}
-//       renderHeader={this._renderHeader.bind(this)}
-//       renderContent={this._renderContent.bind(this)}
-//       onChange={this._onChange.bind(this)}
-//     />
-//   </View>
-// </ScrollView>
-
 export default class BusRoutes extends React.Component {
 	ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 	constructor(props) {
