@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   ImageBackground
 } from 'react-native';
+import moment from 'moment';
+
 import HeaderComponent from '../components/HeaderComponent';
 const { width, height } = Dimensions.get('window');
 import { AntDesign } from '@expo/vector-icons';
@@ -60,22 +62,52 @@ export default class Schedule extends React.Component {
   }
 
   setSchedule(schedObj) {
-    if (!schedObj.day1) return;
-    this.setState({
-      day_1: {
-        MainStage: schedObj.day1['Main Stage'],
-        sandBoxStage: schedObj.day1['SANDBOX Stage']
-      },
-      day_2: {
-        MainStage: schedObj.day2['Main Stage'],
-        sandBoxStage: schedObj.day2['SANDBOX Stage']
-      },
-      day_3: {
-        MainStage: schedObj.day3['Main Stage'],
-        sandBoxStage: schedObj.day3['SANDBOX Stage']
+    Object.keys(schedObj).forEach(day => {
+
+      let mainStage = schedObj[day]['Main Stage']
+      let sandBox = schedObj[day]['SANDBOX Stage']
+      let i = 0, j = 0, maxI = mainStage.length, maxJ = sandBox.length;
+      let begin, end;
+
+      // Set Begin and End Times of the day
+      beginMain = moment(mainStage[0]['session_start_time'], "HH:mm")
+      beginSand = moment(sandBox[0]['session_start_time'], "HH:mm")
+      begin = beginMain.isBefore(beginSand) ? beginMain : beginSand
+
+      endMain = moment(mainStage[mainStage.length-1]['session_end_time'], "HH:mm").add(24, 'hours')
+      endSand = moment(sandBox[sandBox.length-1]['session_end_time'], "HH:mm").add(24, 'hours')
+      end = endMain.isBefore(endSand) ? endSand : endMain
+
+      console.log('begin:', begin.format("HH:mm"), 'end', end.format("HH:mm") )
+      let mainSlots = [], sandSlots = [];
+      while(begin.isBefore(end)){
+        beginMain = moment(mainStage[i]['session_start_time'], "HH:mm")
+        beginSand = moment(sandBox[j]['session_start_time'], "HH:mm")
+        endMain = moment(mainStage[i]['session_end_time'], "HH:mm")
+        endSand = moment(sandBox[j]['session_end_time'], "HH:mm")
+        begin.add(30,'minutes')
       }
+
+
     });
+    // if (!schedObj.day1) return;
+    // this.setState({
+    //   day_1: {
+    //     MainStage: schedObj.day1['Main Stage'],
+    //     sandBoxStage: schedObj.day1['SANDBOX Stage']
+    //   },
+    //   day_2: {
+    //     MainStage: schedObj.day2['Main Stage'],
+    //     sandBoxStage: schedObj.day2['SANDBOX Stage']
+    //   },
+    //   day_3: {
+    //     MainStage: schedObj.day3['Main Stage'],
+    //     sandBoxStage: schedObj.day3['SANDBOX Stage']
+    //   }
+    // });
+
   }
+
 
   refreshSchedule() {
     fetch(URLs.scheduleURL)
@@ -188,7 +220,38 @@ export default class Schedule extends React.Component {
       </TouchableOpacity>
     );
   };
+
+  renderSlot(item) {
+    return null
+  }
+
   render() {
+    /**  <Image
+        source={require('../assets/images/main.png')}
+        style={{ height: 150, width: 60, resizeMode: 'cover' }}
+      />
+      <FlatList
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        data={this.state.day_1.MainStage}
+        extraData={this.state}
+        keyExtractor={item => item.artistId}
+        renderItem={({ item }) => this.renderMainStageArtiest(item)}
+      />
+    </View>
+    <View style={{ flexDirection: 'row' }}>
+      <Image
+        source={require('../assets/images/sandBox.png')}
+        style={{ height: 150, width: 60 }}
+      />
+      <FlatList
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        data={this.state.day_1.sandBoxStage}
+        extraData={this.state}
+        keyExtractor={item => item.artistId}
+        renderItem={({ item }) => this.renderSandBoxStageArtiest(item)}
+      />*/
     return (
       <ImageBackground
         style={__GStyles.default.container}
@@ -198,31 +261,13 @@ export default class Schedule extends React.Component {
           <HeaderComponent navigation={this.props.navigation} />
 
           <View style={{ flexDirection: 'row' }}>
-            <Image
-              source={require('../assets/images/main.png')}
-              style={{ height: 150, width: 60, resizeMode: 'cover' }}
-            />
             <FlatList
-              horizontal={true}
+              horizontal
               showsHorizontalScrollIndicator={false}
-              data={this.state.day_1.MainStage}
+              data={[]}
               extraData={this.state}
               keyExtractor={item => item.artistId}
-              renderItem={({ item }) => this.renderMainStageArtiest(item)}
-            />
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Image
-              source={require('../assets/images/sandBox.png')}
-              style={{ height: 150, width: 60 }}
-            />
-            <FlatList
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              data={this.state.day_1.sandBoxStage}
-              extraData={this.state}
-              keyExtractor={item => item.artistId}
-              renderItem={({ item }) => this.renderSandBoxStageArtiest(item)}
+              renderItem={({ item }) => this.renderSlot(item)}
             />
           </View>
           {this.state.current_artist && this.state.show_popup && (
