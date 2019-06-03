@@ -121,8 +121,8 @@ export default class ArtistRow extends React.Component {
                 row && row.liked == true ? Assets.heart_on : Assets.heart_off
               }
               style={{
-                width: 25,
-                height: 25
+                width: 14,
+                height: 14
               }}
               resizeMode={'contain'}
             />

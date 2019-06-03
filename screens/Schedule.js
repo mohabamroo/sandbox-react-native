@@ -14,10 +14,11 @@ const { width, height } = Dimensions.get('window');
 import { AntDesign } from '@expo/vector-icons';
 // import the page components
 import Assets from '../constants/Assets';
+import ArtistPopup from './ArtistPopup';
 
 import * as __GStyles from '../styles';
 import Footer from '../components/Footer';
-import { SchedualDB } from '../Config/DB';
+import { SchedualDB, ArtistsDB } from '../Config/DB';
 const URLs = require('../Config/ExternalURL');
 
 export default class Schedule extends React.Component {
@@ -25,6 +26,8 @@ export default class Schedule extends React.Component {
     super(props);
 
     this.state = {
+      show_popup: false,
+      current_artist: null,
       day_1: {
         MainStage: [],
         sandBoxStage: []
@@ -42,6 +45,12 @@ export default class Schedule extends React.Component {
 
   componentDidMount() {
     this.fetchCategories();
+    this.fetchArtists()
+  }
+
+  async fetchArtists() {
+    let artists = await ArtistsDB.Get();
+    this.setState({artists})
   }
 
   async fetchCategories() {
@@ -87,7 +96,16 @@ export default class Schedule extends React.Component {
 
   renderMainStageArtiest = item => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() =>{
+        current_artist = this.state.artists.filter(
+          x => x.artist_id == item.artistId
+        )[0];
+        this.setState({
+        show_popup: true,
+        current_artist,
+        color1: '#7bc19e',
+        color2: '#f8b7bb'
+      })}}>
         <Image
           source={{ uri: item.artistImage }}
           style={{ height: 150, width: width * 0.3, marginLeft: width * 0.21 }}
@@ -125,7 +143,16 @@ export default class Schedule extends React.Component {
   };
   renderSandBoxStageArtiest = item => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() =>{
+        current_artist = this.state.artists.filter(
+          x => x.artist_id == item.artistId
+        )[0];
+        this.setState({
+        show_popup: true,
+        current_artist,
+        color1: '#7bc19e',
+        color2: '#f8b7bb'
+      })}}>
         <Image
           source={{ uri: item.artistImage }}
           style={{ height: 150, width: width * 0.3, marginLeft: width * 0.21 }}
@@ -198,7 +225,15 @@ export default class Schedule extends React.Component {
               renderItem={({ item }) => this.renderSandBoxStageArtiest(item)}
             />
           </View>
-
+          {this.state.current_artist && this.state.show_popup && (
+            <ArtistPopup
+              artist={this.state.current_artist}
+              color1={this.state.color1}
+              color2={this.state.color2}
+              notifyParent={() => this.fetchFavorites()}
+              onClose={() => this.setState({ show_popup: false })}
+            />
+          )}
         <Footer />
       </ImageBackground>
     );
