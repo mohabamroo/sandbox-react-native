@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
   Text,
   Image,
-  Picker
+  Picker,
+  ImageBackground
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
-import Footer from '../components/Footer';
 const { width, height } = Dimensions.get('window');
 import * as __GStyles from '../styles';
 import { AntDesign, Entypo } from '@expo/vector-icons';
@@ -18,74 +18,46 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import CountryPicker, {
   getAllCountries
 } from 'react-native-country-picker-modal';
+import { Permissions, ImagePicker, CAMERA_ROLL, Camera } from 'expo';
+import { UserDB } from '../Config/DB';
 import Assets from '../constants/Assets';
-import { Permissions, ImagePicker, CAMERA_ROLL } from 'expo';
+import Footer from '../components/Footer';
 
 export default class Media extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       active: 'pics',
-      txt:
-        'Text between two or more users of mobile devices, videos, and sound content, as well as ideograms known as emoji (happy faces, sad faces, and other icons).',
+      txt: 'Please complete the steps below to activate your SANDBOX pass.',
       years: [],
-      days: [
-        '01',
-        '02',
-        '03',
-        '04',
-        '05',
-        '06',
-        '07',
-        '08',
-        '09',
-        '10',
-        '11',
-        '12',
-        '13',
-        '14',
-        '15',
-        '16',
-        '17',
-        '18',
-        '19',
-        '20',
-        '21',
-        '22',
-        '23',
-        '24',
-        '25',
-        '26',
-        '27',
-        '28',
-        '29',
-        '30',
-        '31',
-        '32'
-      ],
-      months: [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-      ],
+      days: Array(31)
+        .fill()
+        .map((x, i) => i + 1),
+      months: {
+        January: '01',
+        February: '02',
+        March: '03',
+        April: '04',
+        May: '05',
+        June: '06',
+        July: '07',
+        August: '08',
+        September: '09',
+        October: '10',
+        November: '11',
+        December: '12'
+      },
       day: null,
-      month: null,
-      year: null,
+      selectedMonthValue: null,
+      selectedMonthName: 'Month',
+      yearValue: null,
       cca2: 'US',
       callingCode: '1',
       fetching: false,
       PermissionsReady: false,
       image: null,
-      base64: null
+      base64: null,
+      countryName: 'Country'
     };
   }
 
@@ -108,16 +80,18 @@ export default class Media extends React.Component {
       alert('not grandted');
     }
   };
+
   onPressIcon = async () => {
-    console.log('icon press');
     if (this.state.PermissionsReady) {
       let result = await ImagePicker.launchCameraAsync({
         allowsEditing: false,
+        aspect: [1, 1],
         base64: true
       });
-      console.log('TCL: Media -> onPressIcon -> result', result);
       if (!result.cancelled) {
-        this.setState({ image: result.uri, base64: result.base64 });
+        this.setState({
+          image: result.uri
+        });
       }
     } else {
       this.getPermissionOne();
@@ -132,34 +106,62 @@ export default class Media extends React.Component {
     }
     this.setState({ years });
   }
-  sendData = () => {
+
+  async sendData() {
+    if (
+      !this.state.yearValue ||
+      !this.state.selectedMonthValue ||
+      !this.state.dayValue ||
+      !this.state.cca2 ||
+      !this.state.image
+    ) {
+      alert('Please, fill all fields');
+      this.props.navigation.navigate('Home');
+
+      this.props.navigation.state.params.notifyParent();
+      return;
+    }
     var form = new FormData();
     form.append(
       'client_date_of_birth',
-      `${this.state.day}-${this.state.month}-${this.state.year}`
+      `${this.state.yearValue}-${this.state.selectedMonthValue}-${
+        this.state.dayValue
+      }`
     );
     form.append('client_photo', 'wait');
     form.append('country', this.state.cca2);
     this.setState({ fetching: true });
-    fetch('https://nacelle.nbhood.com/api/tickets/techiiestan@gmail.com/', {
+    fetch('https://nacelle.nbhood.com/api/tickets/mohabamr1@gmail.com/', {
       method: 'PATCH',
       headers: {
-        Accept: 'application/json, application/xml, text/plain, text/html, *.*',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data'
       },
       body: form
     }).then(res => {
       if (res.status != 200) {
         alert(res._bodyInit);
       } else {
-        this.props.navigation.navigate('Home');
+        res.json().then(jsonData => {
+          UserDB.Set(jsonData).then(cache => {
+            console.log('set user in cache');
+            this.props.navigation.state.params.notifyParent();
+            this.props.navigation.navigate('Home');
+          });
+        });
       }
       this.setState({ fetching: false });
     });
-  };
+  }
+
   render() {
     return (
-      <View style={__GStyles.default.container}>
+      <ImageBackground
+        resizeMode="repeat"
+        source={Assets.bg1}
+        style={__GStyles.default.container}
+      >
+        {' '}
         <HeaderComponent navigation={this.props.navigation} />
         <ScrollView style={styles.container}>
           <View
@@ -201,17 +203,18 @@ export default class Media extends React.Component {
               }}
             >
               <View style={{}}>
-                <Image
-                  style={{ width: width * 0.4, height: height * 0.35 }}
-                  source={require('../assets/images/pp.png')}
-                />
-                {/* FIXME: */}
-                {/* {this.state.image && (
+                {!this.state.image && (
                   <Image
-                    style={styles.preview}
-                    source={{ uri: this.state.image }}
+                    style={{ width: width * 0.4, height: height * 0.35 }}
+                    source={require('../assets/images/pp.png')}
                   />
-                )} */}
+                )}
+                {this.state.image && (
+                  <Image
+                    source={{ uri: this.state.image }}
+                    style={{ width: 200, height: '100%' }}
+                  />
+                )}
               </View>
               <View style={{ position: 'absolute', bottom: 10 }}>
                 <Text style={{ fontSize: 10, color: '#837563' }}>
@@ -237,26 +240,21 @@ export default class Media extends React.Component {
                 paddingHorizontal: 10
               }}
             >
-              <Text style={{ color: '#fabb79' }}>country</Text>
+              <Text style={{ color: '#fabb79' }}>{this.state.countryName}</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <ModalDropdown
-                  defaultValue="country"
-                  style={{ flexDirection: 'row' }}
-                  textStyle={{ color: '#fabb79', fontSize: 14 }}
-                >
-                  <CountryPicker
-                    onChange={value => {
-                      this.setState({
-                        cca2: value.cca2,
-                        callingCode: value.callingCode
-                      });
-                    }}
-                    cca2={this.state.cca2}
-                    translation="eng"
-                    filterable
-                    showCountryNameWithFlag={false}
-                  />
-                </ModalDropdown>
+                <CountryPicker
+                  onChange={value => {
+                    this.setState({
+                      countryName: value.name,
+                      cca2: value.cca2,
+                      callingCode: value.callingCode
+                    });
+                  }}
+                  cca2={this.state.cca2}
+                  translation="eng"
+                  filterable
+                  showCountryNameWithFlag={false}
+                />
 
                 <AntDesign
                   name="down"
@@ -277,76 +275,82 @@ export default class Media extends React.Component {
                 justifyContent: 'center'
               }}
             >
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginRight: 5,
-                  backgroundColor: 'white',
-                  height: 30,
-                  justifyContent: 'space-between',
-                  paddingHorizontal: 10
+              <ModalDropdown
+                style={styles.dropdownInput}
+                options={this.state.days}
+                defaultValue="Date"
+                dropdownStyle={{ width: width * 0.25 }}
+                onSelect={txt =>
+                  this.setState({ dayValue: this.state.days[txt] })
+                }
+              >
+                <View style={styles.inputLabel}>
+                  <Text style={styles.labelText}>
+                    {this.state.dayValue ? this.state.dayValue : 'Date'}
+                  </Text>
+                  <AntDesign
+                    style={styles.labelArrow}
+                    name="down"
+                    size={12}
+                    color="#fabb79"
+                  />
+                </View>
+              </ModalDropdown>
+
+              <ModalDropdown
+                style={styles.dropdownInput}
+                options={Object.keys(this.state.months)}
+                defaultValue="Month"
+                textStyle={{ color: '#fabb79', fontSize: 14 }}
+                dropdownStyle={{ width: width * 0.25 }}
+                onSelect={txt => {
+                  let monthName = Object.keys(this.state.months)[txt];
+                  this.setState({
+                    selectedMonthValue: this.state.months[monthName],
+                    selectedMonthName: monthName
+                  });
                 }}
               >
-                <ModalDropdown
-                  options={this.state.days}
-                  defaultValue="Date"
-                  textStyle={{ color: '#fabb79', fontSize: 14 }}
-                  dropdownStyle={{ width: width * 0.25 }}
-                  onSelect={txt => this.setState({ day: this.state.days[txt] })}
-                />
-                <AntDesign name="down" size={12} color="#fabb79" />
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginRight: 5,
-                  backgroundColor: 'white',
-                  height: 30,
-                  justifyContent: 'space-between',
-                  paddingHorizontal: 10
-                }}
+                <View style={styles.inputLabel}>
+                  <Text style={styles.labelText}>
+                    {this.state.selectedMonthName
+                      ? this.state.selectedMonthName
+                      : 'Month'}
+                  </Text>
+                  <AntDesign
+                    style={styles.labelArrow}
+                    name="down"
+                    size={12}
+                    color="#fabb79"
+                  />
+                </View>
+              </ModalDropdown>
+
+              <ModalDropdown
+                style={[styles.dropdownInput, { marginRight: 0 }]}
+                options={this.state.years}
+                dropdownStyle={{ width: width * 0.25, left: width * 0.68 }}
+                defaultValue="Year"
+                textStyle={{ color: '#fabb79', fontSize: 14 }}
+                onSelect={txt =>
+                  this.setState({ yearValue: this.state.years[txt] })
+                }
               >
-                <ModalDropdown
-                  options={this.state.months}
-                  defaultValue="Month"
-                  textStyle={{ color: '#fabb79', fontSize: 14 }}
-                  dropdownStyle={{ width: width * 0.25 }}
-                  onSelect={txt =>
-                    this.setState({ month: this.state.months[txt] })
-                  }
-                />
-                <AntDesign name="down" size={12} color="#fabb79" />
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginRight: 5,
-                  backgroundColor: 'white',
-                  height: 30,
-                  justifyContent: 'space-between',
-                  paddingHorizontal: 10
-                }}
-              >
-                <ModalDropdown
-                  options={this.state.years}
-                  dropdownStyle={{ width: width * 0.25, left: width * 0.68 }}
-                  defaultValue="Year"
-                  textStyle={{ color: '#fabb79', fontSize: 14 }}
-                  onSelect={txt =>
-                    this.setState({ year: this.state.years[txt] })
-                  }
-                />
-                <AntDesign name="down" size={12} color="#fabb79" />
-              </View>
+                <View style={styles.inputLabel}>
+                  <Text style={styles.labelText}>
+                    {this.state.yearValue ? this.state.yearValue : 'Year'}
+                  </Text>
+                  <AntDesign
+                    style={styles.labelArrow}
+                    name="down"
+                    size={12}
+                    color="#fabb79"
+                  />
+                </View>
+              </ModalDropdown>
             </View>
             <TouchableOpacity
-              onPress={() => this.sendData}
+              onPress={() => this.sendData()}
               style={{
                 flex: 1,
                 alignItems: 'center',
@@ -361,7 +365,7 @@ export default class Media extends React.Component {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </View>
+      </ImageBackground>
     );
   }
 }
@@ -393,5 +397,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: Dimensions.get('window').height,
     width: Dimensions.get('window').width
-  }
+  },
+  dropdownInput: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: 30,
+    marginRight: 10
+  },
+  inputLabel: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    paddingHorizontal: 10,
+    justifyContent: 'space-between'
+  },
+  labelText: {
+    width: '90%',
+    color: '#fabb79',
+    fontSize: 14
+  },
+  labelArrow: {}
 });

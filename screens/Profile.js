@@ -10,11 +10,14 @@ import HeaderComponent from '../components/HeaderComponent';
 import ArtistPopup from './ArtistPopup';
 import Footer from '../components/Footer';
 import Assets from '../constants/Assets';
+import { NavigationController } from '../navigation/index';
 
 import * as __GStyles from '../styles';
 import { FavoritesDB } from '../Config/DB';
 import ArtistRow from '../components/ArtistRow';
 import { Label } from '../components/Label';
+import { UserBrief } from '../components/UserBrief';
+
 const URLs = require('../Config/ExternalURL');
 
 export default class ProfileScreen extends React.Component {
@@ -22,6 +25,7 @@ export default class ProfileScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    this.navigationController = new NavigationController(this.props.navigation);
     this.state = {
       active: 'all',
       colors: ['#fabb79', '#008691', '#e9665d', '#60a484'],
@@ -32,7 +36,8 @@ export default class ProfileScreen extends React.Component {
       show_popup: false,
       color1: '#fff',
       color2: '#fff',
-      userID: 38
+      userID: this.props.navigation.state.params.user.id,
+      user: this.props.navigation.state.params.user
     };
   }
 
@@ -121,6 +126,12 @@ export default class ProfileScreen extends React.Component {
     return (
       <View style={__GStyles.default.container}>
         <HeaderComponent navigation={this.props.navigation} />
+        <UserBrief
+          navigation={this.props.navigation}
+          NACController={this.navigationController}
+          user={this.state.user}
+          hasBackBtn={true}
+        />
         <ImageBackground
           source={Assets.circ2}
           style={[__GStyles.default.subHeaderContainer]}

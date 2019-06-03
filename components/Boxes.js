@@ -3,7 +3,14 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, TouchableHighlight } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  TouchableHighlight
+} from 'react-native';
 import Layout from '../constants/Layout';
 import * as assets from '../constants/Assets';
 
@@ -49,9 +56,11 @@ export class Boxes extends React.Component {
             </View>
           </TouchableHighlight>
           <TouchableHighlight
-
             onPress={() => {
-              this.props.NACController.direct('Balance');
+              if (this.props.loggedIn)
+                this.props.NACController.direct('Balance', {
+                  user: this.props.user
+                });
             }}
             underlayColor={'rgb(255,255,255)'}
             activeOpacity={0.05}
@@ -139,7 +148,7 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 'auto',
     width: 45,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   box: {
     flex: 1,

@@ -87,9 +87,7 @@ export default class ArtistRow extends React.Component {
   }
 
   handleRowClick() {
-    console.log('general row');
     if (!this.preventDefault) {
-      console.log('Row but not heart click');
       this.props.click();
     }
   }

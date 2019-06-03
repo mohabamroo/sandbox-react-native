@@ -7,13 +7,15 @@ import {
   TextInput,
   Text,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  ImageBackground
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import Footer from '../components/Footer';
 const { width, height } = Dimensions.get('window');
 import * as __GStyles from '../styles';
 import { NavigationController } from '../navigation/index';
+import Assets from '../constants/Assets';
 
 export default class Media extends React.Component {
   constructor(props) {
@@ -23,7 +25,8 @@ export default class Media extends React.Component {
       fetching: false,
       active: 'pics',
       txt:
-        'Text between two or more users of mobile devices,t has grown beyond alphanumeric text to  containing digital images, videos, and sound content, as well as ideograms known as emoji (happy faces, sad faces, and other icons).'
+        'In order to receive your wristband at the SANDBOX gates you will need to activate your ticket. For those without app access, you will be able to activate on door.' +
+        'Please enter the e-mail at which you received your SANDBOX e-pass to get your Activation Code.'
     };
     this.navigationController = new NavigationController(this.props.navigation);
   }
@@ -31,7 +34,6 @@ export default class Media extends React.Component {
   sendCode = () => {
     var form = new FormData();
     form.append('email', this.state.email);
-    console.log("TCL: Media -> sendCode -> this.state.email", this.state.email)
     this.setState({ fetching: true });
     fetch('https://nacelle.nbhood.com/api/sms/send', {
       method: 'POST',
@@ -41,20 +43,27 @@ export default class Media extends React.Component {
       },
       body: form
     }).then(res => {
+      // FIXME: code is 200 even though message was not sent
+      console.log('TCL: Media -> sendCode -> res', res);
       if (res.status != 200) {
         alert(res._bodyInit);
       } else {
-        this.props.navigation.navigate('ConfirmActivation', {
-          email: this.state.email
-        });
+        const self = this;
+        this.setState({ fetching: false, disabled: true, submittedOnce: true });
+        setTimeout(() => {
+          self.setState({ disabled: false });
+        }, 1000 * 60);
       }
-      this.setState({ fetching: false });
     });
   };
 
   render() {
     return (
-      <View style={__GStyles.default.container}>
+      <ImageBackground
+        resizeMode="repeat"
+        source={Assets.bg1}
+        style={__GStyles.default.container}
+      >
         <HeaderComponent navigation={this.props.navigation} />
         <ScrollView style={styles.container}>
           <View
@@ -74,7 +83,7 @@ export default class Media extends React.Component {
             >
               <Text
                 style={{
-                  fontSize: 12,
+                  fontSize: 14,
                   color: 'white',
                   paddingHorizontal: 20,
                   paddingVertical: 20
@@ -86,7 +95,7 @@ export default class Media extends React.Component {
             <View
               style={{ flex: 1, paddingHorizontal: 20, paddingVertical: 35 }}
             >
-              <Text style={{ color: '#ffec59', fontSize: 10 }}>
+              <Text style={{ color: '#ffec59', fontSize: 10, marginBottom: 5 }}>
                 Enter You Email
               </Text>
               <TextInput
@@ -94,13 +103,14 @@ export default class Media extends React.Component {
                 style={{
                   width: width * 0.9,
                   backgroundColor: 'white',
-                  height: 40,
+                  height: 60,
                   paddingLeft: 10
                 }}
                 placeholder="E-mail"
                 placeholderTextColor="#fabb79"
               />
               <TouchableOpacity
+                disabled={this.state.disabled}
                 onPress={this.sendCode}
                 style={{
                   flex: 1,
@@ -115,14 +125,40 @@ export default class Media extends React.Component {
                 {this.state.fetching ? (
                   <ActivityIndicator color="#ffec59" />
                 ) : (
-                  <Text style={{ color: '#ffec59' }}>SEND CODE</Text>
+                  <Text style={{ color: '#ffec59', fontWeight: 'bold' }}>
+                    {(this.state.submittedOnce ? 'RE-' : '') + 'SEND CODE'}
+                  </Text>
                 )}
               </TouchableOpacity>
+
+              {this.state.submittedOnce && (
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('ConfirmActivation', {
+                      email: this.state.email,
+                      notifyParent: this.props.navigation.state.params
+                        .notifyParent
+                    });
+                  }}
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: width * 0.9,
+                    height: 40,
+                    backgroundColor: '#189aa9'
+                  }}
+                >
+                  <Text style={{ color: '#ffec59', fontWeight: 'bold' }}>
+                    PROCEED
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </ScrollView>
         <Footer />
-      </View>
+      </ImageBackground>
     );
   }
 }
@@ -139,8 +175,7 @@ const styles = StyleSheet.create({
   tabsContainer: {
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    flexDirection: 'row',
-    backgroundColor: '#fde9d6'
+    flexDirection: 'row'
   },
   tab: {
     justifyContent: 'center',

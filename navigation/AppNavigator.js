@@ -22,6 +22,7 @@ import Activation1 from '../screens/Activation1';
 import ConfirmActivation from '../screens/ConfirmActivation';
 import DataActivation from '../screens/DataActivation';
 import CameraPage from '../screens/CameraComp';
+import { QrCode } from '../components/QrCode';
 export default createAppContainer(
   createStackNavigator(
     {
@@ -96,7 +97,7 @@ export default createAppContainer(
           title: {
             text: 'Balance',
             fontColor: '#FFEC59',
-            bgColor: '#FBBC78',
+            bgColor: '#FCC78A',
             colorBack: '#FFEC59',
             bgBack: '#189AA8'
           },
@@ -332,10 +333,10 @@ export default createAppContainer(
             colorBack: '#ffec59'
           },
           mainHeader: {
-            bg: 'bg2b'
+            bg: 'bg2'
           },
           subHeader: {
-            bg: 'circ2'
+            bg: 'circAct'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
@@ -356,7 +357,7 @@ export default createAppContainer(
             bg: 'bg2'
           },
           subHeader: {
-            bg: 'circ2'
+            bg: 'circAct'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
@@ -377,7 +378,7 @@ export default createAppContainer(
             bg: 'bg2'
           },
           subHeader: {
-            bg: 'circ2'
+            bg: 'circAct'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
@@ -401,6 +402,13 @@ export default createAppContainer(
             bg: 'circ2'
           }
         },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      QRCode: {
+        screen: QrCode,
+        params: {},
         navigationOptions: ({ navigation, screenProps }) => ({
           header: null
         })
