@@ -54,7 +54,7 @@ export default class HomeScreen extends React.Component {
     this.handleSchedule = this.handleSchedule.bind(this);
     // sets state
     let countState = this.handleCountdown();
-    // this.refreshUserAccount();
+    this.refreshUserAccount();
     this.state = {
       ...countState
     };
