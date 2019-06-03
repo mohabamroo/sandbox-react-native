@@ -52,7 +52,6 @@ export default class ArtistPopup extends React.Component {
   }
 
   _likeArtist(opts) {
-    console.log('TCL: ArtistPopup -> _likeArtist -> opts', opts);
     let newLike = this.state.artist.liked == true ? false : true;
     this.setState({
       artist: { ...this.state.artist, liked: newLike }

@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  ImageBackground
+} from 'react-native';
 // Import navigation
 import { NavigationActions } from 'react-navigation';
 
@@ -18,6 +24,7 @@ import {
   EventInfoDB,
   MediaDB
 } from '../Config/DB/index';
+import Assets from '../constants/Assets';
 
 export default class Loading extends Component {
   constructor(props) {
@@ -101,6 +108,10 @@ export default class Loading extends Component {
             success.scheduleLastUpdate
           ) {
             this.navigationController.reset('Home');
+            // console.log('from one');
+            // _this.setState({
+            //   currentTaskText: 'Downloading data from the intenet'
+            // });
             // _this.DownloadTheData(success);
           } else {
             console.log('from two');
@@ -159,7 +170,7 @@ export default class Loading extends Component {
           ? URLs.scheduleURL
           : URLs.scheduleURL
       ).then(response => response.json());
-      _this.setState({
+      this.setState({
         currentTaskText: 'Fetched schedule data'
       });
       Artists = await fetch(
@@ -167,19 +178,19 @@ export default class Loading extends Component {
           ? URLs.getArtists(this.formateDate(new Date()))
           : URLs.getArtists(undefined)
       ).then(response => response.json());
-      _this.setState({
+      this.setState({
         currentTaskText: 'Fetched artists and line-up'
       });
       Discover = await fetch(URLs.Discover).then(response => response.json());
-      _this.setState({
+      this.setState({
         currentTaskText: 'Fetched discover details'
       });
       General = await fetch(URLs.General).then(response => response.json());
-      _this.setState({
+      this.setState({
         currentTaskText: 'Fetched general data'
       });
       Media = await fetch(URLs.Media).then(response => response.json());
-      _this.setState({
+      this.setState({
         currentTaskText: 'Fetched media data'
       });
       News = await fetch(
@@ -187,11 +198,11 @@ export default class Loading extends Component {
           ? URLs.getNews(object.newsLastUpdate)
           : URLs.getNews(undefined)
       ).then(response => response.json());
-      _this.setState({
+      this.setState({
         currentTaskText: 'Fetched news and articles'
       });
     } catch (err) {
-      _this.setState({
+      this.setState({
         currentTaskText: 'Error downloading data from the internet'
       });
       this.InternetCorruption();
@@ -209,7 +220,7 @@ export default class Loading extends Component {
       this.InternetCorruption();
     }
     // Should save each one of downloads into RealM DB.
-    const _this = this;
+    const self = this;
     this.setState(
       {
         InfoData: Info.data,
@@ -225,7 +236,7 @@ export default class Loading extends Component {
       },
       () => {
         console.log(this.state.NewsLastUpdate);
-        _this.proccess();
+        self.proccess();
       }
     );
   }
@@ -328,18 +339,25 @@ export default class Loading extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>
-          {this.state.loadingName ? this.state.loadingName : 'Loading...'}
+      <ImageBackground
+        source={Assets.splash}
+        resizeMode="stretch"
+        style={styles.container}
+      >
+        <ActivityIndicator size="large" color="#ffec59" />
+
+        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>
+          {this.state.currentTaskText}
         </Text>
-        <Text style={styles.hintMsg}>{this.state.currentTaskText}</Text>
-      </View>
+      </ImageBackground>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
+    height: '100%',
     flex: 1,
     position: 'relative',
     padding: 0,
