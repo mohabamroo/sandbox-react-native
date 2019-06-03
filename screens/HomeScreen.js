@@ -23,7 +23,8 @@ import { News } from '../components/News';
 import Assets from '../constants/Assets';
 import Layout from '../constants/Layout';
 import { CountDownTimer } from '../components/CountDownTimer';
-import { EventInfoDB, SchedualDB, ArtistsDB } from '../Config/DB';
+import { UserBrief } from '../components/UserBrief';
+import { EventInfoDB, SchedualDB, ArtistsDB, UserDB } from '../Config/DB';
 
 // const start_days = [moment]
 
@@ -51,6 +52,13 @@ export default class HomeScreen extends React.Component {
       show_popup: false
     };
     this.handleSchedule = this.handleSchedule.bind(this);
+    // sets state
+    let countState = this.handleCountdown();
+    // this.refreshUserAccount();
+    this.state = {
+      ...countState
+    };
+    this.refreshUserAccount = this.refreshUserAccount.bind(this);
   }
 
   handleSchedule() {
@@ -108,7 +116,6 @@ export default class HomeScreen extends React.Component {
     let general = await EventInfoDB.Get();
     let schedule = await SchedualDB.Get();
     let artists = await ArtistsDB.Get();
-    console.log('TCL: HomeScreen -> componentDidMount -> general', general);
     this.setState(
       {
         general,
@@ -117,7 +124,6 @@ export default class HomeScreen extends React.Component {
       },
       () => {
         this.handleState();
-        this.handleCountdown();
       }
     );
     this.handleSchedule();
@@ -127,15 +133,14 @@ export default class HomeScreen extends React.Component {
     const startDateTime = new Date('2019-06-13T13:00:00Z');
     const endDateTime = new Date('2019-06-16T04:00:00Z');
     const diff = Math.floor((startDateTime - new Date()) / 1000);
-    console.log('TCL: HomeScreen -> handleCountdown -> diff', diff);
     const endedFlag = Math.floor((new Date() - endDateTime) / 1000);
     const self = this;
-    this.setState({
+    return {
       timeState: 2,
       startDateTime,
       countDown: diff,
       endedFlag: endedFlag > 0
-    });
+    };
   }
 
   showDetials(artistInfo) {
@@ -170,6 +175,19 @@ export default class HomeScreen extends React.Component {
       });
     }
   }
+  refreshUserAccount() {
+    let userState;
+    let self = this;
+    UserDB.Get().then(userData => {
+      if (userData != null) {
+        userState = { user: { ...userData }, loggedIn: true };
+      } else {
+        userState = { loggedIn: false };
+      }
+      this.setState({ ...userState });
+    });
+  }
+
   render() {
     return (
       <ImageBackground
@@ -183,31 +201,40 @@ export default class HomeScreen extends React.Component {
             navigation={this.props.navigation}
           />
           <View>
-            <ImageBackground
-              resizeMode="stretch"
-              source={Assets.homeProfile}
-              style={styles.profileBG}
-            >
-              <View style={styles.textContainer}>
-                <Text style={styles.beforeActivationTextBG}>
-                  You did not activate you pass yet?!
-                </Text>
-                <TouchableOpacity
-                  activeOpacity={0.9}
-                  style={styles.buttonActivate}
-                  onPress={() => {
-                    console.log('Press');
-                    this.navigationController.direct('Activation1');
-                  }}
-                >
-                  <View>
-                    <Text style={styles.activateText}>
-                      {String('Activate Your PASS now').toUpperCase()}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </ImageBackground>
+            {!this.state.loggedIn ? (
+              <ImageBackground
+                resizeMode="stretch"
+                source={Assets.homeProfile}
+                style={styles.profileBG}
+              >
+                <View style={styles.textContainer}>
+                  <Text style={styles.beforeActivationTextBG}>
+                    You did not activate you pass yet?!
+                  </Text>
+                  <TouchableOpacity
+                    activeOpacity={0.9}
+                    style={styles.buttonActivate}
+                    onPress={() => {
+                      this.navigationController.direct('Activation1', {
+                        notifyParent: this.refreshUserAccount
+                      });
+                    }}
+                  >
+                    <View>
+                      <Text style={styles.activateText}>
+                        {String('Activate Your PASS now').toUpperCase()}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </ImageBackground>
+            ) : (
+              <UserBrief
+                navigation={this.props.navigation}
+                NACController={this.navigationController}
+                user={this.state.user}
+              />
+            )}
           </View>
           <ScrollView style={{ marginTop: -10 }}>
             {this.state.countDown > 0 ? (
@@ -234,11 +261,14 @@ export default class HomeScreen extends React.Component {
                 showDetials={artist => this.showDetials(artist)}
               />
             )}
-            <Boxes NACController={this.navigationController} />
             {/** The boxes area */}
+            <Boxes
+              user={this.state.user}
+              loggedIn={this.state.loggedIn}
+              NACController={this.navigationController}
+            />
 
             {/**News section */}
-
             <News />
             <View style={styles.paddingDiv} />
           </ScrollView>

@@ -13,58 +13,135 @@ import {
 const { width, height } = Dimensions.get('window');
 import * as __GStyles from '../styles';
 import Assets from '../constants/Assets';
-export default class Media extends React.Component {
+import Layout from '../constants/Layout';
+export class UserBrief extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-     
-     
-    };
+    this.state = {};
   }
   render() {
-    const {isActive,name,balance,friend,isfriend}=this.props
+    const { user, balance } = this.props;
     return (
-        <ImageBackground
+      <ImageBackground
         resizeMode="stretch"
         source={Assets.homeProfile}
         style={styles.profileBG}
       >
-      {isActive?
-        <TouchableOpacity style={{overflow:'hidden'}} >
-        <Image source={require('../assets/images/man.jpg')} style={{height:97,width:width*.4,borderBottomRightRadius:50,borderTopRightRadius:40}}/> 
-        
-      <View style={styles.triangle} > 
-      </View>
-      <View style={{position:'absolute',top:10,}}>
-           <Text style={{fontSize:16,color:'#f069a7',fontWeight:'bold',left:width*.28 ,}}>{name}</Text>
-           <Text style={{fontSize:12,color:'#e9665d',left:width*.32,}}>-Your Balance is:<Text style={{fontWeight:'bold'}}> {balance}</Text> EGP</Text>
-            {isfriend?<Text style={{fontSize:12,color:'#e9665d',left:width*.32,}}>-Friends in the BOX:{friend}</Text>:null}
-           
-        </View>
-        
-        
-          </TouchableOpacity>
-        
-        :
-         <View style={styles.textContainer}>
-          <Text style={styles.beforeActivationTextBG}>
-            You did not activate you pass yet ?!
-          </Text>
-          <TouchableOpacity
-            activeOpacity={0.9}
-            style={styles.buttonActivate}
-            onPress={() => {
-              console.log('Press');
+        <View
+          style={{
+            flexDirection: 'row',
+            width: '70%',
+            height: 100,
+            overflow: 'hidden',
+            position: 'relative',
+            backgroundColor: '#f8b7bb'
+          }}
+        >
+          <Image
+            source={{
+              uri:
+                'https://sandboxfestival.com/wp-content/uploads/2018/04/SB18-Map-1500x1500-2-no-labels.jpg'
             }}
+            style={{
+              width: Layout.window.width / 3,
+              height: '100%',
+              backgroundColor: '#fde9d6'
+            }}
+          />
+          <View
+            style={[
+              styles.triangle,
+              styles.triangleDown,
+              styles.nameArea,
+              { borderBottomColor: '#f8b7bb' }
+            ]}
+          />
+          <View style={styles.textArea}>
+            <Text
+              style={{
+                fontSize: 16,
+                color: '#f069a7',
+                fontWeight: 'bold'
+              }}
+            >
+              {user.client_name}
+            </Text>
+            <Text style={{ fontSize: 12, color: '#e9665d' }}>
+              -Your Balance is:
+              <Text style={{ fontWeight: 'bold' }}> {balance}</Text> EGP
+            </Text>
+          </View>
+        </View>
+        {this.props.hasBackBtn ? (
+          <View
+            style={[
+              styles.floatingLabel,
+              { right: 20, backgroundColor: '#E9665C' }
+            ]}
           >
-            <View>
-              <Text style={styles.activateText}>
-                {String('Activate Your PASS now').toUpperCase()}
+            <TouchableOpacity
+              onPress={() => {
+                this.props.NACController.direct('QRCode', {
+                  user: this.props.user
+                });
+              }}
+            >
+              <Text
+                style={{
+                  color: '#FFEB5C',
+                  fontWeight: 'bold',
+                  fontSize: 12,
+                  zIndex: 5
+                }}
+              >
+                YOUR PASS
               </Text>
-            </View>
-          </TouchableOpacity>
-        </View>}
-       
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={[styles.floatingLabel, { right: 20 }]}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.NACController.direct('Profile', {
+                  user: this.props.user
+                });
+              }}
+            >
+              <Text
+                style={{
+                  color: '#FFEB5C',
+                  fontWeight: 'bold',
+                  fontSize: 12,
+                  zIndex: 5
+                }}
+              >
+                YOUR PROFILE
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        {this.props.hasBackBtn && (
+          <View style={[styles.floatingLabel, { left: 20 }]}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}
+            >
+              <Text
+                style={[
+                  {
+                    color: '#FFEB5C',
+                    fontWeight: 'bold',
+                    fontSize: 12,
+                    zIndex: 5
+                  }
+                ]}
+              >
+                BACK
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </ImageBackground>
     );
   }
@@ -80,13 +157,15 @@ const styles = StyleSheet.create({
     height: 100,
     zIndex: 3,
     justifyContent: 'center'
-  },
-  counter: {
-    backgroundColor: '#7bc19e',
-    width: '100%',
-    height: 100,
-    zIndex: 2,
-    marginTop: -10
+
+    // width: '100%',
+    // borderTopWidth: 100,
+    // borderTopColor: 'red',
+    // borderLeftWidth: 0,
+    // borderLeftColor: 'transparent',
+    // borderRightWidth: 80,
+    // borderRightColor: 'transparent',
+    // borderStyle: 'solid'
   },
   beforeActivationTextBG: {
     backgroundColor: '#fde9d6',
@@ -107,27 +186,36 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold'
   },
+
   triangle: {
     width: 0,
     height: 0,
+    borderBottomWidth: Layout.window.width,
     backgroundColor: 'transparent',
     borderStyle: 'solid',
-    borderLeftWidth: 165,
-    borderRightWidth: 34,
-    borderBottomWidth: 93,
-    borderLeftColor: '#fde9d6',
-    borderRightColor: 'transparent',
-    borderBottomColor: '#fde9d6',
-    position:'absolute',
-    bottom:3,
-    transform: [
-      {rotate: '180deg'}
-    ],
-    justifyContent:'flex-end',
-    alignItems:'flex-end',
-    flex:1,
-    marginLeft:width*.21,
-    borderTopLeftRadius:15,
-    borderBottomLeftRadius:4
+    borderLeftWidth: Layout.window.width,
+    borderRightWidth: Layout.window.width / 2,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent'
   },
+  triangleDown: {
+    transform: [{ rotate: '180deg' }]
+  },
+  nameArea: {
+    marginLeft: (Layout.window.width / 6) * -1
+  },
+  textArea: {
+    position: 'absolute',
+    top: 20,
+    left: Layout.window.width / 3
+  },
+  floatingLabel: {
+    position: 'absolute',
+    top: -10,
+    backgroundColor: '#f069a7',
+    padding: 5,
+    paddingLeft: 8,
+    paddingRight: 8,
+    color: 'white'
+  }
 });

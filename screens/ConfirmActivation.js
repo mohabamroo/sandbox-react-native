@@ -7,7 +7,8 @@ import {
   TextInput,
   Text,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  ImageBackground
 } from 'react-native';
 import CodeInput from 'react-native-confirmation-code-input';
 import HeaderComponent from '../components/HeaderComponent';
@@ -15,14 +16,14 @@ import Footer from '../components/Footer';
 const { width, height } = Dimensions.get('window');
 import * as __GStyles from '../styles';
 import { NavigationController } from '../navigation/index';
+import Assets from '../constants/Assets';
 
 export default class Media extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       active: 'pics',
-      txt:
-        'Text between two or more users of mobile devices,t has grown beyond alphanumeric text to  containing digital images, videos, and sound content, as well as ideograms known as emoji (happy faces, sad faces, and other icons).'
+      txt: 'Please enter the 4 digit code you received in the space below.'
     };
     this.navigationController = new NavigationController(this.props.navigation);
   }
@@ -45,7 +46,10 @@ export default class Media extends React.Component {
       if (res.status != 200) {
         alert('wrong code');
       } else {
-        this.props.navigation.navigate('DataActivation', { email });
+        this.props.navigation.navigate('DataActivation', {
+          email,
+          notifyParent: this.props.navigation.state.params.notifyParent
+        });
       }
       this.setState({ fetching: false });
     });
@@ -53,7 +57,11 @@ export default class Media extends React.Component {
 
   render() {
     return (
-      <View style={__GStyles.default.container}>
+      <ImageBackground
+        resizeMode="repeat"
+        source={Assets.bg1}
+        style={__GStyles.default.container}
+      >
         <HeaderComponent navigation={this.props.navigation} />
         <ScrollView style={styles.container}>
           <View
@@ -73,7 +81,7 @@ export default class Media extends React.Component {
             >
               <Text
                 style={{
-                  fontSize: 12,
+                  fontSize: 14,
                   color: 'white',
                   paddingHorizontal: 20,
                   paddingVertical: 20
@@ -86,7 +94,7 @@ export default class Media extends React.Component {
               style={{ flex: 1, paddingHorizontal: 20, paddingVertical: 35 }}
             >
               <Text style={{ color: '#ffec59', fontSize: 10 }}>
-                Enter You Email
+                Enter code:
               </Text>
               <CodeInput
                 ref="codeInputRef2"
@@ -124,14 +132,16 @@ export default class Media extends React.Component {
                 {this.state.fetching ? (
                   <ActivityIndicator color="#ffec59" />
                 ) : (
-                  <Text style={{ color: '#ffec59' }}>SUBMIT YOUR CODE</Text>
+                  <Text style={{ color: '#ffec59', fontWeight: 'bold' }}>
+                    SUBMIT YOUR CODE
+                  </Text>
                 )}
               </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
         <Footer />
-      </View>
+      </ImageBackground>
     );
   }
 }

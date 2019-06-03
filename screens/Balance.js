@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-	ScrollView,
-	StyleSheet,
-	View,
-	Text,
-	ImageBackground,
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+  ImageBackground,
   Image
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
@@ -15,40 +15,50 @@ import Layout from '../constants/Layout';
 import Footer from '../components/Footer';
 
 export default class Balance extends React.Component {
-	async componentDidMount() {
-		let balance = await BalanceDB.Get();
-		console.log('Balance', balance);
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: this.props.navigation.state.params.user
+    };
+  }
 
-	render() {
-		return (
-			<ImageBackground
-				resizeMode="repeat"
-				source={Assets.bg1}
-				style={__GStyles.default.container}
-			>
-				<HeaderComponent navigation={this.props.navigation} />
-				<View
-					style={{ width: '100%', height: '100%', backgroundColor: 'white' }}
-				>
-					<View
-						style={{
-							flexDirection: 'row',
-							width: '100%',
-							height: Layout.window.width / 3,
-							overflow: 'hidden',
-							position: 'relative',
+  async componentDidMount() {
+    let balance = await BalanceDB.Get();
+  }
+
+  render() {
+    let { user } = this.state;
+    return (
+      <ImageBackground
+        resizeMode="repeat"
+        source={Assets.bg1}
+        style={__GStyles.default.container}
+      >
+        <HeaderComponent navigation={this.props.navigation} />
+        <View
+          style={{ width: '100%', height: '100%', backgroundColor: 'white' }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              height: Layout.window.width / 3,
+              overflow: 'hidden',
+              position: 'relative',
               backgroundColor: '#f8b7bb'
-						}}
-					>
-						<Image
-							source={{ uri: 'https://sandboxfestival.com/wp-content/uploads/2018/04/SB18-Map-1500x1500-2-no-labels.jpg' }}
-							style={{
-								width: Layout.window.width / 3,
-								height: Layout.window.width / 3,
-								backgroundColor: '#fde9d6'
-							}}
-						/>
+            }}
+          >
+            <Image
+              source={{
+                uri:
+                  'https://sandboxfestival.com/wp-content/uploads/2018/04/SB18-Map-1500x1500-2-no-labels.jpg'
+              }}
+              style={{
+                width: Layout.window.width / 3,
+                height: Layout.window.width / 3,
+                backgroundColor: '#fde9d6'
+              }}
+            />
             <View
               style={[
                 styles.triangle,
@@ -58,26 +68,26 @@ export default class Balance extends React.Component {
               ]}
             />
             <View style={styles.textArea}>
-              <Text style={styles.name}>Ramy Georgy</Text>
-              <View style={{flexDirection: 'row'}}>
+              <Text style={styles.name}>{user.client_name}</Text>
+              <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.balance}>Your balance is:</Text>
                 <Text style={styles.number}>200 EGP</Text>
               </View>
             </View>
-					</View>
-				</View>
-				<Footer />
-			</ImageBackground>
-		);
-	}
+          </View>
+        </View>
+        <Footer />
+      </ImageBackground>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		paddingTop: 15,
-		backgroundColor: '#fff'
-	},
+  container: {
+    flex: 1,
+    paddingTop: 15,
+    backgroundColor: '#fff'
+  },
   triangle: {
     width: 0,
     height: 0,
@@ -98,7 +108,7 @@ const styles = StyleSheet.create({
   textArea: {
     position: 'absolute',
     top: Layout.window.height * 0.07,
-    left: Layout.window.width / 3 - 20,
+    left: Layout.window.width / 3 - 10
   },
   name: {
     fontSize: 18,
