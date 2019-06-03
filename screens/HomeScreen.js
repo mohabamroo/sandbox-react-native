@@ -103,7 +103,6 @@ export default class HomeScreen extends React.Component {
     });
   }
 
-
   async componentDidMount() {
     // check the timestate..
     let general = await EventInfoDB.Get();
@@ -118,9 +117,25 @@ export default class HomeScreen extends React.Component {
       },
       () => {
         this.handleState();
+        this.handleCountdown();
       }
     );
     this.handleSchedule();
+  }
+
+  handleCountdown() {
+    const startDateTime = new Date('2019-06-13T13:00:00Z');
+    const endDateTime = new Date('2019-06-16T04:00:00Z');
+    const diff = Math.floor((startDateTime - new Date()) / 1000);
+    console.log('TCL: HomeScreen -> handleCountdown -> diff', diff);
+    const endedFlag = Math.floor((new Date() - endDateTime) / 1000);
+    const self = this;
+    this.setState({
+      timeState: 2,
+      startDateTime,
+      countDown: diff,
+      endedFlag: endedFlag > 0
+    });
   }
 
   showDetials(artistInfo) {
@@ -195,18 +210,24 @@ export default class HomeScreen extends React.Component {
             </ImageBackground>
           </View>
           <ScrollView style={{ marginTop: -10 }}>
-            <View style={styles.counter}>
-              {this.state.timeState == 1 && (
+            {this.state.countDown > 0 ? (
+              <CountDownTimer
+                duration={this.state.countDown}
+                startDateTime={this.state.startDateTime}
+              />
+            ) : null}
+            {this.state.endedFlag ? (
+              <View style={styles.counter}>
                 <View style={styles.seeYouContainer}>
                   <Text style={styles.seeYou}>SEE YOU NEXT YEAR</Text>
                 </View>
-              )}
-              {this.state.timeState == 2 && (
+                {/* {this.state.timeState == 2 && (
                 <View style={styles.seeYouContainer}>
                   <Text style={styles.dotsText}> ... </Text>
                 </View>
-              )}
-            </View>
+              )} */}
+              </View>
+            ) : null}
             {this.state.currentEvents && (
               <CurrentlyPlaying
                 currentEvents={this.state.currentEvents}
