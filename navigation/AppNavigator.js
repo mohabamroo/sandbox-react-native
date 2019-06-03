@@ -21,6 +21,7 @@ import BusRoutes from '../screens/BusRoutes';
 import Activation1 from '../screens/Activation1';
 import ConfirmActivation from '../screens/ConfirmActivation';
 import DataActivation from '../screens/DataActivation';
+import CameraPage from '../screens/CameraComp';
 export default createAppContainer(
   createStackNavigator(
     {
@@ -82,7 +83,7 @@ export default createAppContainer(
             bg: 'bg2'
           },
           subHeader: {
-            bg: 'circ3'
+            bg: 'circ7'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
@@ -331,7 +332,7 @@ export default createAppContainer(
             colorBack: '#ffec59'
           },
           mainHeader: {
-            bg: 'bg2'
+            bg: 'bg2b'
           },
           subHeader: {
             bg: 'circ2'
@@ -367,6 +368,27 @@ export default createAppContainer(
         params: {
           title: {
             text: 'Activation',
+            fontColor: 'yellow',
+            bgColor: '#e9665d',
+            bgBack: '#189aa9',
+            colorBack: '#ffec59'
+          },
+          mainHeader: {
+            bg: 'bg2'
+          },
+          subHeader: {
+            bg: 'circ2'
+          }
+        },
+        navigationOptions: ({ navigation, screenProps }) => ({
+          header: null
+        })
+      },
+      CamPage: {
+        screen: CameraPage,
+        params: {
+          title: {
+            text: 'Camera',
             fontColor: 'yellow',
             bgColor: '#e9665d',
             bgBack: '#189aa9',

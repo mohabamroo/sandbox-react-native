@@ -19,6 +19,7 @@ export default {
   circ4: require(`${__pattern}/circ4_1.png`),
   circ5: require(`${__pattern}/circ5.png`),
   circ6: require(`${__pattern}/circ6_1.png`),
+  circ7: require(`${__pattern}/circ7.png`),
   circb: require(`${__pattern}/circb.png`),
   info: require(`${__pattern}/infoheaderbg.png`),
   lineupheader: require(`${__pattern}/lineupheader.png`),

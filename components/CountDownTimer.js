@@ -10,6 +10,7 @@ import CountDown from 'react-native-countdown-component';
 export class CountDownTimer extends React.Component {
   constructor(props) {
     super(props);
+    console.log("TCL: CountDownTimer -> constructor -> props", props)
     this.state = {
       eventStartTime: this.props.startDateTime,
       duration: this.props.duration
@@ -44,7 +45,6 @@ const styles = StyleSheet.create({
     width: '100%',
     zIndex: 2,
     marginTop: -10,
-    marginBottom: 10,
-    paddingBottom: 15
+    paddingBottom: 25
   }
 });

@@ -27,7 +27,8 @@ export default class Loading extends Component {
       loadingName: null,
       InfoData: {},
       SchedualData: {},
-      ArtistsData: {}
+      ArtistsData: {},
+      currentTaskText: 'Checking the internet'
     };
     this.navigationController = new NavigationController(this.props.navigation);
   }
@@ -65,10 +66,6 @@ export default class Loading extends Component {
     this.refresh(async status => {
       console.log('The status: ', status);
       if (!status) {
-        _this.setState({
-          loadingName:
-            'There seems to be an issue with your internet connection.'
-        });
         console.log('TCL: componentDidMount -> no internet connection', status);
         // should check the offline content.
         let schedule = await SchedualDB.Get();
@@ -76,32 +73,40 @@ export default class Loading extends Component {
         let Info = await InfoDB.Get();
         let General = await EventInfoDB.Get();
         if (!schedule || !artist || !Info || !General) {
+          let msg = 'There seems to be an issue with your internet connection.';
           _this.setState({
-            loadingName:
-              'There seems to be an issue with your internet connection, please check and try again later.'
+            loadingName: msg,
+            currentTaskText: msg
           });
         } else {
+          _this.setState({
+            currentTaskText: 'using cache data...'
+          });
           this.navigationController.reset('Home');
         }
       } else {
         console.log('the internet is working fine, ');
+        _this.setState({
+          currentTaskText: 'Internet connection is ok.'
+        });
         // should check and download the content online.
         _this.checkForDownloadableContent().then(success => {
-          console.log(
-            'checked the downloadable content and the result is : ',
-            success
-          );
+          _this.setState({
+            currentTaskText: 'Checking for downloadable data'
+          });
           // FIXME: when to direct to home, what's the condition
           if (
             success &&
             success.artistsLastUpdate &&
             success.scheduleLastUpdate
           ) {
-            console.log('from one');
             this.navigationController.reset('Home');
             // _this.DownloadTheData(success);
           } else {
             console.log('from two');
+            _this.setState({
+              currentTaskText: 'Downloading data from the intenet'
+            });
             _this.DownloadTheData(undefined);
           }
         });
@@ -154,32 +159,41 @@ export default class Loading extends Component {
           ? URLs.scheduleURL
           : URLs.scheduleURL
       ).then(response => response.json());
-      console.log('Parsed Schedule');
-
+      _this.setState({
+        currentTaskText: 'Fetched schedule data'
+      });
       Artists = await fetch(
         object && object.artistsLastUpdate
           ? URLs.getArtists(this.formateDate(new Date()))
           : URLs.getArtists(undefined)
       ).then(response => response.json());
-      console.log('Parsed artists');
-
+      _this.setState({
+        currentTaskText: 'Fetched artists and line-up'
+      });
       Discover = await fetch(URLs.Discover).then(response => response.json());
-      console.log('Parsed discover');
-
+      _this.setState({
+        currentTaskText: 'Fetched discover details'
+      });
       General = await fetch(URLs.General).then(response => response.json());
-      console.log('Parsed general');
-
+      _this.setState({
+        currentTaskText: 'Fetched general data'
+      });
       Media = await fetch(URLs.Media).then(response => response.json());
-      console.log('Parsed media');
-
+      _this.setState({
+        currentTaskText: 'Fetched media data'
+      });
       News = await fetch(
         object && object.newsLastUpdate
           ? URLs.getNews(object.newsLastUpdate)
           : URLs.getNews(undefined)
       ).then(response => response.json());
-      console.log('Parsed news');
+      _this.setState({
+        currentTaskText: 'Fetched news and articles'
+      });
     } catch (err) {
-      console.log('Error while downloading', err);
+      _this.setState({
+        currentTaskText: 'Error downloading data from the internet'
+      });
       this.InternetCorruption();
       return;
     }
@@ -311,12 +325,14 @@ export default class Loading extends Component {
     console.log('TCL: Loading -> formateDate -> formattedDate', formattedDate);
     return formattedDate;
   }
+
   render() {
     return (
       <View style={styles.container}>
         <Text>
           {this.state.loadingName ? this.state.loadingName : 'Loading...'}
         </Text>
+        <Text style={styles.hintMsg}>{this.state.currentTaskText}</Text>
       </View>
     );
   }
@@ -330,5 +346,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff'
+  },
+  hintMsg: {
+    position: 'absolute',
+    bottom: 40,
+    fontWeight: 'bold',
+    color: '#ccc'
   }
 });
