@@ -54,10 +54,11 @@ export default class HomeScreen extends React.Component {
     this.handleSchedule = this.handleSchedule.bind(this);
     // sets state
     let countState = this.handleCountdown();
-    this.refreshUserAccount();
+    // this.refreshUserAccount();
     this.state = {
       ...countState
     };
+    this.notifyEventStart = this.notifyEventStart.bind(this);
     this.refreshUserAccount = this.refreshUserAccount.bind(this);
   }
 
@@ -130,7 +131,8 @@ export default class HomeScreen extends React.Component {
   }
 
   handleCountdown() {
-    const startDateTime = new Date('2019-06-13T13:00:00Z');
+    // FIXME: hardcoded for testing
+    const startDateTime = new Date('2019-06-03T13:00:00Z');
     const endDateTime = new Date('2019-06-16T04:00:00Z');
     const diff = Math.floor((startDateTime - new Date()) / 1000);
     const endedFlag = Math.floor((new Date() - endDateTime) / 1000);
@@ -175,6 +177,7 @@ export default class HomeScreen extends React.Component {
       });
     }
   }
+
   refreshUserAccount() {
     let userState;
     let self = this;
@@ -186,6 +189,13 @@ export default class HomeScreen extends React.Component {
       }
       this.setState({ ...userState });
     });
+  }
+
+  notifyEventStart() {
+    console.log('event start');
+    // this.setState({ countDown: 0 });
+
+    this.navigationController.direct('Loading');
   }
 
   render() {
@@ -241,6 +251,7 @@ export default class HomeScreen extends React.Component {
               <CountDownTimer
                 duration={this.state.countDown}
                 startDateTime={this.state.startDateTime}
+                notifyParent={this.notifyEventStart}
               />
             ) : null}
             {this.state.endedFlag ? (

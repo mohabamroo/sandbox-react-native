@@ -43,15 +43,17 @@ export default class Media extends React.Component {
       },
       body: form
     }).then(res => {
+      // FIXME: code is 200 even though message was not sent
+      console.log('TCL: Media -> sendCode -> res', res);
       if (res.status != 200) {
         alert(res._bodyInit);
       } else {
-        this.props.navigation.navigate('ConfirmActivation', {
-          email: this.state.email,
-          notifyParent: this.props.navigation.state.params.notifyParent
-        });
+        const self = this;
+        this.setState({ fetching: false, disabled: true, submittedOnce: true });
+        setTimeout(() => {
+          self.setState({ disabled: false });
+        }, 1000 * 60);
       }
-      this.setState({ fetching: false });
     });
   };
 
@@ -108,6 +110,7 @@ export default class Media extends React.Component {
                 placeholderTextColor="#fabb79"
               />
               <TouchableOpacity
+                disabled={this.state.disabled}
                 onPress={this.sendCode}
                 style={{
                   flex: 1,
@@ -123,10 +126,34 @@ export default class Media extends React.Component {
                   <ActivityIndicator color="#ffec59" />
                 ) : (
                   <Text style={{ color: '#ffec59', fontWeight: 'bold' }}>
-                    SEND CODE
+                    {(this.state.submittedOnce ? 'RE-' : '') + 'SEND CODE'}
                   </Text>
                 )}
               </TouchableOpacity>
+
+              {this.state.submittedOnce && (
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('ConfirmActivation', {
+                      email: this.state.email,
+                      notifyParent: this.props.navigation.state.params
+                        .notifyParent
+                    });
+                  }}
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: width * 0.9,
+                    height: 40,
+                    backgroundColor: '#189aa9'
+                  }}
+                >
+                  <Text style={{ color: '#ffec59', fontWeight: 'bold' }}>
+                    PROCEED
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </ScrollView>
