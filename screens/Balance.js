@@ -15,26 +15,24 @@ import { BalanceDB } from '../Config/DB';
 import Layout from '../constants/Layout';
 import Footer from '../components/Footer';
 const URLs = require('../Config/ExternalURL');
-import { sha512 } from 'react-native-sha512';
-console.log('TCL: sha512', sha512);
 export default class Balance extends React.Component {
-  hashingAlgo = sha512;
   constructor(props) {
     super(props);
     this.state = {
       user: this.props.navigation.state.params.user,
-      qrCode: 111
+      qrCode: this.props.navigation.state.params.user.qr_serial,
+      balanceObj: {}
     };
 
     this._onRefresh = this._onRefresh.bind(this);
   }
 
   async componentDidMount() {
-    let balance = await BalanceDB.Get();
+    let balanceObj = await BalanceDB.Get();
+    this.setState({ balanceObj });
   }
 
   renderOrderRow(order, idx) {
-    console.log('TCL: Balance -> renderOrderRow -> order', order);
     return (
       <View style={styles.orderRow} key={idx}>
         <Text style={styles.orderTitle}>{'ORDER: ' + idx}</Text>
@@ -44,37 +42,40 @@ export default class Balance extends React.Component {
               <Text style={{ flex: 1 }}>{item.name}</Text>
               <Text style={{ flex: 1 }}>{item.quantity}</Text>
               <Text style={{ flex: 1 }}>{item.price}</Text>
-              <Text style={{ flex: 1 }}>{item.subtotal}</Text>
+              <Text style={{ flex: 1 }}>{Math.ceil(item.subtotal / 100)}</Text>
             </View>
           );
         })}
-        <Text style={styles.totalPrice}>{'Total: ' + order.total + 'EGP'}</Text>
+        <Text style={styles.totalPrice}>
+          {'Total: ' + Math.ceil(order.total / 100) + 'EGP'}
+        </Text>
       </View>
     );
   }
   _onRefresh() {
     fetch(URLs.getBalance(this.state.qrCode))
       .then(response => {
-        console.log('TCL: Balance -> _onRefresh -> response', response);
+        console.log("TCL: Balance -> _onRefresh -> response", response)
         if (response.status == 200) {
           return response.json();
         }
       })
       .then(apiResponse => {
         console.log('TCL: Balance -> _onRefresh -> apiResponse', apiResponse);
-        if (apiResponse.Status == 200) {
-          // this.setNews(apiResponse.data);
-          // NewsDB.Set(apiResponse.data);
-        }
+        this.setState({ balanceObj: apiResponse, refreshing: false });
+        BalanceDB.Set(apiResponse);
       })
       .catch(err => {
         // FIXME: what to do on internet corruption
+        this.setState({ refreshing: false });
+
         console.log('TCL: Balance Screen -> componentDidMount -> err', err);
       });
   }
 
   render() {
-    let { user, orders } = this.state;
+    let { user } = this.state;
+    let { user: balanceUser, orders } = this.state.balanceObj;
     if (!orders)
       orders = [
         {
@@ -150,7 +151,9 @@ export default class Balance extends React.Component {
               <Text style={styles.name}>{user.client_name}</Text>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.balance}>Your balance is:</Text>
-                <Text style={styles.number}>200 EGP</Text>
+                <Text style={styles.number}>
+                  {balanceUser ? balanceUser.balance : 0} EGP
+                </Text>
               </View>
             </View>
           </View>

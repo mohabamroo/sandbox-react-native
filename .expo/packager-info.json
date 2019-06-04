@@ -2,8 +2,8 @@
   "expoServerPort": 19000,
   "expoServerNgrokUrl": "https://gv-ngs.mohabamroo.sandbox-react.exp.direct",
   "packagerNgrokUrl": "https://packager.gv-ngs.mohabamroo.sandbox-react.exp.direct",
-  "ngrokPid": 24744,
+  "ngrokPid": 10312,
   "devToolsPort": 19002,
   "packagerPort": 19001,
-  "packagerPid": 25416
+  "packagerPid": 26180
 }

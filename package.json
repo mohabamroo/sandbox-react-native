@@ -13,7 +13,6 @@
   "dependencies": {
     "@expo/samples": "2.1.1",
     "axios": "^0.18.0",
-    "crypto-js": "^3.1.9-1",
     "expo": "^32.0.0",
     "moment": "^2.24.0",
     "react": "16.5.0",
@@ -27,7 +26,6 @@
     "react-native-modal": "^11.0.1",
     "react-native-modal-dropdown": "^0.6.2",
     "react-native-select-input-ios": "^2.0.2",
-    "react-native-sha512": "^1.0.2",
     "react-native-snap-carousel": "^3.8.0",
     "react-navigation": "^3.0.9",
     "utf8": "^3.0.0"

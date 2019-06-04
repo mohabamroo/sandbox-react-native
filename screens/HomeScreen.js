@@ -182,6 +182,7 @@ export default class HomeScreen extends React.Component {
     let userState;
     let self = this;
     UserDB.Get().then(userData => {
+      console.log("TCL: HomeScreen -> refreshUserAccount -> userData", userData)
       if (userData != null) {
         userState = { user: { ...userData }, loggedIn: true };
       } else {
