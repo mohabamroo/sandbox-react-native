@@ -68,7 +68,6 @@ export default class HomeScreen extends React.Component {
 	}
 
 	handleSchedule() {
-		console.log('hey youu');
 		let { schedule } = this.state;
 		days = Object.keys(schedule);
 		let now = moment();
@@ -127,7 +126,6 @@ export default class HomeScreen extends React.Component {
 
 	async componentDidMount() {
 		// check the timestate..
-    this._interval = setInterval(() => this.handleSchedule(), 600000);
 		let general = await EventInfoDB.Get();
 		let schedule = await SchedualDB.Get();
 		let artists = await ArtistsDB.Get();
@@ -141,7 +139,8 @@ export default class HomeScreen extends React.Component {
 				this.handleState();
 			}
 		);
-		this.handleSchedule();
+    this.handleSchedule()
+	  this._interval = setInterval(() => this.handleSchedule(), 6000000);
 	}
 
 	handleCountdown() {
