@@ -62,7 +62,13 @@ export default class HomeScreen extends React.Component {
 		this.refreshUserAccount = this.refreshUserAccount.bind(this);
 	}
 
+
+	componentWillUnmount() {
+		clearInterval(this._interval);
+	}
+
 	handleSchedule() {
+		console.log('hey youu');
 		let { schedule } = this.state;
 		days = Object.keys(schedule);
 		let now = moment();
@@ -99,18 +105,16 @@ export default class HomeScreen extends React.Component {
 			return;
 		}
 		let currentM = schedule[day]['Main Stage'].filter(x => {
-      start = moment(x.session_start_time, 'HH:mm')
-      end = moment(x.session_end_time, 'HH:mm')
-      if (end.hours() < 12 ) end.add(1, 'days')
-			return start.isBefore(now) &&
-				end.isAfter(now);
+			start = moment(x.session_start_time, 'HH:mm');
+			end = moment(x.session_end_time, 'HH:mm');
+			if (end.hours() < 12) end.add(1, 'days');
+			return start.isBefore(now) && end.isAfter(now);
 		});
 		let currentS = schedule[day]['SANDBOX Stage'].filter(x => {
-      start = moment(x.session_start_time, 'HH:mm')
-      end = moment(x.session_end_time, 'HH:mm')
-      if (end.hours() < 12) end.add(1, 'days')
-			return start.isBefore(now) &&
-				end.isAfter(now);
+			start = moment(x.session_start_time, 'HH:mm');
+			end = moment(x.session_end_time, 'HH:mm');
+			if (end.hours() < 12) end.add(1, 'days');
+			return start.isBefore(now) && end.isAfter(now);
 		});
 
 		this.setState({
@@ -123,6 +127,7 @@ export default class HomeScreen extends React.Component {
 
 	async componentDidMount() {
 		// check the timestate..
+    this._interval = setInterval(() => this.handleSchedule(), 600000);
 		let general = await EventInfoDB.Get();
 		let schedule = await SchedualDB.Get();
 		let artists = await ArtistsDB.Get();

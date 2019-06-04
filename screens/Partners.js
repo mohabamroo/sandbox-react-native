@@ -12,9 +12,6 @@ export default class Partners extends React.Component {
     super(props);
   }
   render() {
-    // <ScrollView bounces={false} style={styles.container} contentContainerStyle={__GStyles.default.contentContainer}>
-    //   <Image style={[styles.image, {height: this.props.navigation.state.params.in.height || Layout.window.height}]} resizeMode="cover" source={{uri: this.props.navigation.state.params.in.partners_image}} />
-    // </ScrollView>
     return (
       <ImageBackground resizeMode="repeat" source={Assets.bg1} style={__GStyles.default.container}>
         <HeaderComponent navigation={this.props.navigation} />
