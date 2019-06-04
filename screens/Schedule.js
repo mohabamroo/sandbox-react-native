@@ -7,7 +7,7 @@ import {
 	FlatList,
 	Image,
 	TouchableOpacity,
-  TouchableHighlight,
+	TouchableHighlight,
 	ImageBackground,
 	ScrollView
 } from 'react-native';
@@ -35,13 +35,51 @@ export default class Schedule extends React.Component {
 		this.state = {
 			show_popup: false,
 			current_artist: null,
-      active: 'day1'
+			active: 'day1'
 		};
 	}
 
 	componentDidMount() {
 		this.fetchCategories();
 		this.fetchArtists();
+	}
+
+	setDay() {
+		let now = moment();
+    let event_day = ''
+		if (
+			now.isAfter(
+				moment().set({ year: 2019, month: 5, date: 13, hour: 12, minute: 59 })
+			) &&
+			now.isBefore(
+				moment().set({ year: 2019, month: 5, date: 14, hour: 12, minute: 15 })
+			)
+		) {
+			event_day = 'day1';
+		} else if (
+			now.isAfter(
+				moment().set({ year: 2019, month: 5, date: 14, hour: 12, minute: 59 })
+			) &&
+			now.isBefore(
+				moment().set({ year: 2019, month: 5, date: 15, hour: 11, minute: 59 })
+			)
+		) {
+			event_day = 'day2';
+
+		} else if (
+			now.isAfter(
+				moment().set({ year: 2019, month: 5, date: 15, hour: 12, minute: 59 })
+			) &&
+			now.isBefore(
+				moment().set({ year: 2019, month: 5, date: 16, hour: 15, minute: 59 })
+			)
+		) {
+			event_day = 'day3';
+		} else {
+			return;
+		}
+    this.setState({today: event_day});
+		this._handleAppStateChange({ active: event_day });
 	}
 
 	async fetchArtists() {
@@ -95,13 +133,13 @@ export default class Schedule extends React.Component {
 							backgroundColor: '#fff'
 						}}
 					>
-            <AntDesign
-              name="hearto"
-              size={15}
-              color="white"
-              style={{ position: 'absolute', right: 10, top: 10 }}
-            />
-          </ImageBackground>
+						<AntDesign
+							name="hearto"
+							size={15}
+							color="white"
+							style={{ position: 'absolute', right: 10, top: 10 }}
+						/>
+					</ImageBackground>
 
 					<View
 						style={[
@@ -120,9 +158,15 @@ export default class Schedule extends React.Component {
 		return array;
 	}
 
-  autoScroll() {
-    // this.scrollView.scrollTo({x: 4 * interval, animated: true})
-  }
+	autoScroll(day) {
+		let now = moment();
+		let begin = this.state[day].begin;
+    if (begin.hours() >= 12 && now.hours() < 12) {
+      begin.subtract(24, 'hours')
+    }
+		let slots = Math.abs(now.diff(begin, 'minutes')) / 30
+		this.scrollView.scrollTo({ x: (slots - 2) * interval, animated: true });
+	}
 
 	setSchedule(schedObj) {
 		Object.keys(schedObj).forEach(day => {
@@ -158,24 +202,46 @@ export default class Schedule extends React.Component {
 					moment(current)
 						.add(30, 'minutes')
 						.diff(end, 'minutes') == 0;
+				let currentSlot =
+          this.state.today === day &&
+					moment().hours() == current.hours() &&
+					moment().minutes() > current.minutes() && moment().minutes() < current.minutes() + 30 ;
 				timeslots.push(
 					<View
 						style={{
 							height: 40,
 							width: last ? interval + 60 : interval,
-							backgroundColor: '#e9665d',
-							alignItems: 'center',
-							flexDirection: 'row'
+							backgroundColor: '#e9665d'
 						}}
 					>
-						<Text style={{ color: '#ffec59', marginLeft: 4 }}>
-							{current.format('h:mmA')}
-						</Text>
-						{last && (
-							<Text style={{ color: '#ffec59', marginLeft: 'auto' }}>
-								{current.add(30, 'minutes').format('h:mmA')}
-							</Text>
-						)}
+						<View
+							style={{
+								flexDirection: 'row',
+								marginTop: 5
+							}}
+						>
+              <View style={{flexDirection: 'column'}}>
+  							<Text style={{ color: '#ffec59', marginLeft: 4 }}>
+  								{current.format('h:mmA')}
+  							</Text>
+                {currentSlot && (
+                  <View
+                    style={{
+                      height: 10,
+                      width: 10,
+                      borderRadius: 5,
+                      backgroundColor: '#ffec59',
+                      alignSelf: 'center'
+                    }}
+                  />
+                )}
+              </View>
+							{last && (
+								<Text style={{ color: '#ffec59', marginLeft: 'auto' }}>
+									{current.add(30, 'minutes').format('h:mmA')}
+								</Text>
+							)}
+						</View>
 					</View>
 				);
 				current.add(30, 'minutes');
@@ -251,22 +317,24 @@ export default class Schedule extends React.Component {
 				}
 			}
 
-      if(day == 'day1'){
-        this.setState({
-          timeslots,
-          mainSlots,
-          sandSlots
-        })
-      }
+			if (day == 'day1') {
+				this.setState({
+					timeslots,
+					mainSlots,
+					sandSlots
+				});
+			}
 
 			this.setState({
 				[day]: {
 					timeslots,
 					mainSlots,
-					sandSlots
+					sandSlots,
+					begin
 				}
 			});
 		});
+		this.setDay();
 	}
 
 	refreshSchedule() {
@@ -286,15 +354,18 @@ export default class Schedule extends React.Component {
 			});
 	}
 
-  _handleAppStateChange = newState => {
-    day = newState.active
-    this.setState({
-      active: day,
-      timeslots: this.state[day].timeslots,
-      mainSlots: this.state[day].mainSlots,
-      sandSlots: this.state[day].sandSlots
-    },this.autoScroll());
-  };
+	_handleAppStateChange = newState => {
+		day = newState.active;
+		this.setState(
+			{
+				active: day,
+				timeslots: this.state[day].timeslots,
+				mainSlots: this.state[day].mainSlots,
+				sandSlots: this.state[day].sandSlots
+			},
+			this.autoScroll(day)
+		);
+	};
 
 	renderMainStageArtiest = item => {
 		return (
@@ -397,102 +468,101 @@ export default class Schedule extends React.Component {
 		);
 	};
 
-  renderTabs() {
-    return (
-      <View style={styles.tabsContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            this._handleAppStateChange({ active: 'day1' });
-          }}
-          style={{ flex: 1 }}
-        >
-          <View
-            style={[
-              styles.tab,
-              {
-                backgroundColor:
-                  this.state.active == 'day1' ? '#e9665d' : 'transparent'
-              }
-            ]}
-          >
-            <Text
-              style={[
-                {
-                  fontWeight: 'bold',
-                  fontSize: 12,
-                  color: this.state.active == 'day1' ? '#ffec59' : '#e9665d'
-                }
-              ]}
-            >
-              {' '}
-              {this.state.active == 'day1' ? '>' : ''} Thursday
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            this._handleAppStateChange({ active: 'day2' });
-          }}
-          style={{ flex: 1 }}
-        >
-          <View
-            style={[
-              styles.tab,
-              {
-                backgroundColor:
-                  this.state.active == 'day2' ? '#e9665d' : 'transparent'
-              }
-            ]}
-          >
-            <Text
-              style={[
-                {
-                  fontWeight: 'bold',
-                  fontSize: 12,
-                  color: this.state.active == 'day2' ? '#ffec59' : '#e9665d'
-                }
-              ]}
-            >
-              {' '}
-              {this.state.active == 'day2' ? '>' : ''} Friday
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            this._handleAppStateChange({
-              active: 'day3'
-            });
-          }}
-          style={{ flex: 1 }}
-        >
-          <View
-            style={[
-              styles.tab,
-              {
-                backgroundColor:
-                  this.state.active == 'day3' ? '#e9665d' : 'transparent'
-              }
-            ]}
-          >
-            <Text
-              style={[
-                {
-                  fontWeight: 'bold',
-                  fontSize: 12,
-                  color:
-                    this.state.active == 'day3' ? '#ffec59' : '#e9665d'
-                }
-              ]}
-            >
-              {' '}
-              {this.state.active == 'day3' ? '>' : ''} Saturday
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    )
-  }
+	renderTabs() {
+		return (
+			<View style={styles.tabsContainer}>
+				<TouchableOpacity
+					onPress={() => {
+						this._handleAppStateChange({ active: 'day1' });
+					}}
+					style={{ flex: 1 }}
+				>
+					<View
+						style={[
+							styles.tab,
+							{
+								backgroundColor:
+									this.state.active == 'day1' ? '#e9665d' : 'transparent'
+							}
+						]}
+					>
+						<Text
+							style={[
+								{
+									fontWeight: 'bold',
+									fontSize: 12,
+									color: this.state.active == 'day1' ? '#ffec59' : '#e9665d'
+								}
+							]}
+						>
+							{' '}
+							{this.state.active == 'day1' ? '>' : ''} Thursday
+						</Text>
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => {
+						this._handleAppStateChange({ active: 'day2' });
+					}}
+					style={{ flex: 1 }}
+				>
+					<View
+						style={[
+							styles.tab,
+							{
+								backgroundColor:
+									this.state.active == 'day2' ? '#e9665d' : 'transparent'
+							}
+						]}
+					>
+						<Text
+							style={[
+								{
+									fontWeight: 'bold',
+									fontSize: 12,
+									color: this.state.active == 'day2' ? '#ffec59' : '#e9665d'
+								}
+							]}
+						>
+							{' '}
+							{this.state.active == 'day2' ? '>' : ''} Friday
+						</Text>
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => {
+						this._handleAppStateChange({
+							active: 'day3'
+						});
+					}}
+					style={{ flex: 1 }}
+				>
+					<View
+						style={[
+							styles.tab,
+							{
+								backgroundColor:
+									this.state.active == 'day3' ? '#e9665d' : 'transparent'
+							}
+						]}
+					>
+						<Text
+							style={[
+								{
+									fontWeight: 'bold',
+									fontSize: 12,
+									color: this.state.active == 'day3' ? '#ffec59' : '#e9665d'
+								}
+							]}
+						>
+							{' '}
+							{this.state.active == 'day3' ? '>' : ''} Saturday
+						</Text>
+					</View>
+				</TouchableOpacity>
+			</View>
+		);
+	}
 
 	render() {
 		return (
@@ -502,29 +572,26 @@ export default class Schedule extends React.Component {
 				resizeMode={'cover'}
 			>
 				<HeaderComponent navigation={this.props.navigation} />
-        {this.renderTabs()}
+				{this.renderTabs()}
 				<ScrollView
-          ref={element => this.scrollView = element}
+					ref={element => (this.scrollView = element)}
 					horizontal
 					contentContainerStyle={{ flexDirection: 'column' }}
 				>
 					<View style={{ flexDirection: 'row' }}>
-						{
-							this.state.timeslots &&
+						{this.state.timeslots &&
 							this.state.timeslots.map((item, index) => {
 								return item;
 							})}
 					</View>
 					<View style={{ flexDirection: 'row', marginLeft: 60 }}>
-						{
-							this.state.mainSlots &&
+						{this.state.mainSlots &&
 							this.state.mainSlots.map((item, index) => {
 								return item;
 							})}
 					</View>
 					<View style={{ flexDirection: 'row', marginLeft: 60 }}>
-						{
-							this.state.sandSlots &&
+						{this.state.sandSlots &&
 							this.state.sandSlots.map((item, index) => {
 								return item;
 							})}
@@ -605,16 +672,16 @@ const styles = StyleSheet.create({
 		width: 110,
 		textAlign: 'right'
 	},
-  tabsContainer: {
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-    backgroundColor: '#ffec59',
-    height: 35
-  },
-  tab: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 35
-  }
+	tabsContainer: {
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		flexDirection: 'row',
+		backgroundColor: '#ffec59',
+		height: 35
+	},
+	tab: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: 35
+	}
 });
