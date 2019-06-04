@@ -5,7 +5,8 @@ import {
   View,
   Text,
   ImageBackground,
-  Image
+  Image,
+  RefreshControl
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import Assets from '../constants/Assets';
@@ -13,21 +14,101 @@ import * as __GStyles from '../styles';
 import { BalanceDB } from '../Config/DB';
 import Layout from '../constants/Layout';
 import Footer from '../components/Footer';
-
+const URLs = require('../Config/ExternalURL');
+import { sha512 } from 'react-native-sha512';
+console.log('TCL: sha512', sha512);
 export default class Balance extends React.Component {
+  hashingAlgo = sha512;
   constructor(props) {
     super(props);
     this.state = {
-      user: this.props.navigation.state.params.user
+      user: this.props.navigation.state.params.user,
+      qrCode: 111
     };
+
+    this._onRefresh = this._onRefresh.bind(this);
   }
 
   async componentDidMount() {
     let balance = await BalanceDB.Get();
   }
 
+  renderOrderRow(order, idx) {
+    console.log('TCL: Balance -> renderOrderRow -> order', order);
+    return (
+      <View style={styles.orderRow} key={idx}>
+        <Text style={styles.orderTitle}>{'ORDER: ' + idx}</Text>
+        {order.items.map((item, itemIdx) => {
+          return (
+            <View style={styles.itemRow} key={itemIdx}>
+              <Text style={{ flex: 1 }}>{item.name}</Text>
+              <Text style={{ flex: 1 }}>{item.quantity}</Text>
+              <Text style={{ flex: 1 }}>{item.price}</Text>
+              <Text style={{ flex: 1 }}>{item.subtotal}</Text>
+            </View>
+          );
+        })}
+        <Text style={styles.totalPrice}>{'Total: ' + order.total + 'EGP'}</Text>
+      </View>
+    );
+  }
+  _onRefresh() {
+    fetch(URLs.getBalance(this.state.qrCode))
+      .then(response => {
+        console.log('TCL: Balance -> _onRefresh -> response', response);
+        if (response.status == 200) {
+          return response.json();
+        }
+      })
+      .then(apiResponse => {
+        console.log('TCL: Balance -> _onRefresh -> apiResponse', apiResponse);
+        if (apiResponse.Status == 200) {
+          // this.setNews(apiResponse.data);
+          // NewsDB.Set(apiResponse.data);
+        }
+      })
+      .catch(err => {
+        // FIXME: what to do on internet corruption
+        console.log('TCL: Balance Screen -> componentDidMount -> err', err);
+      });
+  }
+
   render() {
-    let { user } = this.state;
+    let { user, orders } = this.state;
+    if (!orders)
+      orders = [
+        {
+          id: 13,
+          items: [
+            {
+              name: 'Heineken',
+              quantity: 3,
+              price: 9500,
+              subtotal: 28500
+            },
+            {
+              name: 'Stella',
+              quantity: 2,
+              price: 1000,
+              subtotal: 1200
+            }
+          ],
+          total: 34000
+        },
+        {
+          id: 16,
+          items: [
+            {
+              name: 'Vodka',
+              quantity: 1,
+              price: 1200,
+              subtotal: 1200
+            }
+          ],
+          total: 3000
+        }
+      ];
+    console.log(orders);
     return (
       <ImageBackground
         resizeMode="repeat"
@@ -35,9 +116,7 @@ export default class Balance extends React.Component {
         style={__GStyles.default.container}
       >
         <HeaderComponent navigation={this.props.navigation} />
-        <View
-          style={{ width: '100%', height: '100%', backgroundColor: 'white' }}
-        >
+        <View style={{ width: '100%', height: 150, backgroundColor: 'white' }}>
           <View
             style={{
               flexDirection: 'row',
@@ -76,6 +155,19 @@ export default class Balance extends React.Component {
             </View>
           </View>
         </View>
+
+        <ScrollView
+          style={styles.ordersList}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }
+        >
+          <Text style={styles.listTitle}>Orders List</Text>
+          {orders.map((order, idx) => this.renderOrderRow(order, idx))}
+        </ScrollView>
         <Footer />
       </ImageBackground>
     );
@@ -107,7 +199,7 @@ const styles = StyleSheet.create({
   },
   textArea: {
     position: 'absolute',
-    top: Layout.window.height * 0.07,
+    top: 40,
     left: Layout.window.width / 3 - 10
   },
   name: {
@@ -126,5 +218,40 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: '#ffec59'
+  },
+  orderRow: {
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    marginBottom: 10
+  },
+  itemRow: {
+    flex: 1,
+    padding: 2,
+    paddingLeft: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  ordersList: {
+    padding: 10,
+    paddingLeft: 10,
+    backgroundColor: 'white'
+  },
+  listTitle: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    paddingLeft: 5,
+    marginBottom: 10
+  },
+  totalPrice: {
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    textAlign: 'right',
+    fontWeight: 'bold',
+    marginTop: 5,
+    marginBottom: 5
+  },
+  orderTitle: {
+    paddingLeft: 10
   }
 });
