@@ -94,10 +94,8 @@ export default class ArtistRow extends React.Component {
 
   render() {
     let { artist: row, index, color, color2 } = this.props;
-
     return (
       <TouchableHighlight
-        style={[this.props.lastRow ? styles.footerMargin : {}]}
         onPress={() => this.handleRowClick()}
       >
         <View key={index} style={styles.artistRow}>
@@ -180,7 +178,6 @@ const styles = StyleSheet.create({
   },
 
   artistRow: {
-    flex: 1,
     flexDirection: 'row',
     width: '100%',
     height: Layout.window.width / 3,
@@ -255,8 +252,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 8,
     textAlign: 'right'
-  },
-  footerMargin: {
-    marginBottom: Layout.window.height / 3
   }
 });

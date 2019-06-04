@@ -42,11 +42,11 @@ export default class ArtistPopup extends React.Component {
     Animated.sequence([
       Animated.timing(this.state.opacity, {
         toValue: 1,
-        duration: 300
+        duration: 450
       }),
       Animated.timing(this.state.position, {
         toValue: Layout.window.height * 0.01,
-        duration: 300
+        duration: 450
       })
     ]).start();
   }
@@ -96,6 +96,20 @@ export default class ArtistPopup extends React.Component {
           // FIXME: what to do on internet corruption
         });
     });
+  }
+
+  onClose(){
+    Animated.sequence([
+      Animated.timing(this.state.position, {
+        toValue: Layout.window.height,
+        duration: 450
+      }),
+      Animated.timing(this.state.opacity, {
+        toValue: 0,
+        duration: 450
+      })
+    ]).start(() => this.props.onClose());
+
   }
 
   render() {
@@ -150,7 +164,7 @@ export default class ArtistPopup extends React.Component {
           <View style={[styles.triangle, { borderBottomColor: color2 }]} />
           <Text style={styles.artistName}>{artist.artist_name}</Text>
           <TouchableOpacity
-            onPress={() => this.props.onClose()}
+            onPress={() => this.onClose()}
             style={styles.close}
           >
             <Image
