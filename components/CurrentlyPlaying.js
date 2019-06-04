@@ -8,6 +8,7 @@ import Assets from '../constants/Assets';
 export default class CurrentlyPlaying extends React.Component {
 	render() {
     let { sandbox, main } = this.props.currentEvents;
+		console.log(main, sandbox)
 		return (
 			<View style={styles.container}>
 				<View

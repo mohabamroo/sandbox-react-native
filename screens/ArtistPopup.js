@@ -26,16 +26,9 @@ export default class ArtistPopup extends React.Component {
       artist: this.props.artist,
       opacity: new Animated.Value(0),
       position: new Animated.Value(Layout.window.height),
-      userID: 38
+      userID: 38 //TODO: REMOVE THIS
     };
     this._likeArtist = this._likeArtist.bind(this);
-  }
-
-  componentDidMount() {
-    console.log(
-      'TCL: ArtistPopup -> after mount -> this.props.artist',
-      this.props.artist
-    );
   }
 
   componentWillMount() {
@@ -85,10 +78,7 @@ export default class ArtistPopup extends React.Component {
           if (apiResponse.Status == 200) {
             FavoritesDB.Set(apiResponse.data).then(() => res());
           } else {
-            console.log(
-              'TCL: ArtistPopup -> refreshFavorites -> apiResponse',
-              apiResponse
-            );
+
           }
         })
         .catch(err => {

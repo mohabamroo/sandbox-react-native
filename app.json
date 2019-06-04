@@ -18,7 +18,9 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sandbox.festival",
+      "buildNumber": "1"
     },
     "android": {
       "package": "com.sandbox.festival",
