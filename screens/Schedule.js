@@ -27,7 +27,6 @@ import { SchedualDB, ArtistsDB } from '../Config/DB';
 const URLs = require('../Config/ExternalURL');
 
 const interval = 110;
-
 export default class Schedule extends React.Component {
 	constructor(props) {
 		super(props);
@@ -46,7 +45,7 @@ export default class Schedule extends React.Component {
 
 	setDay() {
 		let now = moment();
-    let event_day = ''
+		let event_day = '';
 		if (
 			now.isAfter(
 				moment().set({ year: 2019, month: 5, date: 13, hour: 12, minute: 59 })
@@ -65,7 +64,6 @@ export default class Schedule extends React.Component {
 			)
 		) {
 			event_day = 'day2';
-
 		} else if (
 			now.isAfter(
 				moment().set({ year: 2019, month: 5, date: 15, hour: 12, minute: 59 })
@@ -78,7 +76,7 @@ export default class Schedule extends React.Component {
 		} else {
 			return;
 		}
-    this.setState({today: event_day});
+		this.setState({ today: event_day });
 		this._handleAppStateChange({ active: event_day });
 	}
 
@@ -95,6 +93,48 @@ export default class Schedule extends React.Component {
 
 	emptySpace(width, array) {
 		array.push(<View style={{ width, height: 150 }} />);
+		return array;
+	}
+
+	renderTimeslot(last, currentSlot, current, array) {
+		array.push(
+			<View
+				style={{
+					height: 40,
+					width: last ? interval + 60 : interval,
+					backgroundColor: '#e9665d'
+				}}
+			>
+				<View
+					style={{
+						flexDirection: 'row',
+						marginTop: 5
+					}}
+				>
+					<View style={{ flexDirection: 'column' }}>
+						<Text style={{ color: '#ffec59', marginLeft: 4 }}>
+							{current.format('h:mmA')}
+						</Text>
+						{currentSlot && (
+							<View
+								style={{
+									height: 10,
+									width: 10,
+									borderRadius: 5,
+									backgroundColor: '#ffec59',
+									alignSelf: 'center'
+								}}
+							/>
+						)}
+					</View>
+					{last && (
+						<Text style={{ color: '#ffec59', marginLeft: 'auto' }}>
+							{current.add(30, 'minutes').format('h:mmA')}
+						</Text>
+					)}
+				</View>
+			</View>
+		);
 		return array;
 	}
 
@@ -159,13 +199,31 @@ export default class Schedule extends React.Component {
 	}
 
 	autoScroll(day) {
+		if (this.state.today !== day) {
+			this.scrollView.scrollTo({ x: 0, animated: true });
+			return;
+		}
 		let now = moment();
 		let begin = this.state[day].begin;
-    if (begin.hours() >= 12 && now.hours() < 12) {
-      begin.subtract(24, 'hours')
-    }
-		let slots = Math.abs(now.diff(begin, 'minutes')) / 30
-		this.scrollView.scrollTo({ x: (slots - 2) * interval, animated: true });
+		if (Math.abs(begin.date() - now.date()) < 1 && begin.hours() >= 12 && now.hours() < 12) {
+      isInitial = false
+			begin.subtract(24, 'hours');
+      let dayObj = this.state[day]
+      dayObj.begin = begin
+      this.setState({
+        [day]: {...dayObj}
+      })
+		}
+
+		let slots = Math.abs(now.diff(begin, 'minutes')) / 30;
+		let scrollValue = (slots - 2 ) * interval;
+		let max =
+			this.state[day].timeslots.length * interval + 60 - Layout.window.width;
+
+		this.scrollView.scrollTo({
+			x: Math.max(0, Math.min(scrollValue, max)),
+			animated: true
+		});
 	}
 
 	setSchedule(schedObj) {
@@ -203,47 +261,11 @@ export default class Schedule extends React.Component {
 						.add(30, 'minutes')
 						.diff(end, 'minutes') == 0;
 				let currentSlot =
-          this.state.today === day &&
+					this.state.today === day &&
 					moment().hours() == current.hours() &&
-					moment().minutes() > current.minutes() && moment().minutes() < current.minutes() + 30 ;
-				timeslots.push(
-					<View
-						style={{
-							height: 40,
-							width: last ? interval + 60 : interval,
-							backgroundColor: '#e9665d'
-						}}
-					>
-						<View
-							style={{
-								flexDirection: 'row',
-								marginTop: 5
-							}}
-						>
-              <View style={{flexDirection: 'column'}}>
-  							<Text style={{ color: '#ffec59', marginLeft: 4 }}>
-  								{current.format('h:mmA')}
-  							</Text>
-                {currentSlot && (
-                  <View
-                    style={{
-                      height: 10,
-                      width: 10,
-                      borderRadius: 5,
-                      backgroundColor: '#ffec59',
-                      alignSelf: 'center'
-                    }}
-                  />
-                )}
-              </View>
-							{last && (
-								<Text style={{ color: '#ffec59', marginLeft: 'auto' }}>
-									{current.add(30, 'minutes').format('h:mmA')}
-								</Text>
-							)}
-						</View>
-					</View>
-				);
+					moment().minutes() > current.minutes() &&
+					moment().minutes() < current.minutes() + 30;
+				timeslots = this.renderTimeslot(last, currentSlot, current, timeslots)
 				current.add(30, 'minutes');
 			}
 			// mainStage slots
@@ -354,18 +376,16 @@ export default class Schedule extends React.Component {
 			});
 	}
 
-	_handleAppStateChange = newState => {
+	 _handleAppStateChange(newState) {
 		day = newState.active;
-		this.setState(
-			{
-				active: day,
-				timeslots: this.state[day].timeslots,
-				mainSlots: this.state[day].mainSlots,
-				sandSlots: this.state[day].sandSlots
-			},
-			this.autoScroll(day)
-		);
-	};
+		 this.setState({
+			active: day,
+			timeslots: this.state[day].timeslots,
+			mainSlots: this.state[day].mainSlots,
+			sandSlots: this.state[day].sandSlots
+		}, this.autoScroll(day));
+
+	}
 
 	renderMainStageArtiest = item => {
 		return (
