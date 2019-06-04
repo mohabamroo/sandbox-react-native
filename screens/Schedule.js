@@ -34,7 +34,8 @@ export default class Schedule extends React.Component {
 
 		this.state = {
 			show_popup: false,
-			current_artist: null
+			current_artist: null,
+      active: 'day1'
 		};
 	}
 
@@ -86,14 +87,21 @@ export default class Schedule extends React.Component {
 				>
 					<View style={{ width: width - 150 }} />
 
-					<Image
+					<ImageBackground
 						source={{ uri: item.artistImage }}
 						style={{
 							width: 150,
 							height: 150,
 							backgroundColor: '#fff'
 						}}
-					/>
+					>
+            <AntDesign
+              name="hearto"
+              size={15}
+              color="white"
+              style={{ position: 'absolute', right: 10, top: 10 }}
+            />
+          </ImageBackground>
 
 					<View
 						style={[
@@ -111,6 +119,10 @@ export default class Schedule extends React.Component {
 		);
 		return array;
 	}
+
+  autoScroll() {
+    // this.scrollView.scrollTo({x: 4 * interval, animated: true})
+  }
 
 	setSchedule(schedObj) {
 		Object.keys(schedObj).forEach(day => {
@@ -238,6 +250,15 @@ export default class Schedule extends React.Component {
 					);
 				}
 			}
+
+      if(day == 'day1'){
+        this.setState({
+          timeslots,
+          mainSlots,
+          sandSlots
+        })
+      }
+
 			this.setState({
 				[day]: {
 					timeslots,
@@ -264,6 +285,16 @@ export default class Schedule extends React.Component {
 				console.log('TCL: News Screen -> componentDidMount -> err', err);
 			});
 	}
+
+  _handleAppStateChange = newState => {
+    day = newState.active
+    this.setState({
+      active: day,
+      timeslots: this.state[day].timeslots,
+      mainSlots: this.state[day].mainSlots,
+      sandSlots: this.state[day].sandSlots
+    },this.autoScroll());
+  };
 
 	renderMainStageArtiest = item => {
 		return (
@@ -366,6 +397,103 @@ export default class Schedule extends React.Component {
 		);
 	};
 
+  renderTabs() {
+    return (
+      <View style={styles.tabsContainer}>
+        <TouchableOpacity
+          onPress={() => {
+            this._handleAppStateChange({ active: 'day1' });
+          }}
+          style={{ flex: 1 }}
+        >
+          <View
+            style={[
+              styles.tab,
+              {
+                backgroundColor:
+                  this.state.active == 'day1' ? '#e9665d' : 'transparent'
+              }
+            ]}
+          >
+            <Text
+              style={[
+                {
+                  fontWeight: 'bold',
+                  fontSize: 12,
+                  color: this.state.active == 'day1' ? '#ffec59' : '#e9665d'
+                }
+              ]}
+            >
+              {' '}
+              {this.state.active == 'day1' ? '>' : ''} Thursday
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            this._handleAppStateChange({ active: 'day2' });
+          }}
+          style={{ flex: 1 }}
+        >
+          <View
+            style={[
+              styles.tab,
+              {
+                backgroundColor:
+                  this.state.active == 'day2' ? '#e9665d' : 'transparent'
+              }
+            ]}
+          >
+            <Text
+              style={[
+                {
+                  fontWeight: 'bold',
+                  fontSize: 12,
+                  color: this.state.active == 'day2' ? '#ffec59' : '#e9665d'
+                }
+              ]}
+            >
+              {' '}
+              {this.state.active == 'day2' ? '>' : ''} Friday
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            this._handleAppStateChange({
+              active: 'day3'
+            });
+          }}
+          style={{ flex: 1 }}
+        >
+          <View
+            style={[
+              styles.tab,
+              {
+                backgroundColor:
+                  this.state.active == 'day3' ? '#e9665d' : 'transparent'
+              }
+            ]}
+          >
+            <Text
+              style={[
+                {
+                  fontWeight: 'bold',
+                  fontSize: 12,
+                  color:
+                    this.state.active == 'day3' ? '#ffec59' : '#e9665d'
+                }
+              ]}
+            >
+              {' '}
+              {this.state.active == 'day3' ? '>' : ''} Saturday
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
 	render() {
 		return (
 			<ImageBackground
@@ -374,29 +502,30 @@ export default class Schedule extends React.Component {
 				resizeMode={'cover'}
 			>
 				<HeaderComponent navigation={this.props.navigation} />
-
+        {this.renderTabs()}
 				<ScrollView
+          ref={element => this.scrollView = element}
 					horizontal
 					contentContainerStyle={{ flexDirection: 'column' }}
 				>
 					<View style={{ flexDirection: 'row' }}>
-						{this.state.day1 &&
-							this.state.day1.timeslots &&
-							this.state.day1.timeslots.map((item, index) => {
+						{
+							this.state.timeslots &&
+							this.state.timeslots.map((item, index) => {
 								return item;
 							})}
 					</View>
 					<View style={{ flexDirection: 'row', marginLeft: 60 }}>
-						{this.state.day1 &&
-							this.state.day1.mainSlots &&
-							this.state.day1.mainSlots.map((item, index) => {
+						{
+							this.state.mainSlots &&
+							this.state.mainSlots.map((item, index) => {
 								return item;
 							})}
 					</View>
 					<View style={{ flexDirection: 'row', marginLeft: 60 }}>
-						{this.state.day1 &&
-							this.state.day1.sandSlots &&
-							this.state.day1.sandSlots.map((item, index) => {
+						{
+							this.state.sandSlots &&
+							this.state.sandSlots.map((item, index) => {
 								return item;
 							})}
 					</View>
@@ -408,9 +537,9 @@ export default class Schedule extends React.Component {
 						width: 70,
 						resizeMode: 'cover',
 						position: 'absolute',
-						top: 140,
+						top: 180,
 						left: -3,
-						transform: [{ skewX: '3deg' }]
+						transform: [{ rotate: '-3deg' }]
 					}}
 				/>
 				<Image
@@ -420,9 +549,9 @@ export default class Schedule extends React.Component {
 						width: 70,
 						resizeMode: 'cover',
 						position: 'absolute',
-						top: 290,
+						top: 325,
 						left: -3,
-						transform: [{ skewX: '3deg' }]
+						transform: [{ rotate: '-3deg' }]
 					}}
 				/>
 				{this.state.current_artist &&
@@ -475,5 +604,17 @@ const styles = StyleSheet.create({
 		color: 'white',
 		width: 110,
 		textAlign: 'right'
-	}
+	},
+  tabsContainer: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: '#ffec59',
+    height: 35
+  },
+  tab: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 35
+  }
 });
