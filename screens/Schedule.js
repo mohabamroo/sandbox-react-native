@@ -270,7 +270,7 @@ export default class Schedule extends React.Component {
 			}
 			// mainStage slots
 			if (beginMain.isAfter(begin)) {
-				let difference = beginMain.diff(begin, 'minutes') / 15;
+				let difference = Math.abs(beginMain.diff(begin, 'minutes')) / 15;
 				mainSlots = this.emptySpace((difference * interval) / 2, mainSlots);
 			}
 			for (; i < mainStage.length; i++) {
@@ -284,7 +284,7 @@ export default class Schedule extends React.Component {
 					if (prevEnd.hours() < 12) prevEnd.add(1, 'days');
 				}
 				if (i == 0 || currentBegin.isSame(prevEnd)) {
-					let difference = currentEnd.diff(currentBegin, 'minutes') / 15;
+					let difference = Math.abs(currentEnd.diff(currentBegin, 'minutes')) / 15;
 					mainSlots = this.sessionSpace(
 						(difference * interval) / 2,
 						mainSlots,
@@ -292,9 +292,9 @@ export default class Schedule extends React.Component {
 						'#f8b7bb'
 					);
 				} else {
-					let difference = currentBegin.diff(prevEnd, 'minutes') / 15;
+					let difference = Math.abs(currentBegin.diff(prevEnd, 'minutes')) / 15;
 					mainSlots = this.emptySpace((difference * interval) / 2, mainSlots);
-					difference = currentBegin.diff(currentEnd, 'minutes') / 15;
+					difference = Math.abs(currentBegin.diff(currentEnd, 'minutes')) / 15;
 					mainSlots = this.sessionSpace(
 						(difference * interval) / 2,
 						mainSlots,
