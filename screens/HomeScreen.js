@@ -112,7 +112,7 @@ export default class HomeScreen extends React.Component {
 			return start.isBefore(now) &&
 				end.isAfter(now);
 		});
-		
+
 		this.setState({
 			currentEvents: {
 				sandbox: currentS[0],
