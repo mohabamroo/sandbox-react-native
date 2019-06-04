@@ -132,7 +132,7 @@ export default class HomeScreen extends React.Component {
 
   handleCountdown() {
     // FIXME: hardcoded for testing
-    const startDateTime = new Date('2019-06-03T13:00:00Z');
+    const startDateTime = new Date('2019-06-13T13:00:00Z');
     const endDateTime = new Date('2019-06-16T04:00:00Z');
     const diff = Math.floor((startDateTime - new Date()) / 1000);
     const endedFlag = Math.floor((new Date() - endDateTime) / 1000);
@@ -182,7 +182,10 @@ export default class HomeScreen extends React.Component {
     let userState;
     let self = this;
     UserDB.Get().then(userData => {
-      console.log("TCL: HomeScreen -> refreshUserAccount -> userData", userData)
+      console.log(
+        'TCL: HomeScreen -> refreshUserAccount -> userData',
+        userData
+      );
       if (userData != null) {
         userState = { user: { ...userData }, loggedIn: true };
       } else {
@@ -319,7 +322,7 @@ const styles = StyleSheet.create({
     marginTop: -10
   },
   beforeActivationTextBG: {
-    backgroundColor: '#fde9d6',
+    backgroundColor: '#FDE9D6',
     padding: 5,
     color: '#f069a7',
     fontSize: 12

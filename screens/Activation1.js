@@ -8,7 +8,8 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
-  ImageBackground
+  ImageBackground,
+  Alert
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import Footer from '../components/Footer';
@@ -31,7 +32,20 @@ export default class Media extends React.Component {
     this.navigationController = new NavigationController(this.props.navigation);
   }
 
+  validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
   sendCode = () => {
+    if (!this.validateEmail(this.state.email)) {
+      Alert.alert(
+        'Invalid Email',
+        'You have entered an invalid email, please try again.'
+      );
+
+      return;
+    }
     var form = new FormData();
     form.append('email', this.state.email);
     this.setState({ fetching: true });
@@ -42,19 +56,33 @@ export default class Media extends React.Component {
         'Content-Type': 'multipart/form-data'
       },
       body: form
-    }).then(res => {
-      // FIXME: code is 200 even though message was not sent
-      console.log('TCL: Media -> sendCode -> res', res);
-      if (res.status != 200) {
-        alert(res._bodyInit);
-      } else {
-        const self = this;
-        this.setState({ fetching: false, disabled: true, submittedOnce: true });
-        setTimeout(() => {
-          self.setState({ disabled: false });
-        }, 1000 * 60);
-      }
-    });
+    })
+      .then(res => {
+        // FIXME: code is 200 even though message was not sent
+        console.log('TCL: Media -> sendCode -> res', res);
+        if (res.status != 200) {
+          Alert.alert('Invalid Email', res._bodyInit.replace("\"", ""));
+
+          this.setState({ fetching: false });
+        } else {
+          const self = this;
+          this.setState({
+            fetching: false,
+            disabled: true,
+            submittedOnce: true
+          });
+          setTimeout(() => {
+            self.setState({ disabled: false });
+          }, 1000 * 60);
+        }
+      })
+      .catch(err => {
+        this.setState({ fetching: false });
+        Alert.alert(
+          'Network failed',
+          'Check your internet connection and try again please.'
+        );
+      });
   };
 
   render() {
@@ -104,6 +132,8 @@ export default class Media extends React.Component {
                   width: width * 0.9,
                   backgroundColor: 'white',
                   height: 60,
+                  color: '#fabb79',
+                  fontWeight: 'bold',
                   paddingLeft: 10
                 }}
                 placeholder="E-mail"
@@ -135,7 +165,7 @@ export default class Media extends React.Component {
                 <TouchableOpacity
                   onPress={() => {
                     this.props.navigation.navigate('ConfirmActivation', {
-                      email: this.state.email,
+                      email: this.state.email.toLowerCase(),
                       notifyParent: this.props.navigation.state.params
                         .notifyParent
                     });

@@ -346,7 +346,7 @@ export default class Loading extends Component {
       >
         <ActivityIndicator size="large" color="#ffec59" />
 
-        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>
+        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18, position: 'absolute', top: 100 }}>
           {this.state.currentTaskText}
         </Text>
       </ImageBackground>

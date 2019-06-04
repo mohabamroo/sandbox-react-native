@@ -17,6 +17,7 @@ import { FavoritesDB } from '../Config/DB';
 import ArtistRow from '../components/ArtistRow';
 import { Label } from '../components/Label';
 import { UserBrief } from '../components/UserBrief';
+import Layout, * as layout from '../constants/Layout';
 
 const URLs = require('../Config/ExternalURL');
 
@@ -117,6 +118,11 @@ export default class ProfileScreen extends React.Component {
     });
   }
 
+  __onLayout(event) {
+    this.setState({
+      marginTop: (event.nativeEvent.layout.height / 2) * -1
+    });
+  }
   render() {
     let title = {
       text: 'MY FAVORITES',
@@ -124,44 +130,52 @@ export default class ProfileScreen extends React.Component {
       bgColor: '#E9665C'
     };
     return (
-      <View style={__GStyles.default.container}>
-        <HeaderComponent navigation={this.props.navigation} />
-        <UserBrief
-          navigation={this.props.navigation}
-          NACController={this.navigationController}
-          user={this.state.user}
-          hasBackBtn={true}
-        />
-        <ImageBackground
-          source={Assets.circ2}
-          style={[__GStyles.default.subHeaderContainer]}
-          resizeMode="repeat"
-        >
-          <View style={__GStyles.default.subHeaderContent}>
-            <View
-              style={[
-                __GStyles.default.subHeaderContentView,
-                { alignItems: 'flex-start' }
-              ]}
-            >
-              {title && <Label title={title} />}
+      <ImageBackground
+        source={Assets.bg1}
+        resizeMode="repeat"
+        style={styles.imageBG}
+      >
+        <View style={[__GStyles.default.container, { paddingTop: 50 }]}>
+          <UserBrief
+            style={{ marginTop: 50 }}
+            navigation={this.props.navigation}
+            NACController={this.navigationController}
+            user={this.state.user}
+            hasBackBtn={true}
+          />
+          <ImageBackground
+            source={Assets.circ2}
+            style={[__GStyles.default.subHeaderContainer]}
+            resizeMode="repeat"
+          >
+            <View style={__GStyles.default.subHeaderContent}>
+              <View
+                style={[
+                  __GStyles.default.subHeaderContentView,
+                  { alignItems: 'flex-start' }
+                ]}
+              >
+                {title && <Label title={title} />}
+              </View>
             </View>
-          </View>
-        </ImageBackground>
-        <ImageBackground
-          resizeMode="repeat"
-          source={Assets.bg4}
-          style={[styles.container, { width: '100%' }]}
-        >
-          <ScrollView bounces={false} style={{ flex: 1 }}>
-            <ListView
-              bounces={false}
-              dataSource={this.state.artists}
-              renderRow={this.renderArtist.bind(this)}
-              enableEmptySections={this.section}
-            />
-          </ScrollView>
-        </ImageBackground>
+          </ImageBackground>
+          <ImageBackground
+            resizeMode="repeat"
+            source={Assets.bg4}
+            style={[styles.container, { width: '100%' }]}
+          >
+            <ScrollView bounces={false} style={{ flex: 1 }}>
+              <ListView
+                bounces={false}
+                dataSource={this.state.artists}
+                renderRow={this.renderArtist.bind(this)}
+                enableEmptySections={this.section}
+              />
+              <View style={styles.footerMargin} />
+            </ScrollView>
+          </ImageBackground>
+          <Footer />
+        </View>
         {this.state.current_artist && (
           <ArtistPopup
             isVisible={this.state.show_popup}
@@ -173,8 +187,7 @@ export default class ProfileScreen extends React.Component {
             style={{ zIndex: 1 }}
           />
         )}
-        <Footer />
-      </View>
+      </ImageBackground>
     );
   }
 }
@@ -187,5 +200,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'transparent'
+  },
+  imageBG: {
+    width: '100%',
+    height: '100%'
+  },
+  footerMargin: {
+    height: Layout.window.height / 3
   }
 });

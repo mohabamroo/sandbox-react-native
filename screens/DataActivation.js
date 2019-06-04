@@ -8,8 +8,11 @@ import {
   Text,
   Image,
   Picker,
+  ActivityIndicator,
   ImageBackground
 } from 'react-native';
+// import * as RNFS from 'react-native-fs';
+
 import HeaderComponent from '../components/HeaderComponent';
 const { width, height } = Dimensions.get('window');
 import * as __GStyles from '../styles';
@@ -87,18 +90,39 @@ export default class Media extends React.Component {
       let result = await ImagePicker.launchCameraAsync({
         allowsEditing: false,
         aspect: [1, 1],
-        base64: true
+        base64: true,
+        quality: 0.5
       });
       if (!result.cancelled) {
+        let imageName = this.state.email.split('@')[0] + '-' + this.makeid(10);
+        var photo = {
+          uri: result.uri,
+          type: 'image/jpeg',
+          name: imageName + '.jpg'
+        };
         this.setState({
           image: result.uri,
-          base64: result.base64
+          base64: result.base64,
+          imageObj: photo
         });
+        console.log('TCL: Media -> photo', photo);
+        console.log('TCL: Media -> onPressIcon -> result.uri', result.uri);
       }
     } else {
       this.getPermissionOne();
     }
   };
+
+  makeid(length) {
+    var result = '';
+    var characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
 
   componentWillMount() {
     this.getPermissionOne();
@@ -110,7 +134,7 @@ export default class Media extends React.Component {
   }
 
   async sendData() {
-    console.log("TCL: Media -> sendData -> this.state.email", this.state.email)
+    console.log('TCL: Media -> sendData -> this.state.email', this.state.email);
     if (
       !this.state.yearValue ||
       !this.state.selectedMonthValue ||
@@ -120,8 +144,6 @@ export default class Media extends React.Component {
       !this.state.email
     ) {
       alert('Please, fill all fields');
-      this.props.navigation.navigate('Home');
-
       this.props.navigation.state.params.notifyParent();
       return;
     }
@@ -132,7 +154,9 @@ export default class Media extends React.Component {
         this.state.dayValue
       }`
     );
-    form.append('client_photo', this.state.base64);
+
+    var body = new FormData();
+    form.append('client_photo', this.state.imageObj);
     form.append('country', this.state.cca2);
     this.setState({ fetching: true });
     fetch(`https://nacelle.nbhood.com/api/tickets/${this.state.email}/`, {
@@ -142,20 +166,29 @@ export default class Media extends React.Component {
         'Content-Type': 'multipart/form-data'
       },
       body: form
-    }).then(res => {
-      if (res.status != 200) {
-        alert(res._bodyInit);
-      } else {
-        res.json().then(jsonData => {
-          UserDB.Set(jsonData).then(cache => {
-            console.log('set user in cache');
-            this.props.navigation.state.params.notifyParent();
-            this.props.navigation.navigate('Home');
+    })
+      .then(res => {
+        if (res.status != 200) {
+          alert(res._bodyInit);
+        } else {
+          res.json().then(jsonData => {
+            console.log('TCL: Media -> jsonData', jsonData);
+            UserDB.Set(jsonData).then(cache => {
+              console.log('set user in cache');
+              this.props.navigation.state.params.notifyParent();
+              this.props.navigation.navigate('Home');
+            });
           });
-        });
-      }
-      this.setState({ fetching: false });
-    });
+        }
+        this.setState({ fetching: false });
+      })
+      .catch(err => {
+        this.setState({ fetching: false });
+        Alert.alert(
+          'Network failed',
+          'Check your internet connection and try again please.'
+        );
+      });
   }
 
   render() {
@@ -171,8 +204,7 @@ export default class Media extends React.Component {
             style={{
               flex: 1,
               justifyContent: 'center',
-              alignItems: 'center',
-              paddingTop: 40
+              alignItems: 'center'
             }}
           >
             <View
@@ -195,15 +227,18 @@ export default class Media extends React.Component {
             </View>
             <TouchableOpacity
               onPress={() => this.onPressIcon()}
-              style={{
-                flex: 1,
-                width: width * 0.9,
-                height: height * 0.21,
-                paddingHorizontal: 20,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#ffec59'
-              }}
+              style={[
+                {
+                  flex: 1,
+                  width: width * 0.9,
+                  height: height * 0.35,
+                  paddingHorizontal: 20,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: '#ffec59'
+                },
+                this.state.image ? { backgroundColor: 'transparent' } : {}
+              ]}
             >
               <View style={{}}>
                 {!this.state.image && (
@@ -215,7 +250,7 @@ export default class Media extends React.Component {
                 {this.state.image && (
                   <Image
                     source={{ uri: this.state.image }}
-                    style={{ width: 200, height: '100%' }}
+                    style={{ width: width * 0.8, height: height * 0.35 }}
                   />
                 )}
               </View>
@@ -238,7 +273,7 @@ export default class Media extends React.Component {
                 flexDirection: 'row',
                 alignItems: 'center',
                 backgroundColor: 'white',
-                height: 30,
+                height: 35,
                 justifyContent: 'space-between',
                 paddingHorizontal: 10
               }}
@@ -364,10 +399,17 @@ export default class Media extends React.Component {
                 backgroundColor: '#189aa9'
               }}
             >
-              <Text style={{ color: '#ffec59' }}>SUBMIT</Text>
+              {this.state.fetching ? (
+                <ActivityIndicator color="#ffec59" />
+              ) : (
+                <Text style={{ color: '#ffec59', fontWeight: 'bold' }}>
+                  SUBMIT
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
         </ScrollView>
+        <Footer />
       </ImageBackground>
     );
   }
@@ -406,7 +448,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 30,
+    height: 35,
     marginRight: 10
   },
   inputLabel: {
