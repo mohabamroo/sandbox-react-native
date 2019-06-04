@@ -17,7 +17,6 @@ import {
 import HeaderComponent from '../components/HeaderComponent';
 import MediaPopup from './MediaPopup';
 import Layout, * as layout from '../constants/Layout';
-import Footer from '../components/Footer';
 import * as __GStyles from '../styles';
 import { MediaDB } from '../Config/DB';
 import Colors from '../constants/Colors';
@@ -423,7 +422,7 @@ export default class Media extends React.Component {
 					onClose={() => this.setState({ showSlider: false })}
 				/>
 
-				<Footer />
+
 			</ImageBackground>
 		);
 	}

@@ -22,7 +22,6 @@ import Assets from '../constants/Assets';
 import ArtistPopup from './ArtistPopup';
 
 import * as __GStyles from '../styles';
-import Footer from '../components/Footer';
 import { SchedualDB, ArtistsDB } from '../Config/DB';
 const URLs = require('../Config/ExternalURL');
 
@@ -34,7 +33,11 @@ export default class Schedule extends React.Component {
 		this.state = {
 			show_popup: false,
 			current_artist: null,
-			active: 'day1'
+			active: 'day1',
+			timer: 0,
+			colors1: ['#fabb79', '#008691', '#e9665d', '#60a484'],
+			colors2: ['#60a484', '#f069a7', '#fabb79', '#ffe958'],
+			colorIdx: 0
 		};
 	}
 
@@ -51,7 +54,7 @@ export default class Schedule extends React.Component {
 				moment().set({ year: 2019, month: 5, date: 13, hour: 12, minute: 59 })
 			) &&
 			now.isBefore(
-				moment().set({ year: 2019, month: 5, date: 14, hour: 12, minute: 15 })
+				moment().set({ year: 2019, month: 5, date: 14, hour: 5, minute: 0 })
 			)
 		) {
 			event_day = 'day1';
@@ -60,7 +63,7 @@ export default class Schedule extends React.Component {
 				moment().set({ year: 2019, month: 5, date: 14, hour: 12, minute: 59 })
 			) &&
 			now.isBefore(
-				moment().set({ year: 2019, month: 5, date: 15, hour: 11, minute: 59 })
+				moment().set({ year: 2019, month: 5, date: 15, hour: 4, minute: 0 })
 			)
 		) {
 			event_day = 'day2';
@@ -69,7 +72,7 @@ export default class Schedule extends React.Component {
 				moment().set({ year: 2019, month: 5, date: 15, hour: 12, minute: 59 })
 			) &&
 			now.isBefore(
-				moment().set({ year: 2019, month: 5, date: 16, hour: 15, minute: 59 })
+				moment().set({ year: 2019, month: 5, date: 16, hour: 4, minute: 0 })
 			)
 		) {
 			event_day = 'day3';
@@ -96,13 +99,14 @@ export default class Schedule extends React.Component {
 		return array;
 	}
 
-	renderTimeslot(last, currentSlot, current, array) {
+	renderTimeslot(current, array) {
 		array.push(
 			<View
 				style={{
 					height: 40,
-					width: last ? interval + 60 : interval,
-					backgroundColor: '#e9665d'
+					width: interval,
+					backgroundColor: '#e9665d',
+					alignItems: 'center'
 				}}
 			>
 				<View
@@ -115,23 +119,7 @@ export default class Schedule extends React.Component {
 						<Text style={{ color: '#ffec59', marginLeft: 4 }}>
 							{current.format('h:mmA')}
 						</Text>
-						{currentSlot && (
-							<View
-								style={{
-									height: 10,
-									width: 10,
-									borderRadius: 5,
-									backgroundColor: '#ffec59',
-									alignSelf: 'center'
-								}}
-							/>
-						)}
 					</View>
-					{last && (
-						<Text style={{ color: '#ffec59', marginLeft: 'auto' }}>
-							{current.add(30, 'minutes').format('h:mmA')}
-						</Text>
-					)}
 				</View>
 			</View>
 		);
@@ -147,9 +135,7 @@ export default class Schedule extends React.Component {
 					)[0];
 					this.setState({
 						show_popup: true,
-						current_artist,
-						color1: '#7bc19e',
-						color2: '#f8b7bb'
+						current_artist
 					});
 				}}
 			>
@@ -200,25 +186,32 @@ export default class Schedule extends React.Component {
 
 	autoScroll(day) {
 		if (this.state.today !== day) {
-			this.scrollView.scrollTo({ x: 0, animated: true });
+			this.setState({ timer: 0 });
+			setTimeout(() => this.scrollView.scrollTo({ x: 0, animated: true }), 100);
 			return;
 		}
 		let now = moment();
 		let begin = this.state[day].begin;
-		if (Math.abs(begin.date() - now.date()) < 1 && begin.hours() >= 12 && now.hours() < 12) {
-      isInitial = false
+		if (
+			Math.abs(begin.date() - now.date()) < 1 &&
+			begin.hours() >= 12 &&
+			now.hours() < 12
+		) {
+			isInitial = false;
 			begin.subtract(24, 'hours');
-      let dayObj = this.state[day]
-      dayObj.begin = begin
-      this.setState({
-        [day]: {...dayObj}
-      })
+			let dayObj = this.state[day];
+			dayObj.begin = begin;
+			this.setState({
+				[day]: { ...dayObj }
+			});
 		}
 
 		let slots = Math.abs(now.diff(begin, 'minutes')) / 30;
-		let scrollValue = (slots - 2 ) * interval;
+		let scrollValue = (slots - 2) * interval;
+		let timer = (slots + 0.45) * interval;
 		let max =
-			this.state[day].timeslots.length * interval + 60 - Layout.window.width;
+			this.state[day].timeslots.length * interval  - Layout.window.width;
+		this.setState({ timer: Math.max(0, timer) });
 
 		this.scrollView.scrollTo({
 			x: Math.max(0, Math.min(scrollValue, max)),
@@ -255,7 +248,7 @@ export default class Schedule extends React.Component {
 				sandSlots = [];
 			let timeslots = [];
 			current = moment(begin);
-			while (current.isBefore(end)) {
+			while (!current.isAfter(end)) {
 				let last =
 					moment(current)
 						.add(30, 'minutes')
@@ -265,12 +258,12 @@ export default class Schedule extends React.Component {
 					moment().hours() == current.hours() &&
 					moment().minutes() > current.minutes() &&
 					moment().minutes() < current.minutes() + 30;
-				timeslots = this.renderTimeslot(last, currentSlot, current, timeslots)
+				timeslots = this.renderTimeslot(current, timeslots);
 				current.add(30, 'minutes');
 			}
 			// mainStage slots
 			if (beginMain.isAfter(begin)) {
-				let difference = beginMain.diff(begin, 'minutes') / 15;
+				let difference = Math.abs(beginMain.diff(begin, 'minutes')) / 15;
 				mainSlots = this.emptySpace((difference * interval) / 2, mainSlots);
 			}
 			for (; i < mainStage.length; i++) {
@@ -284,7 +277,8 @@ export default class Schedule extends React.Component {
 					if (prevEnd.hours() < 12) prevEnd.add(1, 'days');
 				}
 				if (i == 0 || currentBegin.isSame(prevEnd)) {
-					let difference = currentEnd.diff(currentBegin, 'minutes') / 15;
+					let difference =
+						Math.abs(currentEnd.diff(currentBegin, 'minutes')) / 15;
 					mainSlots = this.sessionSpace(
 						(difference * interval) / 2,
 						mainSlots,
@@ -292,9 +286,9 @@ export default class Schedule extends React.Component {
 						'#f8b7bb'
 					);
 				} else {
-					let difference = currentBegin.diff(prevEnd, 'minutes') / 15;
+					let difference = Math.abs(currentBegin.diff(prevEnd, 'minutes')) / 15;
 					mainSlots = this.emptySpace((difference * interval) / 2, mainSlots);
-					difference = currentBegin.diff(currentEnd, 'minutes') / 15;
+					difference = Math.abs(currentBegin.diff(currentEnd, 'minutes')) / 15;
 					mainSlots = this.sessionSpace(
 						(difference * interval) / 2,
 						mainSlots,
@@ -376,14 +370,17 @@ export default class Schedule extends React.Component {
 			});
 	}
 
-	 _handleAppStateChange(newState) {
+	_handleAppStateChange(newState) {
 		day = newState.active;
-		 this.setState({
-			active: day,
-			timeslots: this.state[day].timeslots,
-			mainSlots: this.state[day].mainSlots,
-			sandSlots: this.state[day].sandSlots
-		}, this.autoScroll(day));
+		this.setState(
+			{
+				active: day,
+				timeslots: this.state[day].timeslots,
+				mainSlots: this.state[day].mainSlots,
+				sandSlots: this.state[day].sandSlots
+			},
+			this.autoScroll(day)
+		);
 	}
 
 	renderTabs() {
@@ -486,70 +483,104 @@ export default class Schedule extends React.Component {
 		return (
 			<ImageBackground
 				style={__GStyles.default.container}
-				source={require('../assets/images/bgschedul.png')}
-				resizeMode={'cover'}
+				source={require('../assets/images/patterns/bg2b.png')}
+				resizeMode={'repeat'}
 			>
-				<HeaderComponent navigation={this.props.navigation} />
-				{this.renderTabs()}
-				<ScrollView
-					ref={element => (this.scrollView = element)}
-					horizontal
-					contentContainerStyle={{ flexDirection: 'column' }}
-				>
-					<View style={{ flexDirection: 'row' }}>
-						{this.state.timeslots &&
-							this.state.timeslots.map((item, index) => {
-								return item;
-							})}
-					</View>
-					<View style={{ flexDirection: 'row', marginLeft: 60 }}>
-						{this.state.mainSlots &&
-							this.state.mainSlots.map((item, index) => {
-								return item;
-							})}
-					</View>
-					<View style={{ flexDirection: 'row', marginLeft: 60 }}>
-						{this.state.sandSlots &&
-							this.state.sandSlots.map((item, index) => {
-								return item;
-							})}
-					</View>
-				</ScrollView>
-				<Image
-					source={require('../assets/images/main.png')}
-					style={{
-						height: 160,
-						width: 70,
-						resizeMode: 'cover',
-						position: 'absolute',
-						top: 180,
-						left: -3,
-						transform: [{ rotate: '-3deg' }]
-					}}
-				/>
-				<Image
-					source={require('../assets/images/sandBox.png')}
-					style={{
-						height: 160,
-						width: 70,
-						resizeMode: 'cover',
-						position: 'absolute',
-						top: 325,
-						left: -3,
-						transform: [{ rotate: '-3deg' }]
-					}}
-				/>
-				{this.state.current_artist &&
-					this.state.show_popup && (
-						<ArtistPopup
-							artist={this.state.current_artist}
-							color1={this.state.color1}
-							color2={this.state.color2}
-							notifyParent={() => this.fetchFavorites()}
-							onClose={() => this.setState({ show_popup: false })}
-						/>
-					)}
-				<Footer />
+
+					<HeaderComponent navigation={this.props.navigation} />
+					<ImageBackground
+						style={__GStyles.default.container}
+						source={require('../assets/images/bgschedul.png')}
+						resizeMode={'cover'}
+					>
+					{this.renderTabs()}
+					<ScrollView
+						ref={element => (this.scrollView = element)}
+						horizontal
+						contentContainerStyle={{ flexDirection: 'column' }}
+					>
+						<View style={{ flexDirection: 'row' }}>
+							{this.state.timeslots &&
+								this.state.timeslots.map((item, index) => {
+									return item;
+								})}
+						</View>
+						<View style={{ flexDirection: 'row', marginLeft: interval / 2 }}>
+							{this.state.mainSlots &&
+								this.state.mainSlots.map((item, index) => {
+									return item;
+								})}
+						</View>
+						<View style={{ flexDirection: 'row', marginLeft: interval / 2 }}>
+							{this.state.sandSlots &&
+								this.state.sandSlots.map((item, index) => {
+									return item;
+								})}
+						</View>
+						{this.state.today === this.state.active && (
+							<View
+								style={{
+									marginTop: 20,
+									position: 'absolute',
+									marginLeft: this.state.timer,
+									alignItems: 'center'
+								}}
+							>
+								<View
+									style={{
+										height: 10,
+										width: 10,
+										borderRadius: 5,
+										backgroundColor: '#ffec59',
+										alignSelf: 'center'
+									}}
+								/>
+								<View
+									style={{
+										width: 1,
+										backgroundColor: '#ffec59',
+										height: Layout.window.height
+									}}
+								/>
+							</View>
+						)}
+					</ScrollView>
+					<Image
+						source={require('../assets/images/main.png')}
+						style={{
+							height: 160,
+							width: interval / 2,
+							resizeMode: 'cover',
+							position: 'absolute',
+							top: 70,
+							left: -3,
+							transform: [{ rotate: '-3deg' }]
+						}}
+					/>
+					<Image
+						source={require('../assets/images/sandBox.png')}
+						style={{
+							height: 160,
+							width: interval / 2,
+							resizeMode: 'cover',
+							position: 'absolute',
+							top: 220,
+							left: -3,
+							transform: [{ rotate: '-3deg' }]
+						}}
+					/>
+					</ImageBackground>
+					{this.state.current_artist &&
+						this.state.show_popup && (
+							<ArtistPopup
+								artist={this.state.current_artist}
+								color1={this.state.colors1[this.state.colorIdx]}
+								color2={this.state.colors2[this.state.colorIdx]}
+								notifyParent={() => this.fetchFavorites()}
+								onClose={() => this.setState({ show_popup: false, colorIdx: this.state.colorIdx + 1 % this.state.colors1.length })}
+							/>
+						)}
+
 			</ImageBackground>
 		);
 	}

@@ -3,7 +3,6 @@ import { ScrollView, Image, TouchableOpacity, StyleSheet, View, Text, ListView, 
 import HeaderComponent from '../components/HeaderComponent';
 import * as __GStyles from '../styles';
 import Accordion from 'react-native-collapsible/Accordion';
-import Footer from '../components/Footer';
 import Assets from '../constants/Assets';
 import Layout from '../constants/Layout';
 export default class Partners extends React.Component {
@@ -15,16 +14,19 @@ export default class Partners extends React.Component {
     return (
       <ImageBackground resizeMode="repeat" source={Assets.bg1} style={__GStyles.default.container}>
         <HeaderComponent navigation={this.props.navigation} />
-        <ScrollView bounces={false} style={styles.container} contentContainerStyle={__GStyles.default.contentContainer}>
-          <Image style={[styles.image, {height: this.props.navigation.state.params.in.height || Layout.window.height}]} resizeMode="cover" source={{uri: this.props.navigation.state.params.in.partners_image}} />
+        <ScrollView contentContainerStyle={styles.container}>
+          <Image style={{height: Layout.window.height * 1.5}} resizeMode="contain" source={{uri: this.props.navigation.state.params.in.partners_image}} />
         </ScrollView>
-        <Footer />
       </ImageBackground>
     );
   }
 }
 
 const styles = StyleSheet.create({
+    container: {
+      paddingBottom: 200,
+      backgroundColor: 'white'
+    },
     image: {
         width: Layout.window.width,
         resizeMode: 'cover',

@@ -12,7 +12,6 @@ import {
 import HeaderComponent from '../components/HeaderComponent';
 import * as __GStyles from '../styles';
 import Accordion from 'react-native-collapsible/Accordion';
-import Footer from '../components/Footer';
 import Assets from '../constants/Assets';
 
 export default class FQAs extends React.Component {
@@ -113,7 +112,7 @@ export default class FQAs extends React.Component {
             />
           </View>
         </ScrollView>
-        <Footer />
+
       </ImageBackground>
     );
   }

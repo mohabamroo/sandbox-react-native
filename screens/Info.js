@@ -17,7 +17,7 @@ import * as __GStyles from '../styles';
 import { InfoDB } from '../Config/DB/index';
 import { NavigationController } from '../navigation/index';
 import Assets from '../constants/Assets';
-import Footer from '../components/Footer';
+
 export default class Info extends React.Component {
   ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
   constructor(props) {
@@ -34,12 +34,12 @@ export default class Info extends React.Component {
         'rgb(231,103,	95)'
       ],
       mapNaming: {
-        rules: { label: 'Sandbox rules', order: 1 },
-        bus_routes: { label: 'SHUTTLE BUSES & ROUTES', order: 2 },
+        rules: { label: 'Sandbox Rules', order: 1 },
+        bus_routes: { label: 'Shuttle Buses & Routes', order: 2 },
         faqs: { label: 'FAQs', order: 3 },
         policies: { label: 'policies', order: 4 },
-        safety: { label: 'Safety & medical info', order: 6 },
-        partners: { label: 'partners, Sponsors & credit', order: 5 }
+        safety: { label: 'Safety & Medical Info', order: 6 },
+        partners: { label: 'Partners, Sponsors & Credit', order: 5 }
       }
     };
   }
@@ -128,7 +128,6 @@ export default class Info extends React.Component {
             enableEmptySections={true}
           />
         </ScrollView>
-        <Footer />
       </ImageBackground>
     );
   }

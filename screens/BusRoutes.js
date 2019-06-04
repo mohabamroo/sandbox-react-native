@@ -16,7 +16,6 @@ import { MapView } from 'expo';
 import HeaderComponent from '../components/HeaderComponent';
 import * as __GStyles from '../styles';
 import Accordion from 'react-native-collapsible/Accordion';
-import Footer from '../components/Footer';
 import Assets from '../constants/Assets';
 
 const { height, width } = Dimensions.get('window');
@@ -103,17 +102,6 @@ export default class BusRoutes extends React.Component {
 		this.setState({ activeSection });
 	}
 
-	// isLocationFree(point, lookup) {
-	// 	for (var i = 0, l = lookup.length; i < l; i++) {
-	// 		if (lookup[i][0] === point[0] && lookup[i][1] === point[1]) {
-	// 			console.log('TAKEN', lookup[i], point);
-	//
-	// 			return false;
-	// 		}
-	// 	}
-	// 	return true;
-	// }
-
 	render() {
 		let addedMarkers = [];
 		return (
@@ -166,7 +154,7 @@ export default class BusRoutes extends React.Component {
 					})}
 				</MapView>
 
-				<Footer />
+
 			</ImageBackground>
 		);
 	}

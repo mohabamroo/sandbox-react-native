@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import CodeInput from 'react-native-confirmation-code-input';
 import HeaderComponent from '../components/HeaderComponent';
-import Footer from '../components/Footer';
 const { width, height } = Dimensions.get('window');
 import * as __GStyles from '../styles';
 import { NavigationController } from '../navigation/index';
@@ -141,7 +140,7 @@ export default class Media extends React.Component {
             </View>
           </View>
         </ScrollView>
-        <Footer />
+
       </ImageBackground>
     );
   }

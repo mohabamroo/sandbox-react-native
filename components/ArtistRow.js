@@ -7,6 +7,7 @@ import {
   Text,
   TouchableHighlight
 } from 'react-native';
+import moment from 'moment';
 import { likeArtist, removeArtistLike } from '../Config/ExternalURL';
 import { FavoritesDB } from '../Config/DB';
 
@@ -142,9 +143,9 @@ export default class ArtistRow extends React.Component {
               {row['artist_session'] && row['artist_session']['session_day']
                 ? row['artist_session']['session_day'].replace('day', 'DAY ') +
                   ', ' +
-                  row['artist_session']['session_start_time'] +
+                  moment(row['artist_session']['session_start_time'], 'HH:mm').format('hh:mmA') +
                   ' - ' +
-                  row['artist_session']['session_end_time']
+                    moment(row['artist_session']['session_end_time'], 'HH:mm').format('hh:mmA')
                 : ''}
             </Text>
           </View>
