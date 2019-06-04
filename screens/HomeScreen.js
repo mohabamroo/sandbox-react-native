@@ -54,7 +54,7 @@ export default class HomeScreen extends React.Component {
     this.handleSchedule = this.handleSchedule.bind(this);
     // sets state
     let countState = this.handleCountdown();
-    // this.refreshUserAccount();
+    this.refreshUserAccount();
     this.state = {
       ...countState
     };
@@ -182,6 +182,7 @@ export default class HomeScreen extends React.Component {
     let userState;
     let self = this;
     UserDB.Get().then(userData => {
+      console.log("TCL: HomeScreen -> refreshUserAccount -> userData", userData)
       if (userData != null) {
         userState = { user: { ...userData }, loggedIn: true };
       } else {

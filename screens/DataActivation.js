@@ -52,6 +52,7 @@ export default class Media extends React.Component {
       selectedMonthName: 'Month',
       yearValue: null,
       cca2: 'US',
+      email: this.props.navigation.state.params.email,
       callingCode: '1',
       fetching: false,
       PermissionsReady: false,
@@ -90,7 +91,8 @@ export default class Media extends React.Component {
       });
       if (!result.cancelled) {
         this.setState({
-          image: result.uri
+          image: result.uri,
+          base64: result.base64
         });
       }
     } else {
@@ -108,12 +110,14 @@ export default class Media extends React.Component {
   }
 
   async sendData() {
+    console.log("TCL: Media -> sendData -> this.state.email", this.state.email)
     if (
       !this.state.yearValue ||
       !this.state.selectedMonthValue ||
       !this.state.dayValue ||
       !this.state.cca2 ||
-      !this.state.image
+      !this.state.image ||
+      !this.state.email
     ) {
       alert('Please, fill all fields');
       this.props.navigation.navigate('Home');
@@ -128,10 +132,10 @@ export default class Media extends React.Component {
         this.state.dayValue
       }`
     );
-    form.append('client_photo', 'wait');
+    form.append('client_photo', this.state.base64);
     form.append('country', this.state.cca2);
     this.setState({ fetching: true });
-    fetch('https://nacelle.nbhood.com/api/tickets/mohabamr1@gmail.com/', {
+    fetch(`https://nacelle.nbhood.com/api/tickets/${this.state.email}/`, {
       method: 'PATCH',
       headers: {
         Accept: 'application/json',
@@ -161,7 +165,6 @@ export default class Media extends React.Component {
         source={Assets.bg1}
         style={__GStyles.default.container}
       >
-        {' '}
         <HeaderComponent navigation={this.props.navigation} />
         <ScrollView style={styles.container}>
           <View

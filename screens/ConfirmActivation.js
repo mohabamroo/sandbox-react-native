@@ -43,6 +43,7 @@ export default class Media extends React.Component {
       },
       body: form
     }).then(res => {
+      console.log("TCL: Media -> res", res)
       if (res.status != 200) {
         alert('wrong code');
       } else {
