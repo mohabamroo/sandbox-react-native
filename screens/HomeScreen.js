@@ -29,38 +29,39 @@ import { EventInfoDB, SchedualDB, ArtistsDB, UserDB } from '../Config/DB';
 // const start_days = [moment]
 
 export default class HomeScreen extends React.Component {
-	__navigationOptions = {
-		title: {
-			text: 'The Home Screen',
-			fontColor: 'yellow',
-			bgColor: 'rgb(219, 109, 98)'
-		},
-		mainHeader: {
-			bg: 'bg1'
-		},
-		subHeader: {
-			bg: 'circ2'
-		}
-	};
-	constructor(props) {
-		super(props);
-		this.navigationController = new NavigationController(this.props.navigation);
-		this.state = {
-			timeState: 2,
-			currentEvents: null,
-			current_artist: false,
-			show_popup: false
-		};
-		this.handleSchedule = this.handleSchedule.bind(this);
-		// sets state
-		let countState = this.handleCountdown();
-		// this.refreshUserAccount();
-		this.state = {
-			...countState
-		};
-		this.notifyEventStart = this.notifyEventStart.bind(this);
-		this.refreshUserAccount = this.refreshUserAccount.bind(this);
-	}
+  
+  __navigationOptions = {
+    title: {
+      text: 'The Home Screen',
+      fontColor: 'yellow',
+      bgColor: 'rgb(219, 109, 98)'
+    },
+    mainHeader: {
+      bg: 'bg1'
+    },
+    subHeader: {
+      bg: 'circ2'
+    }
+  };
+  constructor(props) {
+    super(props);
+    this.navigationController = new NavigationController(this.props.navigation);
+    this.state = {
+      timeState: 2,
+      currentEvents: null,
+      current_artist: false,
+      show_popup: false
+    };
+    this.handleSchedule = this.handleSchedule.bind(this);
+    // sets state
+    let countState = this.handleCountdown();
+    this.refreshUserAccount();
+    this.state = {
+      ...countState
+    };
+    this.notifyEventStart = this.notifyEventStart.bind(this);
+    this.refreshUserAccount = this.refreshUserAccount.bind(this);
+  }
 
 
 	componentWillUnmount() {
@@ -167,6 +168,21 @@ export default class HomeScreen extends React.Component {
 			current_artist
 		});
 	}
+
+  refreshUserAccount() {
+    let userState;
+    let self = this;
+    UserDB.Get().then(userData => {
+      console.log("TCL: HomeScreen -> refreshUserAccount -> userData", userData)
+      if (userData != null) {
+        userState = { user: { ...userData }, loggedIn: true };
+      } else {
+        userState = { loggedIn: false };
+      }
+      this.setState({ ...userState });
+    });
+  }
+
 
 	handleState() {
 		// check for after event state.

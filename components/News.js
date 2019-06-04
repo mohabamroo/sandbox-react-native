@@ -60,8 +60,10 @@ export class News extends React.Component {
   }
 
   refreshNews() {
-    fetch(URLs.getNews(this.state.userID))
-      .then(response => response.json())
+    fetch(URLs.getNews(1))
+      .then(response => {
+        return response.json();
+      })
       .then(apiResponse => {
         if (apiResponse.Status == 200) {
           this.setNews(apiResponse.data);
