@@ -24,6 +24,7 @@ import Layout from '../constants/Layout';
 import { CountDownTimer } from '../components/CountDownTimer';
 import { UserBrief } from '../components/UserBrief';
 import { EventInfoDB, SchedualDB, ArtistsDB, UserDB } from '../Config/DB';
+import Footer from '../components/Footer';
 
 // const start_days = [moment]
 
@@ -325,7 +326,7 @@ export default class HomeScreen extends React.Component {
 							onClose={() => this.setState({ show_popup: false })}
 						/>
 					)}
-
+        <Footer />
 
 			</ImageBackground>
 		);
