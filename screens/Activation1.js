@@ -17,6 +17,7 @@ import * as __GStyles from '../styles';
 import { NavigationController } from '../navigation/index';
 import Assets from '../constants/Assets';
 import Footer from '../components/Footer';
+const URLs = require('../Config/ExternalURL');
 
 export default class Media extends React.Component {
   constructor(props) {
@@ -49,7 +50,7 @@ export default class Media extends React.Component {
     var form = new FormData();
     form.append('email', this.state.email);
     this.setState({ fetching: true });
-    fetch('https://nacelle.nbhood.com/api/sms/send', {
+    fetch(URLs.sendSMS, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -60,19 +61,19 @@ export default class Media extends React.Component {
       .then(res => {
         // FIXME: code is 200 even though message was not sent
         if (res.status != 200) {
-          const newMessage = res._bodyInit.replace(/\"/g, "");
+          const newMessage = res._bodyInit.replace(/\"/g, '');
           Alert.alert('Invalid Email', newMessage);
           this.setState({ fetching: false });
         } else {
           const self = this;
           this.setState({
-            fetching: false,
-            disabled: true,
-            submittedOnce: true
+            fetching: false
           });
-          setTimeout(() => {
-            self.setState({ disabled: false });
-          }, 1000 * 60);
+          this.props.navigation.navigate('ConfirmActivation', {
+            email: this.state.email.toLowerCase(),
+            notifyParent: this.props.navigation.state.params.notifyParent,
+            backBtnRoute: 'Home'
+          });
         }
       })
       .catch(err => {
@@ -159,31 +160,6 @@ export default class Media extends React.Component {
                   </Text>
                 )}
               </TouchableOpacity>
-
-              {this.state.submittedOnce && (
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('ConfirmActivation', {
-                      email: this.state.email.toLowerCase(),
-                      notifyParent: this.props.navigation.state.params
-                        .notifyParent,
-                      backBtnRoute: 'Home'
-                    });
-                  }}
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: width * 0.9,
-                    height: 40,
-                    backgroundColor: '#189aa9'
-                  }}
-                >
-                  <Text style={{ color: '#ffec59', fontWeight: 'bold' }}>
-                    PROCEED
-                  </Text>
-                </TouchableOpacity>
-              )}
             </View>
           </View>
         </ScrollView>

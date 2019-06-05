@@ -421,15 +421,14 @@ export default class Media extends React.Component {
             </View>
           ) : null}
         </View>
-
-        <MediaPopup
-          isVisible={this.state.showSlider}
-          index={this.state.index}
-          selectedImages={this.state.selectedImages}
-          onClose={() => this.setState({ showSlider: false })}
-        />
-
-        <Footer />
+        {this.state.showSlider && (
+          <MediaPopup
+            isVisible={this.state.showSlider}
+            index={this.state.index}
+            selectedImages={this.state.selectedImages}
+            onClose={() => this.setState({ showSlider: false })}
+          />
+        )}
       </ImageBackground>
     );
   }

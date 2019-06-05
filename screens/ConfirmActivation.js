@@ -18,14 +18,11 @@ import * as __GStyles from '../styles';
 import { NavigationController } from '../navigation/index';
 import Assets from '../constants/Assets';
 import Footer from '../components/Footer';
+const URLs = require('../Config/ExternalURL');
 
 export default class Media extends React.Component {
   constructor(props) {
     super(props);
-    console.log(
-      'TCL: Media -> constructor -> this.props.navigation.state.params.notifyParent,',
-      this.props.navigation.state.params.backBtnRoute
-    );
     this.state = {
       active: 'pics',
       txt: 'Please enter the 4 digit code you received in the space below.'
@@ -40,7 +37,7 @@ export default class Media extends React.Component {
     form.append('email', email);
     form.append('token', code);
 
-    fetch('https://nacelle.nbhood.com/api/sms/verify', {
+    fetch(URLs.verifyCode, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -63,6 +60,46 @@ export default class Media extends React.Component {
       }
       this.setState({ fetching: false });
     });
+  };
+
+  reSendCode = () => {
+    var email = this.props.navigation.getParam('email');
+
+    var form = new FormData();
+    form.append('email', email);
+    this.setState({ codeFetching: true });
+    fetch(URLs.sendSMS, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data'
+      },
+      body: form
+    })
+      .then(res => {
+        // FIXME: code is 200 even though message was not sent
+        if (res.status != 200) {
+          const newMessage = res._bodyInit.replace(/\"/g, '');
+          Alert.alert('Invalid Email', newMessage);
+          this.setState({ codeFetching: false });
+        } else {
+          const self = this;
+          this.setState({
+            fetching: false,
+            disabled: true
+          });
+          setTimeout(() => {
+            self.setState({ disabled: false });
+          }, 1000 * 60);
+        }
+      })
+      .catch(err => {
+        this.setState({ codeFetching: false });
+        Alert.alert(
+          'Network failed',
+          'Check your internet connection and try again please.'
+        );
+      });
   };
 
   render() {
@@ -148,6 +185,27 @@ export default class Media extends React.Component {
                 ) : (
                   <Text style={{ color: '#ffec59', fontWeight: 'bold' }}>
                     SUBMIT YOUR CODE
+                  </Text>
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.reSendCode()}
+                disabled={this.state.disabled}
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  marginVertical: 20,
+                  justifyContent: 'center',
+                  width: width * 0.9,
+                  height: 40,
+                  backgroundColor: '#189aa9'
+                }}
+              >
+                {this.state.codeFetching ? (
+                  <ActivityIndicator color="#ffec59" />
+                ) : (
+                  <Text style={{ color: '#ffec59', fontWeight: 'bold' }}>
+                    RE-SEND CODE
                   </Text>
                 )}
               </TouchableOpacity>

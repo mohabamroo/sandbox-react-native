@@ -99,7 +99,7 @@ export default class ArtistRow extends React.Component {
 		return (
 			<TouchableHighlight onPress={() => this.handleRowClick()}>
 				<View key={index} style={styles.artistRow}>
-					<Image source={{ uri: row.artist_image }} style={styles.image} />
+					<Image source={{ uri: row.artist_image }} loadingIndicatorSource={Assets.artistPlaceholder} style={styles.image} />
 					<TouchableOpacity
 						style={{
 							width: 25,
