@@ -21,7 +21,7 @@ import * as __GStyles from '../styles';
 import { MediaDB } from '../Config/DB';
 import Colors from '../constants/Colors';
 import Assets, * as assets from '../constants/Assets';
-import Footer from '../components/Footer';
+const URLs = require('../Config/ExternalURL');
 
 export default class Media extends React.Component {
   constructor(props) {
@@ -87,40 +87,70 @@ export default class Media extends React.Component {
   };
 
   componentDidMount() {
+    this.fetchMediaCache();
+    this.refreshMedia();
+  }
+
+  fetchMediaCache() {
     MediaDB.Get()
       .then(files => {
-        files = files || {};
-        files.images = files.images.map((x, idx) => {
-          return {
-            ...x,
-            backgroundColor: this.state.yearsColors[
-              idx % Number(this.state.yearsColors.length)
-            ]
-          };
-        });
-        yearsArr = files.images.map((x, idx) => {
-          return {
-            label: x.year,
-            backgroundColor: this.state.yearsColors[
-              idx % Number(this.state.yearsColors.length)
-            ]
-          };
-        });
-        let imagesObj = this.arrayToObject(files.images);
-        let activeYear = yearsArr[0].label;
-
-        this.setState({
-          images: imagesObj,
-          imagesArr: files.images,
-          videos: files.videos,
-          musics: files.musics,
-          imagesYears: yearsArr,
-          activeYear,
-          selectedImages: imagesObj[activeYear]
-        });
+        this.setMediaContent(files);
       })
       .catch(err => {
         console.log('failed to fetch from cache', err);
+      });
+  }
+
+  setMediaContent(files) {
+    files = files || {};
+    files.images = files.images.map((x, idx) => {
+      return {
+        ...x,
+        backgroundColor: this.state.yearsColors[
+          idx % Number(this.state.yearsColors.length)
+        ]
+      };
+    });
+    yearsArr = files.images.map((x, idx) => {
+      return {
+        label: x.year,
+        backgroundColor: this.state.yearsColors[
+          idx % Number(this.state.yearsColors.length)
+        ]
+      };
+    });
+    let imagesObj = this.arrayToObject(files.images);
+    let activeYear = yearsArr[0].label;
+
+    this.setState({
+      images: imagesObj,
+      imagesArr: files.images,
+      videos: files.videos,
+      musics: files.musics,
+      imagesYears: yearsArr,
+      activeYear,
+      selectedImages: imagesObj[activeYear]
+    });
+  }
+
+  refreshMedia() {
+    fetch(URLs.Media)
+      .then(response => {
+        console.log('TCL: News -> refreshNews -> response', response);
+        return response.json();
+      })
+      .then(apiResponse => {
+        if (apiResponse.status == 200) {
+          console.log('Refreshed media');
+          this.setMediaContent(apiResponse.data);
+          MediaDB.Set(apiResponse.data);
+        } else {
+          console.log('media not refreshed');
+        }
+      })
+      .catch(err => {
+        // FIXME: what to do on internet corruption
+        console.log('TCL: MEdia Screen -> componentDidMount -> err', err);
       });
   }
 
@@ -143,9 +173,11 @@ export default class Media extends React.Component {
       index
     });
   }
+
   _renderSectionTitle(content, index) {
     return <View />;
   }
+
   _renderHeader(section, index) {
     return (
       <View
@@ -186,6 +218,7 @@ export default class Media extends React.Component {
       />
     );
   }
+
   _onChange(activeSection) {
     console.log('TCL: Media -> _onChange -> activeSection', activeSection);
     if (this.state.activeSection == activeSection) {

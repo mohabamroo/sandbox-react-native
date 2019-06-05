@@ -44,7 +44,9 @@ export default class Discover extends React.Component {
 
 	async componentWillMount() {
 		let places = await DiscoverDB.Get();
-		this.setMapContent(places);
+		if(places) {
+			this.setMapContent(places);
+		}
 		this.refreshMapContent();
 	}
 
@@ -67,12 +69,10 @@ export default class Discover extends React.Component {
 	refreshMapContent() {
 		fetch(URLs.Discover)
 		  .then(response => {
-			console.log("TCL: Discover -> refreshMapContent -> response", response)
 			return response.json();
 		  })
 		  .then(apiResponse => {
 			if (apiResponse.status == 200) {
-			  console.log('refreshing sa7');
 			  this.setMapContent(apiResponse.data);
 			  DiscoverDB.Set(apiResponse.data);
 			} else {

@@ -54,6 +54,7 @@ export default class Info extends React.Component {
   }
 
   setInfoContent(info) {
+    info = info ? info : {};
     delete info['policies'];
     const ordered = {};
     let self = this;

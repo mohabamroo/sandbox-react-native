@@ -25,10 +25,7 @@ export class UserBrief extends React.Component {
 
   async componentDidMount() {
     let balanceObj = await BalanceDB.Get();
-    console.log(
-      'TCL: UserBrief -> componentDidMount -> balanceObj',
-      balanceObj
-    );
+
     this.setState({ balanceObj });
     this.pollBalance();
   }
@@ -112,13 +109,28 @@ export class UserBrief extends React.Component {
             >
               {user.client_name}
             </Text>
-            <Text style={{ fontSize: 12, color: '#e9665d' }}>
-              Your Balance is:
-              <Text style={{ fontWeight: 'bold' }}>
+            <View
+              style={{
+                marginLeft: 5,
+                flexDirection: 'row',
+                justifyContent: 'flex-start'
+              }}
+            >
+              <Text style={{ fontSize: 12, color: '#e9665d' }}>
+                Your Balance is:
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: '#e9665d',
+                  fontWeight: 'bold',
+                  paddingLeft: 5
+                }}
+              >
                 {this.state.balanceObj ? this.state.balanceObj.user.balance : 0}
                 EGP
               </Text>
-            </Text>
+            </View>
           </View>
         </View>
         {this.props.hasBackBtn ? (

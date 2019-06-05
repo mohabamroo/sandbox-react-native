@@ -52,6 +52,7 @@ export class News extends React.Component {
   }
 
   setNews(news) {
+    news = news ? news : [];
     let dsData = this.ds.cloneWithRows(news);
     this.setState({
       dataSource: dsData,
@@ -65,9 +66,11 @@ export class News extends React.Component {
         return response.json();
       })
       .then(apiResponse => {
-        if (apiResponse.Status == 200) {
+        if (apiResponse.status == 200) {
           this.setNews(apiResponse.data);
           NewsDB.Set(apiResponse.data);
+        } else {
+          console.log('news not refreshed');
         }
       })
       .catch(err => {

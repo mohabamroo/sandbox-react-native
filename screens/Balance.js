@@ -62,7 +62,6 @@ export default class Balance extends React.Component {
     this.setState({ refreshing: true });
     fetch(URLs.getBalance(qrCode))
       .then(response => {
-        console.log("TCL: Balance -> _onRefresh -> response", response)
         if (response.status == 200) {
           return response.json();
         } else {
@@ -70,7 +69,6 @@ export default class Balance extends React.Component {
         }
       })
       .then(apiResponse => {
-        console.log('TCL: Balance -> _onRefresh -> apiResponse', apiResponse);
         this.setState({ balanceObj: apiResponse, refreshing: false });
         BalanceDB.Set(apiResponse);
       })

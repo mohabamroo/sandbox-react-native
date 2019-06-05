@@ -56,7 +56,7 @@ export default class HomeScreen extends React.Component {
 		this.handleSchedule = this.handleSchedule.bind(this);
 		// sets state
 		let countState = this.handleCountdown();
-		this.refreshUserAccount();
+		// this.refreshUserAccount();
 		this.state = {
 			...countState
 		};
@@ -173,7 +173,6 @@ export default class HomeScreen extends React.Component {
 		const startDateTime = new Date('2019-06-13T13:00:00Z');
 		const endDateTime = new Date('2019-06-16T04:00:00Z');
 		let diff = Math.floor((startDateTime - new Date()) / 1000);
-		diff = 5000;
 		const endedFlag = Math.floor((new Date() - endDateTime) / 1000);
 		const self = this;
 		return {
@@ -275,7 +274,7 @@ export default class HomeScreen extends React.Component {
 							>
 								<View style={styles.textContainer}>
 									<Text style={styles.beforeActivationTextBG}>
-										You did not activate you pass yet?!
+										You did not activate you pass yet..
 									</Text>
 									<TouchableOpacity
 										activeOpacity={0.9}
@@ -389,7 +388,10 @@ const styles = StyleSheet.create({
 	},
 	buttonActivate: {
 		backgroundColor: '#f069a7',
-		padding: 10
+		paddingTop: 5,
+		paddingBottom: 5,
+		paddingLeft: 15,
+		paddingRight: 15,
 	},
 	activateText: {
 		color: '#fff',
