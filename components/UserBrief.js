@@ -23,8 +23,8 @@ export class UserBrief extends React.Component {
     const { user, balance } = this.props;
     return (
       <ImageBackground
-        resizeMode="stretch"
-        source={Assets.homeProfile}
+        resizeMode="repeat"
+        source={Assets.userPattern}
         style={styles.profileBG}
       >
         <View
@@ -34,18 +34,17 @@ export class UserBrief extends React.Component {
             height: 100,
             overflow: 'hidden',
             position: 'relative',
-            backgroundColor: '#f8b7bb'
+            backgroundColor: '#FDE9D6'
           }}
         >
           <Image
             source={{
-              uri:
-                'https://sandboxfestival.com/wp-content/uploads/2018/04/SB18-Map-1500x1500-2-no-labels.jpg'
+              uri: 'https://nacelle.nbhood.com/' + user.client_photo
             }}
             style={{
               width: Layout.window.width / 3,
               height: '100%',
-              backgroundColor: '#fde9d6'
+              backgroundColor: '#EEB8BB'
             }}
           />
           <View
@@ -53,7 +52,7 @@ export class UserBrief extends React.Component {
               styles.triangle,
               styles.triangleDown,
               styles.nameArea,
-              { borderBottomColor: '#f8b7bb' }
+              { borderBottomColor: '#EEB8BB' }
             ]}
           />
           <View style={styles.textArea}>
@@ -67,7 +66,7 @@ export class UserBrief extends React.Component {
               {user.client_name}
             </Text>
             <Text style={{ fontSize: 12, color: '#e9665d' }}>
-              -Your Balance is:
+              Your Balance is:
               <Text style={{ fontWeight: 'bold' }}> {balance}</Text> EGP
             </Text>
           </View>
@@ -91,7 +90,7 @@ export class UserBrief extends React.Component {
                   color: '#FFEB5C',
                   fontWeight: 'bold',
                   fontSize: 12,
-                  zIndex: 5
+                  
                 }}
               >
                 YOUR PASS
@@ -112,7 +111,7 @@ export class UserBrief extends React.Component {
                   color: '#FFEB5C',
                   fontWeight: 'bold',
                   fontSize: 12,
-                  zIndex: 5
+                  
                 }}
               >
                 YOUR PROFILE
@@ -133,7 +132,7 @@ export class UserBrief extends React.Component {
                     color: '#FFEB5C',
                     fontWeight: 'bold',
                     fontSize: 12,
-                    zIndex: 5
+                    
                   }
                 ]}
               >
@@ -148,16 +147,12 @@ export class UserBrief extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#e9665d'
-  },
   profileBG: {
     width: '100%',
     height: 100,
     zIndex: 3,
-    justifyContent: 'center'
-
+    justifyContent: 'center',
+    backgroundColor: '#EEB8BB'
     // width: '100%',
     // borderTopWidth: 100,
     // borderTopColor: 'red',
@@ -167,26 +162,6 @@ const styles = StyleSheet.create({
     // borderRightColor: 'transparent',
     // borderStyle: 'solid'
   },
-  beforeActivationTextBG: {
-    backgroundColor: '#fde9d6',
-    padding: 5,
-    color: '#f069a7',
-    fontSize: 12
-  },
-  textContainer: {
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    paddingLeft: '10%'
-  },
-  buttonActivate: {
-    backgroundColor: '#f069a7',
-    padding: 10
-  },
-  activateText: {
-    color: '#fff',
-    fontWeight: 'bold'
-  },
-
   triangle: {
     width: 0,
     height: 0,
@@ -195,8 +170,10 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderLeftWidth: Layout.window.width,
     borderRightWidth: Layout.window.width / 2,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent'
+    borderLeftColor: '#FDE9D6',
+    borderRightColor: 'transparent',
+    borderBottomColor: '#FDE9D6',
+    borderTopColor: '#FDE9D6'
   },
   triangleDown: {
     transform: [{ rotate: '180deg' }]

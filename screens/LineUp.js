@@ -20,6 +20,7 @@ import * as __GStyles from '../styles';
 import Layout from '../constants/Layout';
 import ArtistRow from '../components/ArtistRow';
 const URLs = require('../Config/ExternalURL');
+import Footer from '../components/Footer';
 
 export default class LinksScreen extends React.Component {
 	constructor(props) {
@@ -287,7 +288,7 @@ export default class LinksScreen extends React.Component {
 							onClose={() => this.setState({ show_popup: false })}
 						/>
 					)}
-
+				<Footer></Footer>
 			</ImageBackground>
 		);
 	}

@@ -25,6 +25,7 @@ export default {
   circAct: require(`${__pattern}/circAct.png`),
   info: require(`${__pattern}/infoheaderbg.png`),
   lineupheader: require(`${__pattern}/lineupheader.png`),
+  userPattern: require(`${__pattern}/userpattern.png`),
   homeProfile: require(`${__pattern}/homeProfile.png`),
   artist1: require(`${__Artists}/1.png`),
   artistLogo: require(`${__path}/artistLogo.png`),

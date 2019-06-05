@@ -16,6 +16,7 @@ import VisibilityView from '../components/VisibilityView';
 import { DiscoverDB } from '../Config/DB';
 import * as __GStyles from '../styles';
 import Assets from '../constants/Assets';
+import Footer from '../components/Footer';
 
 
 const { height, width } = Dimensions.get('window');
@@ -173,6 +174,7 @@ export default class Discover extends React.Component {
 				)}
 
 			</View>
+			<Footer />
 			</ImageBackground>
 		);
 	}

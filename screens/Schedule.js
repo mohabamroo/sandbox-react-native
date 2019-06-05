@@ -20,6 +20,7 @@ import { AntDesign } from '@expo/vector-icons';
 // import the page components
 import Assets from '../constants/Assets';
 import ArtistPopup from './ArtistPopup';
+import Footer from '../components/Footer';
 
 import * as __GStyles from '../styles';
 import { SchedualDB, ArtistsDB } from '../Config/DB';
@@ -580,7 +581,7 @@ export default class Schedule extends React.Component {
 								onClose={() => this.setState({ show_popup: false, colorIdx: this.state.colorIdx + 1 % this.state.colors1.length })}
 							/>
 						)}
-
+				<Footer />
 			</ImageBackground>
 		);
 	}
