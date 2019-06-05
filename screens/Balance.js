@@ -182,7 +182,7 @@ export default class Balance extends React.Component {
             }}
           >
             <Text style={(styles.listTitle, { color: '#f069a7' })}>
-              Orders List
+              Your Order History
             </Text>
           </View>
         </ImageBackground>

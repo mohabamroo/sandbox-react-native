@@ -22,6 +22,10 @@ import Footer from '../components/Footer';
 export default class Media extends React.Component {
   constructor(props) {
     super(props);
+    console.log(
+      'TCL: Media -> constructor -> this.props.navigation.state.params.notifyParent,',
+      this.props.navigation.state.params.backBtnRoute
+    );
     this.state = {
       active: 'pics',
       txt: 'Please enter the 4 digit code you received in the space below.'
@@ -53,7 +57,8 @@ export default class Media extends React.Component {
       } else {
         this.props.navigation.navigate('DataActivation', {
           email,
-          notifyParent: this.props.navigation.state.params.notifyParent
+          notifyParent: this.props.navigation.state.params.notifyParent,
+          backBtnRoute: 'Home'
         });
       }
       this.setState({ fetching: false });
@@ -67,7 +72,11 @@ export default class Media extends React.Component {
         source={Assets.bg1}
         style={__GStyles.default.container}
       >
-        <HeaderComponent navigation={this.props.navigation} />
+        <HeaderComponent
+          backRoute={this.props.navigation.state.params.backBtnRoute}
+          NACController={this.navigationController}
+          navigation={this.props.navigation}
+        />
         <ScrollView style={styles.container}>
           <View
             style={{
@@ -120,7 +129,9 @@ export default class Media extends React.Component {
               />
               <TouchableOpacity
                 onPress={() =>
-                  this.navigationController.direct('DataActivation')
+                  this.navigationController.direct('DataActivation', {
+                    backBtnRoute: 'Home'
+                  })
                 }
                 style={{
                   flex: 1,

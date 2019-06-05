@@ -9,7 +9,8 @@ import {
   Image,
   Picker,
   ActivityIndicator,
-  ImageBackground
+  ImageBackground,
+  Alert
 } from 'react-native';
 // import * as RNFS from 'react-native-fs';
 
@@ -25,6 +26,7 @@ import { Permissions, ImagePicker, CAMERA_ROLL, Camera } from 'expo';
 import { UserDB } from '../Config/DB';
 import Assets from '../constants/Assets';
 import Footer from '../components/Footer';
+import { NavigationController } from '../navigation/index';
 
 export default class Media extends React.Component {
   constructor(props) {
@@ -63,6 +65,7 @@ export default class Media extends React.Component {
       base64: null,
       countryName: 'Country'
     };
+    this.navigationController = new NavigationController(this.props.navigation);
   }
 
   getPermissionOne = async () => {
@@ -143,7 +146,8 @@ export default class Media extends React.Component {
       !this.state.image ||
       !this.state.email
     ) {
-      alert('Please, fill all fields');
+      const newMessage = 'Please fill in the missing information.';
+      Alert.alert('Missing Information', newMessage);
       this.props.navigation.state.params.notifyParent();
       return;
     }
@@ -169,7 +173,8 @@ export default class Media extends React.Component {
     })
       .then(res => {
         if (res.status != 200) {
-          alert(res._bodyInit);
+          const newMessage = res._bodyInit.replace(/\"/g, '');
+          Alert.alert('Invalid data', newMessage);
         } else {
           res.json().then(jsonData => {
             console.log('TCL: Media -> jsonData', jsonData);
@@ -198,7 +203,11 @@ export default class Media extends React.Component {
         source={Assets.bg1}
         style={__GStyles.default.container}
       >
-        <HeaderComponent navigation={this.props.navigation} />
+        <HeaderComponent
+          backRoute={this.props.navigation.state.params.backBtnRoute}
+          NACController={this.navigationController}
+          navigation={this.props.navigation}
+        />
         <ScrollView style={styles.container}>
           <View
             style={{

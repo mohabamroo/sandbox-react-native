@@ -59,10 +59,9 @@ export default class Media extends React.Component {
     })
       .then(res => {
         // FIXME: code is 200 even though message was not sent
-        console.log('TCL: Media -> sendCode -> res', res);
         if (res.status != 200) {
-          Alert.alert('Invalid Email', res._bodyInit.replace('"', ''));
-
+          const newMessage = res._bodyInit.replace(/\"/g, "");
+          Alert.alert('Invalid Email', newMessage);
           this.setState({ fetching: false });
         } else {
           const self = this;
@@ -167,7 +166,8 @@ export default class Media extends React.Component {
                     this.props.navigation.navigate('ConfirmActivation', {
                       email: this.state.email.toLowerCase(),
                       notifyParent: this.props.navigation.state.params
-                        .notifyParent
+                        .notifyParent,
+                      backBtnRoute: 'Home'
                     });
                   }}
                   style={{
