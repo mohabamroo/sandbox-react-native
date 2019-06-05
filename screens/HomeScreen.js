@@ -1,4 +1,5 @@
 import React from 'react';
+import { Notifications } from 'expo'
 import {
 	ScrollView,
 	StyleSheet,
@@ -23,9 +24,18 @@ import Assets from '../constants/Assets';
 import Layout from '../constants/Layout';
 import { CountDownTimer } from '../components/CountDownTimer';
 import { UserBrief } from '../components/UserBrief';
-import { EventInfoDB, SchedualDB, ArtistsDB, UserDB } from '../Config/DB';
+import {
+	EventInfoDB,
+	SchedualDB,
+	ArtistsDB,
+	UserDB,
+	FavoritesDB
+} from '../Config/DB';
 import Footer from '../components/Footer';
-import { registerForPushNotificationsAsync, scheduleNotification } from '../components/Notifications';
+import {
+	registerForPushNotificationsAsync,
+	scheduleFavoritesNotifications
+} from '../components/Notifications';
 
 // const start_days = [moment]
 
@@ -82,11 +92,13 @@ export default class HomeScreen extends React.Component {
 		this.handleSchedule();
 		this._interval = setInterval(() => this.handleSchedule(), 6000000);
 		registerForPushNotificationsAsync();
+		scheduleFavoritesNotifications();
 	}
 
 	componentWillUnmount() {
 		clearInterval(this._interval);
 	}
+
 
 	handleSchedule() {
 		let { schedule } = this.state;
