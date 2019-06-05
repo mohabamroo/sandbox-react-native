@@ -25,7 +25,10 @@ export class Boxes extends React.Component {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => {
-              this.props.NACController.direct('LineUp');
+              this.props.NACController.direct('LineUp', {
+                user: this.props.user,
+                loggedIn: this.props.loggedIn
+              });
             }}
             style={[styles.box, { backgroundColor: '#f7e25b' }]}
           >
@@ -40,7 +43,10 @@ export class Boxes extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              this.props.NACController.direct('Schedule');
+              this.props.NACController.direct('Schedule', {
+                user: this.props.user,
+                loggedIn: this.props.loggedIn
+              });
             }}
             underlayColor={'rgb(255,255,255)'}
             activeOpacity={0.8}

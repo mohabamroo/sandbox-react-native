@@ -50,7 +50,8 @@ export default class HomeScreen extends React.Component {
 			timeState: 2,
 			currentEvents: null,
 			current_artist: false,
-			show_popup: false
+			show_popup: false,
+			loggedIn: false
 		};
 		this.handleSchedule = this.handleSchedule.bind(this);
 		// sets state
@@ -171,8 +172,8 @@ export default class HomeScreen extends React.Component {
 		// FIXME: hardcoded for testing
 		const startDateTime = new Date('2019-06-13T13:00:00Z');
 		const endDateTime = new Date('2019-06-16T04:00:00Z');
-		const diff = Math.floor((startDateTime - new Date()) / 1000);
-		console.log('TCL: HomeScreen -> handleCountdown -> diff', diff);
+		let diff = Math.floor((startDateTime - new Date()) / 1000);
+		diff = 5000;
 		const endedFlag = Math.floor((new Date() - endDateTime) / 1000);
 		const self = this;
 		return {

@@ -39,24 +39,15 @@ export default class Schedule extends React.Component {
 			timer: 0,
 			colors1: ['#fabb79', '#008691', '#e9665d', '#60a484'],
 			colors2: ['#60a484', '#f069a7', '#fabb79', '#ffe958'],
-			colorIdx: 0
+			colorIdx: 0,
+			loggedIn: this.props.navigation.state.params.loggedIn,
+			user: this.props.navigation.state.params.user
 		};
 	}
 
 	componentDidMount() {
 		this.fetchCategories();
 		this.fetchArtists();
-		UserDB.Get().then(userData => {
-      console.log("TCL: HomeScreen -> refreshUserAccount -> userData", userData)
-      if (userData != null) {
-        console.log(userData)
-        userState = { user: { ...userData }, loggedIn: true };
-      } else {
-        userState = { loggedIn: false };
-      }
-      this.setState({ ...userState });
-    });
-
 	}
 
 	setDay() {
@@ -175,7 +166,7 @@ export default class Schedule extends React.Component {
 			let reqURL = artist.liked == true ? likeArtist : removeArtistLike;
 			let opts = {
 				artist_id: artist.artist_id,
-				user_id: this.state.user_id
+				user_id: this.state.user.id
 			};
 			fetch(reqURL, {
 				method: 'POST',
@@ -230,6 +221,7 @@ export default class Schedule extends React.Component {
 							backgroundColor: '#fff'
 						}}
 					>
+					{this.state.loggedIn && (
 						<TouchableOpacity
 							style={{
 								width: 25,
@@ -253,6 +245,7 @@ export default class Schedule extends React.Component {
 								resizeMode={'contain'}
 							/>
 						</TouchableOpacity>
+					)}
 
 					</ImageBackground>
 
@@ -663,6 +656,8 @@ export default class Schedule extends React.Component {
 					{this.state.current_artist &&
 						this.state.show_popup && (
 							<ArtistPopup
+								loggedIn={this.state.loggedIn}
+								user={this.state.user}
 								artist={this.state.current_artist}
 								color1={this.state.colors1[this.state.colorIdx]}
 								color2={this.state.colors2[this.state.colorIdx]}

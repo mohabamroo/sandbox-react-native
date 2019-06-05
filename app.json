@@ -25,7 +25,12 @@
     "android": {
       "package": "com.sandbox.festival",
       "versionCode": 1,
-      "icon": "./assets/images/app-icon.png"
+      "icon": "./assets/images/app-icon.png",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBxW-gbbFLfn7dSfv0BGkmTPFALXwIErfY"
+        }
+      }
     },
     "notification":{
       "icon": "./assets/images/app-icon.png"

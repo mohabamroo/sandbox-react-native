@@ -47,6 +47,7 @@ export default class ProfileScreen extends React.Component {
   async componentDidMount() {
     // fetch favorites
     this.fetchFavoritesList();
+    this.refreshFavoritesList();
   }
 
   fetchFavoritesList() {
@@ -65,21 +66,21 @@ export default class ProfileScreen extends React.Component {
   }
 
   refreshFavoritesList() {
+    this.setState({refreshing: true});
     fetch(URLs.getFavorites(this.state.userID))
       .then(response => {
-        console.log(
-          'TCL: ProfileScreen -> refreshFavoritesList -> response',
-          response
-        );
-        response.json();
+        return response.json();
       })
       .then(apiResponse => {
         if (apiResponse.Status == 200) {
           this.setArtists(apiResponse.data);
           FavoritesDB.Set(apiResponse.data);
+        } else {
+          this.setState({refreshing: false});
         }
       })
       .catch(err => {
+        this.setState({refreshing: false});
         // FIXME: what to do on internet corruption
         console.log('TCL: ProfileScreen -> componentDidMount -> err', err);
       });
@@ -91,6 +92,7 @@ export default class ProfileScreen extends React.Component {
   }
   setArtists(artists) {
     artists = artists.filter(x => x.artist_session);
+    console.log("TCL: ProfileScreen -> setArtists -> artists", artists.length)
     let dsData = this.ds.cloneWithRows(artists);
     this.setState({
       artists: dsData,
@@ -107,6 +109,8 @@ export default class ProfileScreen extends React.Component {
     return (
       <ArtistRow
         index={index}
+        loggedIn={true}
+        user={this.state.user}
         artist={row}
         color={color}
         color2={color2}
@@ -208,11 +212,13 @@ export default class ProfileScreen extends React.Component {
         </View>
         {this.state.current_artist && (
           <ArtistPopup
+            loggedIn={true}
+            user={this.state.user}
             isVisible={this.state.show_popup}
             artist={this.state.current_artist}
             color1={this.state.color1}
             color2={this.state.color2}
-            onClose={() => this.setState({ show_popup: false })}
+            onClose={() => this.setState({ current_artist: null, show_popup: false })}
             notifyParent={() => this.fetchFavorites()}
             style={{ zIndex: 1 }}
           />

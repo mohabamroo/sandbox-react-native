@@ -1,14 +1,15 @@
 import React from 'react';
 import {
-	Linking,
-	ScrollView,
-	StyleSheet,
-	View,
-	Text,
-	Image,
-	TouchableOpacity,
-	Dimensions,
-	ImageBackground
+  Linking,
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  ImageBackground,
+  Animated
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Carousel from 'react-native-snap-carousel';
@@ -18,92 +19,141 @@ import Assets from '../constants/Assets';
 const { height, width } = Dimensions.get('window');
 
 export default class ArtistPopup extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-			index: 0
-		};
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      index: 0,
+      opacity: new Animated.Value(0),
+      position: new Animated.Value(Layout.window.height)
+    };
+  }
 
-	render() {
-		let { selectedImages, isVisible, index } = this.props;
-		return (
-			<Modal
-				isVisible={isVisible}
-				onModalShow={() => this._carousel.snapToItem(index)}
-			>
-				<View style={styles.container}>
-					<View
-						style={{
-							height: '85%',
-							width: '100%',
-							backgroundColor: 'transparent',
-							alignItems: 'center',
-							justifyContent: 'center'
-						}}
-					>
-						<Carousel
-							useScrollView
-							ref={c => {
-								this._carousel = c;
-							}}
-							data={selectedImages}
-							renderItem={item => {
-								return (
-									<View>
-									<ImageBackground
-										source={{ uri: item.item.image }}
-										resizeMode="contain"
-										style={{
-											alignSelf: 'center',
-											width: width * 0.95,
-											height: 265,
-											marginTop: 50
-										}}
-									>
-									<TouchableOpacity
-										style={styles.close}
-										onPress={() => this.props.onClose()}
-									>
-										<Image source={Assets.close} resizeMode={'contain'} style={{width: 20}}/>
-									</TouchableOpacity>
-									</ImageBackground>
-									</View>
-								);
-							}}
-							sliderWidth={width}
-							itemWidth={width}
-							slidewidth={width}
-							horizontal
-							layout={'default'}
-							onSnapToItem={index => this.setState({ index })}
-							slideStyle={{
-								alignSelf: 'center',
-							}}
-							containerCustomStyle={{
-								backgroundColor: 'transparent'
-							}}
-						/>
-					</View>
-				</View>
+  componentWillMount() {
+    Animated.sequence([
+      Animated.timing(this.state.opacity, {
+        toValue: 1,
+        duration: 450
+      }),
+      Animated.timing(this.state.position, {
+        toValue: Layout.window.height * 0.01,
+        duration: 450
+      })
+    ]).start();
+  }
 
+  componentDidMount() {
+    const self = this;
+    setTimeout(() => {
+      self._carousel.snapToItem(this.props.index);
+    }, 10);
+  }
 
-			</Modal>
-		);
-	}
+  onClose() {
+    Animated.sequence([
+      Animated.timing(this.state.position, {
+        toValue: Layout.window.height,
+        duration: 450
+      }),
+      Animated.timing(this.state.opacity, {
+        toValue: 0,
+        duration: 450
+      })
+    ]).start(() => {
+      this.props.onClose();
+    });
+  }
+
+  render() {
+    let { selectedImages, isVisible, index } = this.props;
+    return (
+      <Animated.View
+        style={{
+          position: 'absolute',
+          height: Layout.window.height,
+          width: Layout.window.width,
+          opacity: this.state.opacity,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <View
+          style={{
+            position: 'absolute',
+            height: Layout.window.height * 1.2,
+            width: Layout.window.width,
+            opacity: 0.6,
+            backgroundColor: 'black'
+          }}
+        />
+        <Animated.View
+          style={[
+            styles.container,
+            { backgroundColor: 'transparent', top: this.state.position }
+          ]}
+        >
+          <Carousel
+            useScrollView
+            ref={c => {
+              this._carousel = c;
+            }}
+            data={selectedImages}
+            renderItem={item => {
+              return (
+                <View>
+                  <ImageBackground
+                    source={{ uri: item.item.image }}
+                    resizeMode="contain"
+                    style={{
+                      alignSelf: 'center',
+                      width: width * 0.95,
+                      height: 265,
+                      marginTop: 50
+                    }}
+                  >
+                    <TouchableOpacity
+                      style={styles.close}
+                      onPress={() => this.onClose()}
+                    >
+                      <Image
+                        source={Assets.close}
+                        resizeMode={'contain'}
+                        style={{ width: 20 }}
+                      />
+                    </TouchableOpacity>
+                  </ImageBackground>
+                </View>
+              );
+            }}
+            sliderWidth={width}
+            itemWidth={width}
+            slidewidth={width}
+            horizontal
+            layout={'default'}
+            onSnapToItem={index => this.setState({ index })}
+            slideStyle={{
+              alignSelf: 'center'
+            }}
+            containerCustomStyle={{
+              backgroundColor: 'transparent'
+            }}
+          />
+        </Animated.View>
+      </Animated.View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-	container: {
-		height: '100%',
-		width: '100%'
-	},
-	close: {
-		position: 'absolute',
-		top: 5,
-		right: 5,
-		height: 20,
-		width: 20,
-		justifyContent: 'center'
-	}
+  container: {
+    height: '100%',
+    width: '100%'
+  },
+  close: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+    height: 20,
+    width: 20,
+    justifyContent: 'center'
+  }
 });

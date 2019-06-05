@@ -29,6 +29,7 @@ export default {
   homeProfile: require(`${__pattern}/homeProfile.png`),
   artist1: require(`${__Artists}/1.png`),
   artistLogo: require(`${__path}/artistLogo.png`),
+  artistPlaceholder: require(`${__path}/artistPlaceholder.png`),
   logoOnly: require(`${__path}/logoONLY.png`),
   balanceIco: require(`${__icons}/MENU-balance.png`),
   discoverIco: require(`${__icons}/MENU-discover.png`),

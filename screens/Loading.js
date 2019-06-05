@@ -356,11 +356,11 @@ export default class Loading extends Component {
         >
           {this.state.currentTaskText}
         </Text>
-        <Image
+        {/* <Image
           resizeMode="contain"
           source={Assets.logoOnly}
           style={styles.footerImage}
-        />
+        /> */}
       </ImageBackground>
     );
   }
