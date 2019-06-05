@@ -6,7 +6,8 @@ import {
 	View,
 	Text,
 	TouchableHighlight,
-  Alert
+	Alert,
+	ActivityIndicator
 } from 'react-native';
 import moment from 'moment';
 import { likeArtist, removeArtistLike } from '../Config/ExternalURL';
@@ -22,7 +23,9 @@ export default class ArtistRow extends React.Component {
 		super(props);
 		this.state = {
 			artist: this.props.artist,
-			user_id: 38
+			loggedIn: this.props.loggedIn,
+			user: this.props.user,
+			user_id: this.props.user ? this.props.user.id : 38
 		};
 	}
 
@@ -37,7 +40,8 @@ export default class ArtistRow extends React.Component {
 		if (this.state.loggedIn) {
 			let newLike = this.state.artist.liked == true ? false : true;
 			this.setState({
-				artist: { ...this.state.artist, liked: newLike }
+				artist: { ...this.state.artist, liked: newLike },
+				fetchingLike: true
 			});
 			let reqURL = newLike == true ? likeArtist : removeArtistLike;
 			let opts = {
@@ -53,16 +57,28 @@ export default class ArtistRow extends React.Component {
 				body: JSON.stringify(opts)
 			}).then(res => {
 				if (res.status == 200) {
+					this.setState({
+						fetchingLike: false
+					
+					});
 					this.refreshFavorites().then(() => {
 						this.props.notifyParent();
 					});
 				} else {
 					this.setState({
-						artist: { ...this.state.artist, liked: false }
+						artist: { ...this.state.artist, liked: !newLike
+						},
+						fetchingLike: false
 					});
 				}
-			});
-		}else {
+			}).catch(err => {
+        console.log("TCL: ArtistRow -> _likeArtist -> err", err)
+				this.setState({
+					artist: { ...this.state.artist, liked: !newLike },
+					fetchingLike: false
+				});
+			})
+		} else {
       Alert.alert('Please login to like this artist.')
     }
 	}
@@ -100,7 +116,8 @@ export default class ArtistRow extends React.Component {
 			<TouchableHighlight onPress={() => this.handleRowClick()}>
 				<View key={index} style={styles.artistRow}>
 					<Image source={{ uri: row.artist_image }} loadingIndicatorSource={Assets.artistPlaceholder} style={styles.image} />
-					<TouchableOpacity
+					{this.state.loggedIn && (
+						<TouchableOpacity
 						style={{
 							width: 25,
 							height: 25,
@@ -111,18 +128,23 @@ export default class ArtistRow extends React.Component {
 						}}
 						activeOpacity={0.5}
 						onPress={() => this._handleLikeClick()}
-					>
-						<Image
-							source={
-								row && row.liked == true ? Assets.heart_on : Assets.heart_off
-							}
-							style={{
-								width: 14,
-								height: 14
-							}}
-							resizeMode={'contain'}
-						/>
-					</TouchableOpacity>
+						>
+							{this.state.fetchingLike ? (
+								<ActivityIndicator color="#ffec59" />
+							) : (
+								<Image
+									source={
+										row && row.liked == true ? Assets.heart_on : Assets.heart_off
+									}
+									style={{
+										width: 14,
+										height: 14
+									}}
+									resizeMode={'contain'}
+									/>
+							)}
+							</TouchableOpacity>
+					)}
 					<View
 						style={[
 							styles.triangle,

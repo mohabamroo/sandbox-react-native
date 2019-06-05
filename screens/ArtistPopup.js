@@ -27,7 +27,9 @@ export default class ArtistPopup extends React.Component {
       artist: this.props.artist,
       opacity: new Animated.Value(0),
       position: new Animated.Value(Layout.window.height),
-      userID: 38 //TODO: REMOVE THIS
+      loggedIn: this.props.loggedIn,
+			user: this.props.user,
+			userID: this.props.user ? this.props.user.id : 38
     };
     this._likeArtist = this._likeArtist.bind(this);
   }
@@ -46,19 +48,10 @@ export default class ArtistPopup extends React.Component {
   }
 
   componentDidMount() {
-    UserDB.Get().then(userData => {
-      console.log("TCL: HomeScreen -> refreshUserAccount -> userData", userData)
-      if (userData != null) {
-        console.log(userData)
-        userState = { user: { ...userData }, loggedIn: true };
-      } else {
-        userState = { loggedIn: false };
-      }
-      this.setState({ ...userState });
-    });
   }
 
   _likeArtist(opts) {
+    console.log("TCL: ArtistPopup -> _likeArtist -> opts", opts)
     if(this.state.loggedIn){
       let newLike = this.state.artist.liked == true ? false : true;
       this.setState({
@@ -154,22 +147,24 @@ export default class ArtistPopup extends React.Component {
             style={styles.image}
             resizeMode={'cover'}
           />
-          <TouchableOpacity
-            style={styles.like}
-            onPress={() =>
-              this._likeArtist({ artist_id: artist.artist_id, user_id: this.state.user })
-            }
-          >
-            <Image
-              source={
-                this.state.artist && this.state.artist.liked == true
-                  ? Assets.heart_on
-                  : Assets.heart_off
+          {this.state.loggedIn && (
+            <TouchableOpacity
+              style={styles.like}
+              onPress={() =>
+                this._likeArtist({ artist_id: artist.artist_id, user_id: this.state.userID })
               }
-              style={{ width: 25, height: 25 }}
-              resizeMode={'contain'}
-            />
-          </TouchableOpacity>
+            >
+              <Image
+                source={
+                  this.state.artist && this.state.artist.liked == true
+                    ? Assets.heart_on
+                    : Assets.heart_off
+                }
+                style={{ width: 25, height: 25 }}
+                resizeMode={'contain'}
+              />
+            </TouchableOpacity>
+          )}
           <View style={[styles.triangle, { borderBottomColor: color2 }]} />
           <Text style={styles.artistName}>{artist.artist_name}</Text>
           <TouchableOpacity

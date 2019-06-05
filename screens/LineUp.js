@@ -24,6 +24,7 @@ const URLs = require('../Config/ExternalURL');
 export default class LinksScreen extends React.Component {
 	constructor(props) {
 		super(props);
+		
 		this.state = {
 			active: 'all',
 			colors: ['#fabb79', '#008691', '#e9665d', '#60a484'],
@@ -34,7 +35,9 @@ export default class LinksScreen extends React.Component {
 			show_popup: false,
 			color1: '#fff',
 			color2: '#fff',
-			refreshing: true
+			refreshing: true,
+			loggedIn: this.props.navigation.state.params.loggedIn,
+			user: this.props.navigation.state.params.user
 		};
 	}
 
@@ -66,6 +69,8 @@ export default class LinksScreen extends React.Component {
 				artist={item.item}
 				color={color}
 				color2={color2}
+				loggedIn={this.state.loggedIn}
+				user={this.state.user}
 				notifyParent={() => this.fetchFavorites()}
 				lastRow={item.index == this.state.currentCount - 1}
 				click={() =>
@@ -281,6 +286,8 @@ export default class LinksScreen extends React.Component {
 				{this.state.current_artist &&
 					this.state.show_popup && (
 						<ArtistPopup
+							loggedIn={this.state.loggedIn}
+							user={this.state.user}
 							artist={this.state.current_artist}
 							color1={this.state.color1}
 							color2={this.state.color2}
