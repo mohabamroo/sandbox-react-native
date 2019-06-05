@@ -4,7 +4,8 @@ import {
   ListView,
   StyleSheet,
   View,
-  ImageBackground
+  ImageBackground,
+  RefreshControl
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import ArtistPopup from './ArtistPopup';
@@ -40,10 +41,15 @@ export default class ProfileScreen extends React.Component {
       userID: this.props.navigation.state.params.user.id,
       user: this.props.navigation.state.params.user
     };
+    this._onRefresh = this._onRefresh.bind(this);
   }
 
   async componentDidMount() {
     // fetch favorites
+    this.fetchFavoritesList();
+  }
+
+  fetchFavoritesList() {
     FavoritesDB.Get()
       .then(artists => {
         if (artists == null) {
@@ -54,26 +60,41 @@ export default class ProfileScreen extends React.Component {
       })
       .catch(err => {
         console.log('failed to fetch from cache', err);
-        fetch(URLs.getFavorites(this.state.userID))
-          .then(response => response.json())
-          .then(apiResponse => {
-            if (apiResponse.Status == 200) {
-              this.setArtists(apiResponse.data);
-              FavoritesDB.Set(apiResponse.data);
-            }
-          })
-          .catch(err => {
-            // FIXME: what to do on internet corruption
-            console.log('TCL: ProfileScreen -> componentDidMount -> err', err);
-          });
+        this.refreshFavoritesList();
       });
   }
 
+  refreshFavoritesList() {
+    fetch(URLs.getFavorites(this.state.userID))
+      .then(response => {
+        console.log(
+          'TCL: ProfileScreen -> refreshFavoritesList -> response',
+          response
+        );
+        response.json();
+      })
+      .then(apiResponse => {
+        if (apiResponse.Status == 200) {
+          this.setArtists(apiResponse.data);
+          FavoritesDB.Set(apiResponse.data);
+        }
+      })
+      .catch(err => {
+        // FIXME: what to do on internet corruption
+        console.log('TCL: ProfileScreen -> componentDidMount -> err', err);
+      });
+  }
+
+  _onRefresh() {
+    console.log('refreshing favorites list');
+    this.refreshFavoritesList();
+  }
   setArtists(artists) {
     artists = artists.filter(x => x.artist_session);
     let dsData = this.ds.cloneWithRows(artists);
     this.setState({
-      artists: dsData
+      artists: dsData,
+      refreshing: false
     });
   }
 
@@ -164,7 +185,16 @@ export default class ProfileScreen extends React.Component {
             source={Assets.bg4}
             style={[styles.container, { width: '100%' }]}
           >
-            <ScrollView bounces={false} style={{ flex: 1 }}>
+            <ScrollView
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.state.refreshing}
+                  onRefresh={this._onRefresh}
+                />
+              }
+              bounces={false}
+              style={{ flex: 1 }}
+            >
               <ListView
                 bounces={false}
                 dataSource={this.state.artists}

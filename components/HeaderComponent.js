@@ -96,7 +96,11 @@ export default class HeaderComponent extends Header {
 						onLayout={this.__onLayout.bind(this)}
 						style={[GStyles.default.backButton, this.props.backButtonStyle, { backgroundColor: title.bgBack }]}
 						onPress={() => {
-							this.props.navigation.goBack();
+							if(this.props.backRoute) {
+								this.props.NACController.direct(this.props.backRoute);
+							} else {
+								this.props.navigation.goBack();
+							}
 						}}
 					>
 						<Text
