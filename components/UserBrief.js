@@ -15,10 +15,12 @@ import * as GStyles from '../styles';
 import Assets from '../constants/Assets';
 import Layout from '../constants/Layout';
 import { BalanceDB } from '../Config/DB';
+const URLs = require('../Config/ExternalURL');
+
 export class UserBrief extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { user: this.props.user, qrCode: this.props.user.qr_Serial };
   }
 
   async componentDidMount() {
@@ -28,6 +30,40 @@ export class UserBrief extends React.Component {
       balanceObj
     );
     this.setState({ balanceObj });
+    this.pollBalance();
+  }
+
+  pollBalance() {
+    const self = this;
+    setTimeout(() => {
+      console.log('polling');
+      self.pollBalance();
+      self._onRefresh();
+    }, 10000);
+  }
+
+  _onRefresh() {
+    let qrCode = this.state.qrCode;
+    qrCode = 111;
+    this.setState({ refreshing: true });
+    fetch(URLs.getBalance(qrCode))
+      .then(response => {
+        if (response.status == 200) {
+          return response.json();
+        } else {
+          throw new Error();
+        }
+      })
+      .then(apiResponse => {
+        this.setState({ balanceObj: apiResponse, refreshing: false });
+        BalanceDB.Set(apiResponse);
+        console.log('updated balance');
+      })
+      .catch(err => {
+        // FIXME: what to do on internet corruption
+        this.setState({ refreshing: false });
+        console.log('TCL: Balance Screen -> componentDidMount -> err', err);
+      });
   }
 
   render() {

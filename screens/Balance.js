@@ -31,6 +31,7 @@ export default class Balance extends React.Component {
   async componentDidMount() {
     let balanceObj = await BalanceDB.Get();
     this.setState({ balanceObj });
+    this._onRefresh();
   }
 
   renderOrderRow(order, idx) {
@@ -57,10 +58,11 @@ export default class Balance extends React.Component {
   }
   _onRefresh() {
     let qrCode = this.state.qrCode;
-    qrCode = 111;
+    // qrCode = 111;
+    this.setState({ refreshing: true });
     fetch(URLs.getBalance(qrCode))
       .then(response => {
-        console.log('TCL: Balance -> _onRefresh -> response', response);
+        console.log("TCL: Balance -> _onRefresh -> response", response)
         if (response.status == 200) {
           return response.json();
         } else {
@@ -116,7 +118,6 @@ export default class Balance extends React.Component {
           total: 3000
         }
       ];
-    console.log(orders);
     return (
       <ImageBackground
         resizeMode="repeat"
@@ -129,7 +130,7 @@ export default class Balance extends React.Component {
             style={{
               flexDirection: 'row',
               width: '100%',
-              height: 160,
+              height: 100,
               overflow: 'hidden',
               position: 'relative',
               backgroundColor: '#f8b7bb'
@@ -141,7 +142,7 @@ export default class Balance extends React.Component {
               }}
               style={{
                 width: Layout.window.width / 3,
-                height: Layout.window.width / 3,
+                height: 100,
                 backgroundColor: '#fde9d6'
               }}
             />
@@ -168,14 +169,14 @@ export default class Balance extends React.Component {
         <ImageBackground
           resizeMode="stretch"
           source={Assets.homeProfile}
-          style={{ height: 60, backgroundColor: 'transparent', marginTop: -10 }}
+          style={{ height: 60, backgroundColor: 'transparent', marginTop: -70 }}
         >
           <View
             style={{
               backgroundColor: '#FDE9D6',
               padding: 3,
               left: 20,
-              top: 10,
+              top: 12,
               height: 25,
               alignItems: 'center',
               position: 'absolute'
@@ -229,8 +230,8 @@ const styles = StyleSheet.create({
   },
   textArea: {
     position: 'absolute',
-    top: 40,
-    left: Layout.window.width / 3 - 10
+    top: 20,
+    left: Layout.window.width / 3 - 30
   },
   name: {
     fontSize: 18,
