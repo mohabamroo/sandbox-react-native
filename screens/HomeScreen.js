@@ -25,6 +25,7 @@ import { CountDownTimer } from '../components/CountDownTimer';
 import { UserBrief } from '../components/UserBrief';
 import { EventInfoDB, SchedualDB, ArtistsDB, UserDB } from '../Config/DB';
 import Footer from '../components/Footer';
+import { registerForPushNotificationsAsync, scheduleNotification } from '../components/Notifications';
 
 // const start_days = [moment]
 
@@ -60,6 +61,26 @@ export default class HomeScreen extends React.Component {
 		};
 		this.notifyEventStart = this.notifyEventStart.bind(this);
 		this.refreshUserAccount = this.refreshUserAccount.bind(this);
+	}
+
+	async componentDidMount() {
+		// check the timestate..
+		let general = await EventInfoDB.Get();
+		let schedule = await SchedualDB.Get();
+		let artists = await ArtistsDB.Get();
+		this.setState(
+			{
+				general,
+				schedule,
+				artists
+			},
+			() => {
+				this.handleState();
+			}
+		);
+		this.handleSchedule();
+		this._interval = setInterval(() => this.handleSchedule(), 6000000);
+		registerForPushNotificationsAsync();
 	}
 
 	componentWillUnmount() {
@@ -135,8 +156,6 @@ export default class HomeScreen extends React.Component {
 			indexS += 1;
 			nextS = schedule[day]['SANDBOX Stage'][indexS];
 		}
-		console.log('==========================')
-		console.log('Next', nextS, nextM)
 
 		this.setState({
 			currentEvents: {
@@ -148,31 +167,12 @@ export default class HomeScreen extends React.Component {
 		});
 	}
 
-	async componentDidMount() {
-		// check the timestate..
-		let general = await EventInfoDB.Get();
-		let schedule = await SchedualDB.Get();
-		let artists = await ArtistsDB.Get();
-		this.setState(
-			{
-				general,
-				schedule,
-				artists
-			},
-			() => {
-				this.handleState();
-			}
-		);
-		this.handleSchedule();
-		this._interval = setInterval(() => this.handleSchedule(), 6000000);
-	}
-
 	handleCountdown() {
 		// FIXME: hardcoded for testing
 		const startDateTime = new Date('2019-06-13T13:00:00Z');
 		const endDateTime = new Date('2019-06-16T04:00:00Z');
 		const diff = Math.floor((startDateTime - new Date()) / 1000);
-    console.log("TCL: HomeScreen -> handleCountdown -> diff", diff)
+		console.log('TCL: HomeScreen -> handleCountdown -> diff', diff);
 		const endedFlag = Math.floor((new Date() - endDateTime) / 1000);
 		const self = this;
 		return {
@@ -349,8 +349,7 @@ export default class HomeScreen extends React.Component {
 						/>
 					)}
 
-        <Footer />
-
+				<Footer />
 			</ImageBackground>
 		);
 	}

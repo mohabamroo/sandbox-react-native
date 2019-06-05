@@ -26,6 +26,9 @@
       "package": "com.sandbox.festival",
       "versionCode": 1,
       "icon": "./assets/images/app-icon.png"
+    },
+    "notification":{
+      "icon": "./assets/images/app-icon.png"
     }
   }
 }
