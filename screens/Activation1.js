@@ -12,11 +12,11 @@ import {
   Alert
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
-import Footer from '../components/Footer';
 const { width, height } = Dimensions.get('window');
 import * as __GStyles from '../styles';
 import { NavigationController } from '../navigation/index';
 import Assets from '../constants/Assets';
+import Footer from '../components/Footer';
 
 export default class Media extends React.Component {
   constructor(props) {
@@ -61,7 +61,7 @@ export default class Media extends React.Component {
         // FIXME: code is 200 even though message was not sent
         console.log('TCL: Media -> sendCode -> res', res);
         if (res.status != 200) {
-          Alert.alert('Invalid Email', res._bodyInit.replace("\"", ""));
+          Alert.alert('Invalid Email', res._bodyInit.replace('"', ''));
 
           this.setState({ fetching: false });
         } else {

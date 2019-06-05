@@ -18,6 +18,7 @@ import * as __GStyles from '../styles';
 import Assets from '../constants/Assets';
 import Footer from '../components/Footer';
 
+
 const { height, width } = Dimensions.get('window');
 
 export default class Discover extends React.Component {
@@ -95,7 +96,7 @@ export default class Discover extends React.Component {
 							</Text>
 						</View>
 					</ImageBackground>
-				
+
 
 				{this.state.places && (
 					<FlatList
@@ -171,8 +172,9 @@ export default class Discover extends React.Component {
 						}}
 					/>
 				)}
-				<Footer />
+
 			</View>
+			<Footer />
 			</ImageBackground>
 		);
 	}

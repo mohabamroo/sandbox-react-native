@@ -14,7 +14,7 @@ const { width, height } = Dimensions.get('window');
 import * as __GStyles from '../styles';
 import Assets from '../constants/Assets';
 import Layout from '../constants/Layout';
-import Footer from './Footer';
+
 export class QrCode extends React.Component {
   constructor(props) {
     super(props);
@@ -63,7 +63,6 @@ export class QrCode extends React.Component {
             TAP HERE TO CLOSE
           </Text>
         </TouchableOpacity>
-        <Footer />
       </View>
     );
   }

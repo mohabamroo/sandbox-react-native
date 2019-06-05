@@ -13,11 +13,11 @@ import {
 } from 'react-native';
 import CodeInput from 'react-native-confirmation-code-input';
 import HeaderComponent from '../components/HeaderComponent';
-import Footer from '../components/Footer';
 const { width, height } = Dimensions.get('window');
 import * as __GStyles from '../styles';
 import { NavigationController } from '../navigation/index';
 import Assets from '../constants/Assets';
+import Footer from '../components/Footer';
 
 export default class Media extends React.Component {
   constructor(props) {
@@ -46,7 +46,10 @@ export default class Media extends React.Component {
     }).then(res => {
       console.log('TCL: Media -> res', res);
       if (res.status != 200) {
-        Alert.alert('Wrong code', "You have entered the wrong code, please check and try again.");
+        Alert.alert(
+          'Wrong code',
+          'You have entered the wrong code, please check and try again.'
+        );
       } else {
         this.props.navigation.navigate('DataActivation', {
           email,

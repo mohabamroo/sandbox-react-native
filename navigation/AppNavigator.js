@@ -76,7 +76,7 @@ export default createAppContainer(
           title: {
             text: 'Schedule',
             fontColor: '#FEEC59',
-            bgColor: '#90B878',
+            bgColor: 'rgb(98,163,133)',
             bgBack: '#189AA8',
             colorBack: '#FEED59'
           },
@@ -181,7 +181,7 @@ export default createAppContainer(
           title: {
             text: 'Info',
             fontColor: '#ffec59',
-            bgColor: '#7bc19e',
+            bgColor: 'rgb(142,201,174)',
             bgBack: '#189aa9',
             colorBack: '#ffec59'
           },
@@ -202,7 +202,7 @@ export default createAppContainer(
           title: {
             text: 'Info',
             fontColor: '#ffec59',
-            bgColor: '#7bc19e',
+            bgColor: 'rgb(142,201,174)',
             bgBack: '#189aa9',
             colorBack: '#ffec59'
           },
@@ -223,7 +223,7 @@ export default createAppContainer(
           title: {
             text: 'Info',
             fontColor: '#ffec59',
-            bgColor: '#7bc19e',
+            bgColor: 'rgb(142,201,174)',
             bgBack: '#189aa9',
             colorBack: '#ffec59'
           },
@@ -244,7 +244,7 @@ export default createAppContainer(
           title: {
             text: 'Info',
             fontColor: '#ffec59',
-            bgColor: '#7bc19e',
+            bgColor: 'rgb(142,201,174)',
             bgBack: '#189aa9',
             colorBack: '#ffec59'
           },
@@ -265,7 +265,7 @@ export default createAppContainer(
           title: {
             text: 'Info',
             fontColor: '#ffec59',
-            bgColor: '#7bc19e',
+            bgColor: 'rgb(142,201,174)',
             bgBack: '#189aa9',
             colorBack: '#ffec59'
           },
@@ -286,7 +286,7 @@ export default createAppContainer(
           title: {
             text: 'Bus Routes',
             fontColor: '#ffec59',
-            bgColor: '#7bc19e',
+            bgColor: 'rgb(142,201,174)',
             bgBack: '#189aa9',
             colorBack: '#ffec59'
           },
@@ -305,7 +305,7 @@ export default createAppContainer(
         screen: ProfileScreen,
         params: {
           title: {
-            text: 'Your pass',
+            text: 'Your Pass',
             fontColor: '#7bc19e',
             bgColor: '#ffe958',
             bgBack: '#7bc19e',

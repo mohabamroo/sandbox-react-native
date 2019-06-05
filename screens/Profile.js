@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import ArtistPopup from './ArtistPopup';
-import Footer from '../components/Footer';
 import Assets from '../constants/Assets';
 import { NavigationController } from '../navigation/index';
 
@@ -18,6 +17,7 @@ import ArtistRow from '../components/ArtistRow';
 import { Label } from '../components/Label';
 import { UserBrief } from '../components/UserBrief';
 import Layout, * as layout from '../constants/Layout';
+import Footer from '../components/Footer';
 
 const URLs = require('../Config/ExternalURL');
 

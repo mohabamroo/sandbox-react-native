@@ -14,6 +14,7 @@ import * as __GStyles from '../styles';
 import { BalanceDB } from '../Config/DB';
 import Layout from '../constants/Layout';
 import Footer from '../components/Footer';
+
 const URLs = require('../Config/ExternalURL');
 export default class Balance extends React.Component {
   constructor(props) {
@@ -123,12 +124,12 @@ export default class Balance extends React.Component {
         style={__GStyles.default.container}
       >
         <HeaderComponent navigation={this.props.navigation} />
-        <View style={{ width: '100%', height: 150 }}>
+        <View style={{ width: '100%', height: 160 }}>
           <View
             style={{
               flexDirection: 'row',
               width: '100%',
-              height: Layout.window.width / 3,
+              height: 160,
               overflow: 'hidden',
               position: 'relative',
               backgroundColor: '#f8b7bb'
@@ -167,7 +168,7 @@ export default class Balance extends React.Component {
         <ImageBackground
           resizeMode="stretch"
           source={Assets.homeProfile}
-          style={{ height: 60, backgroundColor: 'transparent' }}
+          style={{ height: 60, backgroundColor: 'transparent', marginTop: -10 }}
         >
           <View
             style={{
@@ -250,7 +251,7 @@ const styles = StyleSheet.create({
   },
   orderRow: {
     backgroundColor: 'white',
-    marginBottom: 20
+    marginTop: 20
   },
   itemRow: {
     flex: 1,
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
   ordersList: {
     padding: 10,
     marginTop: -10,
-    paddingTop: 30,
+    paddingTop: 50,
     paddingLeft: 10,
     backgroundColor: 'white'
   },

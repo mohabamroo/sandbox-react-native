@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
-  ImageBackground
+  ImageBackground,
+  Image
 } from 'react-native';
 // Import navigation
 import { NavigationActions } from 'react-navigation';
@@ -73,7 +74,6 @@ export default class Loading extends Component {
     this.refresh(async status => {
       console.log('The status: ', status);
       if (!status) {
-        console.log('TCL: componentDidMount -> no internet connection', status);
         // should check the offline content.
         let schedule = await SchedualDB.Get();
         let artist = await ArtistsDB.Get();
@@ -333,7 +333,6 @@ export default class Loading extends Component {
     // d-M-Y-H-i
     let formattedDate =
       jsDate.getDate() + '-' + jsDate.getMonth() + '-' + jsDate.getYear();
-    console.log('TCL: Loading -> formateDate -> formattedDate', formattedDate);
     return formattedDate;
   }
 
@@ -346,9 +345,22 @@ export default class Loading extends Component {
       >
         <ActivityIndicator size="large" color="#ffec59" />
 
-        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18, position: 'absolute', top: 100 }}>
+        <Text
+          style={{
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: 18,
+            position: 'absolute',
+            top: 100
+          }}
+        >
           {this.state.currentTaskText}
         </Text>
+        <Image
+          resizeMode="contain"
+          source={Assets.logoOnly}
+          style={styles.footerImage}
+        />
       </ImageBackground>
     );
   }
@@ -370,5 +382,11 @@ const styles = StyleSheet.create({
     bottom: 40,
     fontWeight: 'bold',
     color: '#ccc'
+  },
+  footerImage: {
+    position: 'absolute',
+    bottom: 10,
+    left: 20,
+    width: 200
   }
 });

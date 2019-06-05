@@ -14,12 +14,13 @@ import {
 
 import HeaderComponent from '../components/HeaderComponent';
 import ArtistPopup from './ArtistPopup';
-import Footer from '../components/Footer';
 import Assets, * as assets from '../constants/Assets';
 import { FavoritesDB, ArtistsDB } from '../Config/DB';
 import * as __GStyles from '../styles';
 import Layout from '../constants/Layout';
 import ArtistRow from '../components/ArtistRow';
+const URLs = require('../Config/ExternalURL');
+import Footer from '../components/Footer';
 
 export default class LinksScreen extends React.Component {
 	constructor(props) {
@@ -33,7 +34,8 @@ export default class LinksScreen extends React.Component {
 			current_artist: null,
 			show_popup: false,
 			color1: '#fff',
-			color2: '#fff'
+			color2: '#fff',
+			refreshing: true
 		};
 	}
 
@@ -44,6 +46,7 @@ export default class LinksScreen extends React.Component {
 		});
 		this.setState({
 			artists,
+			refreshing: false,
 			currentCount: artists.length,
 			initialArtists: artists,
 			appState: AppState.currentState
@@ -118,6 +121,40 @@ export default class LinksScreen extends React.Component {
 				this.setState({ artists: initialArtists });
 			}
 		});
+	}
+
+	formateDate(jsDate) {
+		// d-M-Y-H-i
+		let formattedDate =
+			jsDate.getDate() + '-' + jsDate.getMonth() + '-' + jsDate.getYear();
+		console.log('TCL: Loading -> formateDate -> formattedDate', formattedDate);
+		return formattedDate;
+	}
+
+	_onRefresh() {
+		this.setState({refreshing: true})
+		fetch(URLs.getArtists(this.formateDate(new Date())))
+			.then(response => {
+				if (response.status == 200) {
+					return response.json();
+				}
+			})
+			.then(artists => {
+				let newState = {
+					artists: artists.data,
+					currentCount: artists.data.length,
+					initialArtists: artists.data,
+					refreshing: false,
+					active: this.state.active
+				};
+				ArtistsDB.Set(artists.data);
+				this._handleAppStateChange(newState);
+			})
+			.catch(err => {
+				// FIXME: what to do on internet corruption
+				this.setState({ refreshing: false });
+				console.log('TCL: Balance Screen -> componentDidMount -> err', err);
+			});
 	}
 
 	render() {
@@ -220,24 +257,26 @@ export default class LinksScreen extends React.Component {
 						</View>
 					</TouchableOpacity>
 				</View>
-        <View style={{flex: 1 }}>
-  				<FlatList
-  					data={this.state.artists}
-            extraData={this.state.artists}
-            removeClippedSubviews
-            ListFooterComponent={(
-              <View style={{height: 220}}/>
-            )}
-  					style={{flex: 1 }}
-  					keyExtractor={(item, idx) => idx + ''}
-  					renderItem={this.renderArtist.bind(this)}
-  					getItemLayout={(data, index) => ({
-  						length: Layout.window.width / 3,
-  						offset: Layout.window.width / 3 * index,
-  						index
-  					})}
-  				/>
-        </View>
+				<View style={{ flex: 1 }}>
+					{this.state.artists && (
+						<FlatList
+							data={this.state.artists}
+							extraData={this.state.artists}
+							removeClippedSubviews
+							ListFooterComponent={<View style={{ height: 220 }} />}
+							style={{ flex: 1 }}
+							keyExtractor={(item, idx) => idx + ''}
+							renderItem={this.renderArtist.bind(this)}
+							getItemLayout={(data, index) => ({
+								length: Layout.window.width / 3,
+								offset: (Layout.window.width / 3) * index,
+								index
+							})}
+							refreshing={this.state.refreshing}
+							onRefresh={() => this._onRefresh()}
+						/>
+					)}
+				</View>
 
 				{this.state.current_artist &&
 					this.state.show_popup && (
@@ -249,7 +288,7 @@ export default class LinksScreen extends React.Component {
 							onClose={() => this.setState({ show_popup: false })}
 						/>
 					)}
-				<Footer />
+				<Footer></Footer>
 			</ImageBackground>
 		);
 	}
