@@ -6,6 +6,7 @@ import Layout, * as layout from '../constants/Layout';
 import Assets from '../constants/Assets';
 
 export default class CurrentlyPlaying extends React.Component {
+
 	render() {
     let { sandbox, main } = this.props.currentEvents;
 		console.log(main, sandbox)

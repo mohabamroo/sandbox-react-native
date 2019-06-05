@@ -101,25 +101,26 @@ export default class LinksScreen extends React.Component {
 		});
 	};
 
-	// FIXME: weird logic on dislike, what about stage filtering
 	fetchFavorites() {
-		let initialArtists = this.state.initialArtists;
-		FavoritesDB.Get().then(artists => {
-			if (artists) {
-				artists.forEach(likedArtist => {
-					if (likedArtist && likedArtist.artist_id) {
-						initialArtists.forEach((artist, index) => {
-							if (artist.artist_id == likedArtist.artist_id) {
-								initialArtists[index]['liked'] = true;
-							}
-						});
-					}
-				});
-				// changing state
-				console.log('Changing state');
-				this.setState({ artists: initialArtists });
-			}
-		});
+		if(this.state.loggedIn){
+			let initialArtists = this.state.initialArtists;
+			FavoritesDB.Get().then(artists => {
+				if (artists) {
+					artists.forEach(likedArtist => {
+						if (likedArtist && likedArtist.artist_id) {
+							initialArtists.forEach((artist, index) => {
+								if (artist.artist_id == likedArtist.artist_id) {
+									initialArtists[index]['liked'] = true;
+								}
+							});
+						}
+					});
+					// changing state
+					console.log('Changing state');
+					this.setState({ artists: initialArtists });
+				}
+			});
+		}
 	}
 
 	formateDate(jsDate) {

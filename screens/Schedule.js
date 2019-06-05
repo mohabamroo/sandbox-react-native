@@ -9,11 +9,12 @@ import {
 	TouchableOpacity,
 	TouchableHighlight,
 	ImageBackground,
-	ScrollView
+	ScrollView,
+	Alert
 } from 'react-native';
 import moment from 'moment';
 import Layout from '../constants/Layout';
-
+import { likeArtist, removeArtistLike } from '../Config/ExternalURL';
 import HeaderComponent from '../components/HeaderComponent';
 const { width, height } = Dimensions.get('window');
 import { AntDesign } from '@expo/vector-icons';
@@ -22,7 +23,7 @@ import Assets from '../constants/Assets';
 import ArtistPopup from './ArtistPopup';
 
 import * as __GStyles from '../styles';
-import { SchedualDB, ArtistsDB } from '../Config/DB';
+import { SchedualDB, ArtistsDB, UserDB, FavoritesDB } from '../Config/DB';
 const URLs = require('../Config/ExternalURL');
 
 const interval = 110;
@@ -44,6 +45,17 @@ export default class Schedule extends React.Component {
 	componentDidMount() {
 		this.fetchCategories();
 		this.fetchArtists();
+		UserDB.Get().then(userData => {
+      console.log("TCL: HomeScreen -> refreshUserAccount -> userData", userData)
+      if (userData != null) {
+        console.log(userData)
+        userState = { user: { ...userData }, loggedIn: true };
+      } else {
+        userState = { loggedIn: false };
+      }
+      this.setState({ ...userState });
+    });
+
 	}
 
 	setDay() {
@@ -86,6 +98,7 @@ export default class Schedule extends React.Component {
 	async fetchArtists() {
 		let artists = await ArtistsDB.Get();
 		this.setState({ artists });
+		this.fetchFavorites()
 	}
 
 	async fetchCategories() {
@@ -126,6 +139,63 @@ export default class Schedule extends React.Component {
 		return array;
 	}
 
+	fetchFavorites() {
+		if(this.state.loggedIn){
+			let initialArtists = this.state.artists;
+			FavoritesDB.Get().then(artists => {
+				if (artists) {
+					artists.forEach(likedArtist => {
+						if (likedArtist && likedArtist.artist_id) {
+							initialArtists.forEach((artist, index) => {
+								if (artist.artist_id == likedArtist.artist_id) {
+									initialArtists[index]['liked'] = true;
+								}
+							});
+						}
+					});
+					// changing state
+					console.log('Changing state');
+					this.setState({ artists: initialArtists });
+				}
+			});
+		}
+	}
+
+	_handleLikeClick(artist) {
+    console.log('like clicked');
+    this.preventDefault = true;
+    this._likeArtist(artist);
+    this.preventDefault = false;
+  }
+
+	_likeArtist(artist) {
+		if(this.state.loggedIn){
+			let newLike = artist.liked == true ? false : true;
+			let reqURL = artist.liked == true ? likeArtist : removeArtistLike;
+			let opts = {
+				artist_id: artist.artist_id,
+				user_id: this.state.user_id
+			};
+			fetch(reqURL, {
+				method: 'POST',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(opts)
+			}).then(res => {
+				if (res.status == 200) {
+					this.fetchFavorites()
+				} else {
+					Alert.alert('Please make sure that you are connnected to the internet.')
+				}
+			});
+		}else {
+			Alert.alert('Please login to like the artist.')
+		}
+
+	}
+
 	sessionSpace(width, array, item, color) {
 		array.push(
 			<TouchableHighlight
@@ -159,12 +229,30 @@ export default class Schedule extends React.Component {
 							backgroundColor: '#fff'
 						}}
 					>
-						<AntDesign
-							name="hearto"
-							size={15}
-							color="white"
-							style={{ position: 'absolute', right: 10, top: 10 }}
-						/>
+						<TouchableOpacity
+							style={{
+								width: 25,
+								height: 25,
+								position: 'absolute',
+								top: 5,
+								right: 10,
+								zIndex: 3
+							}}
+							activeOpacity={0.5}
+							onPress={() => this._handleLikeClick(item)}
+						>
+							<Image
+								source={
+									item.liked == true ? Assets.heart_on : Assets.heart_off
+								}
+								style={{
+									width: 14,
+									height: 14
+								}}
+								resizeMode={'contain'}
+							/>
+						</TouchableOpacity>
+
 					</ImageBackground>
 
 					<View
@@ -372,6 +460,7 @@ export default class Schedule extends React.Component {
 
 	_handleAppStateChange(newState) {
 		day = newState.active;
+
 		this.setState(
 			{
 				active: day,
