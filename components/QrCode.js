@@ -26,17 +26,17 @@ export class QrCode extends React.Component {
     const { user, balance } = this.state;
     return (
       <View style={styles.container}>
-        <View>
+        {/* <View>
           <Image source={Assets.logoOnly} resizeMode="contain" style={{  height: 100 }} />
-        </View>
+        </View> */}
         <View>
           <Image
             source={{
               uri: 'https://nacelle.nbhood.com/' + user.qrcode
             }}
             style={{
-              width: 200,
-              height: 200,
+              width: 300,
+              height: 300,
               backgroundColor: '#fde9d6'
             }}
           />
@@ -46,12 +46,13 @@ export class QrCode extends React.Component {
         </View>
         <TouchableOpacity
           onPress={() => {
+            console.log('closing');
             this.props.navigation.goBack();
           }}
           style={[styles.labelWrapper, { marginTop: 30 }]}
         >
           <Image
-            source={Assets.close}
+            source={Assets.QRclose}
             style={{
               width: 20,
               height: 20,
@@ -59,7 +60,7 @@ export class QrCode extends React.Component {
               backgroundColor: '#fde9d6'
             }}
           />
-          <Text style={[styles.nameText, { fontSize: 12 }]}>
+          <Text style={[styles.nameText, { fontSize: 12, marginTop: 10 }]}>
             TAP HERE TO CLOSE
           </Text>
         </TouchableOpacity>
@@ -83,7 +84,6 @@ const styles = StyleSheet.create({
   labelWrapper: {
     marginTop: 15,
     alignItems: 'center',
-    textAlign: 'center',
-    padding: 10
+    textAlign: 'center'
   }
 });
