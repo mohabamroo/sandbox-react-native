@@ -343,6 +343,8 @@ export default class HomeScreen extends React.Component {
 				{this.state.current_artist &&
 					this.state.show_popup && (
 						<ArtistPopup
+							loggedIn={this.state.loggedIn}
+							user={this.state.user}
 							artist={this.state.current_artist}
 							color1={'#7bc19e'}
 							color2={'#f8b7bb'}

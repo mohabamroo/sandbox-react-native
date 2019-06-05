@@ -37,7 +37,7 @@ export default class CurrentlyPlaying extends React.Component {
 						}}
 					>
 						<View style={[styles.play, {borderBottomColor: this.state.active === 'now' ? '#ffec59':'#e9665d'}]} />
-						<Text style={{ color: this.state.active === 'now' ? '#ffec59':'#e9665d', fontSize: 12 }}>NOW PLAYING</Text>
+						<Text style={[{ color: '#e9665d', fontSize: 12 },  this.state.active === 'now' ?{color:  '#ffec59', fontWeight: 'bold'}:{}]}>NOW PLAYING</Text>
 					</TouchableOpacity>
 
 					<TouchableOpacity
@@ -58,13 +58,13 @@ export default class CurrentlyPlaying extends React.Component {
 						<View
 							style={{
 								backgroundColor: this.state.active === 'now' ? '#e9665d':'#ffec59',
-								height: 15,
+								height: 10,
 								width: 2,
 								marginRight: 10
 							}}
 						/>
-						<Text style={{ color: this.state.active === 'now' ? '#e9665d':'#ffec59', fontSize: 12 }}>
-							WHAT IS PLAYING NEXT?!
+						<Text style={[{ color: '#e9665d', fontSize: 12 }, this.state.active !== 'now' ? {color:  '#ffec59', fontWeight: 'bold'}:{} ]}>
+							PLAYING NEXT?!
 						</Text>
 					</TouchableOpacity>
 					<View style={[styles.triangle, {borderBottomColor: this.state.active === 'now' ?'#ffec59' :'#e9665d'}]}/>
@@ -74,7 +74,7 @@ export default class CurrentlyPlaying extends React.Component {
 					style={{
 						flexDirection: 'row',
 						width: '100%',
-						height: 165,
+						height: 100,
 						backgroundColor: !sandbox ? '#f8b7bb' : '#7bc19e'
 					}}
 				>
@@ -113,29 +113,12 @@ export default class CurrentlyPlaying extends React.Component {
 								]}
 							/>
 							<Text
-								style={{
-									position: 'absolute',
-									top: 5,
-									right: 0,
-									color: 'white',
-									fontSize: 16,
-									width: Layout.window.width * 0.3,
-									fontWeight: 'bold'
-								}}
+								style={styles.artistName}
 							>
 								{main.artistName}
 							</Text>
 							<Text
-								style={{
-									position: 'absolute',
-									bottom: 5,
-									right: 5,
-									color: '#e9665d',
-									fontSize: 10,
-									width: Layout.window.width * 0.15,
-									fontWeight: 'bold',
-									textAlign: 'right'
-								}}
+								style={styles.stageName}
 							>
 								MAIN STAGE
 							</Text>
@@ -176,29 +159,12 @@ export default class CurrentlyPlaying extends React.Component {
 								]}
 							/>
 							<Text
-								style={{
-									position: 'absolute',
-									top: 5,
-									right: 0,
-									color: 'white',
-									fontSize: 16,
-									width: Layout.window.width * 0.3,
-									fontWeight: 'bold'
-								}}
+								style={styles.artistName}
 							>
 								{sandbox.artistName}
 							</Text>
 							<Text
-								style={{
-									position: 'absolute',
-									bottom: 5,
-									right: 5,
-									color: '#e9665d',
-									fontSize: 10,
-									width: Layout.window.width * 0.15,
-									fontWeight: 'bold',
-									textAlign: 'right'
-								}}
+								style={styles.stageName}
 							>
 								SANDBOX STAGE
 							</Text>
@@ -211,7 +177,7 @@ export default class CurrentlyPlaying extends React.Component {
 				style={{
 					flexDirection: 'row',
 					width: '100%',
-					height: 165,
+					height: 100,
 					backgroundColor: !sandbox ? '#f8b7bb' : '#7bc19e'
 				}}
 			>
@@ -250,29 +216,12 @@ export default class CurrentlyPlaying extends React.Component {
 							]}
 						/>
 						<Text
-							style={{
-								position: 'absolute',
-								top: 5,
-								right: 0,
-								color: 'white',
-								fontSize: 16,
-								width: Layout.window.width * 0.3,
-								fontWeight: 'bold'
-							}}
+							style={styles.artistName}
 						>
 							{this.props.currentEvents.nextM.artistName}
 						</Text>
 						<Text
-							style={{
-								position: 'absolute',
-								bottom: 5,
-								right: 5,
-								color: '#e9665d',
-								fontSize: 10,
-								width: Layout.window.width * 0.15,
-								fontWeight: 'bold',
-								textAlign: 'right'
-							}}
+							style={styles.stageName}
 						>
 							MAIN STAGE
 						</Text>
@@ -313,29 +262,12 @@ export default class CurrentlyPlaying extends React.Component {
 							]}
 						/>
 						<Text
-							style={{
-								position: 'absolute',
-								top: 5,
-								right: 0,
-								color: 'white',
-								fontSize: 16,
-								width: Layout.window.width * 0.3,
-								fontWeight: 'bold'
-							}}
+							style={styles.artistName}
 						>
 							{this.props.currentEvents.nextS.artistName}
 						</Text>
 						<Text
-							style={{
-								position: 'absolute',
-								bottom: 5,
-								right: 5,
-								color: '#e9665d',
-								fontSize: 10,
-								width: Layout.window.width * 0.15,
-								fontWeight: 'bold',
-								textAlign: 'right'
-							}}
+							style={styles.stageName}
 						>
 							SANDBOX STAGE
 						</Text>
@@ -351,7 +283,7 @@ export default class CurrentlyPlaying extends React.Component {
 
 const styles = StyleSheet.create({
 	container: {
-		height: 200,
+		height: 150,
 		width: '100%'
 	},
 	triangle: {
@@ -374,11 +306,11 @@ const styles = StyleSheet.create({
 		width: 0,
 		height: 0,
 		margin: 10,
-		borderBottomWidth: 12,
+		borderBottomWidth: 8,
 		backgroundColor: 'transparent',
 		borderBottomColor: '#e9665d',
 		borderStyle: 'solid',
-		borderLeftWidth: 12,
+		borderLeftWidth: 8,
 		borderRightWidth: 0,
 		borderLeftColor: 'transparent',
 		borderRightColor: 'transparent',
@@ -389,13 +321,33 @@ const styles = StyleSheet.create({
 		height: 0,
 		backgroundColor: 'transparent',
 		borderStyle: 'solid',
-		borderRightWidth: Layout.window.width * 0.35,
+		borderRightWidth: Layout.window.width * 0.25,
 		borderBottomWidth: 450,
 		borderLeftColor: 'transparent',
 		borderRightColor: 'transparent',
 		transform: [{ rotate: '180deg' }]
 	},
 	image: {
-		height: 165
+		height: 150
+	},
+	artistName: {
+		position: 'absolute',
+		top: 5,
+		right: 10,
+		color: 'white',
+		textAlign: 'right',
+		fontSize: 12,
+		width: Layout.window.width * 0.15,
+		fontWeight: 'bold'
+	},
+	stageName: {
+		position: 'absolute',
+		bottom: -10,
+		right: 10,
+		color: '#e9665d',
+		fontSize: 10,
+		width: Layout.window.width * 0.15,
+		fontWeight: 'bold',
+		textAlign: 'right'
 	}
 });

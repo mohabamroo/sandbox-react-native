@@ -38,7 +38,7 @@ export class CountDownTimer extends React.Component {
           digitStyle={{
             backgroundColor: 'transparent'
           }}
-          digitTxtStyle={{ color: '#FFEB5C', fontSize: 56 }}
+          digitTxtStyle={{ color: '#FFEB5C', fontSize: 48 }}
           timeLabelStyle={{ color: 'white', marginTop: -85, fontSize: 12 }}
           separatorStyle={{
             color: '#FFEB5C',

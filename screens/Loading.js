@@ -36,7 +36,7 @@ export default class Loading extends Component {
       InfoData: {},
       SchedualData: {},
       ArtistsData: {},
-      currentTaskText: 'Checking the internet'
+      currentTaskText: 'Downloading festival content...'
     };
     this.navigationController = new NavigationController(this.props.navigation);
   }

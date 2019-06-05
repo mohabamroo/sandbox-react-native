@@ -7,7 +7,8 @@ import {
   View,
   Text,
   ListView,
-  ImageBackground
+  ImageBackground,
+  RefreshControl
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import Layout from '../constants/Layout';
@@ -17,6 +18,7 @@ import * as __GStyles from '../styles';
 import { InfoDB } from '../Config/DB/index';
 import { NavigationController } from '../navigation/index';
 import Assets from '../constants/Assets';
+const URLs = require('../Config/ExternalURL');
 
 export default class Info extends React.Component {
   ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -42,10 +44,16 @@ export default class Info extends React.Component {
         partners: { label: 'Partners, Sponsors & Credit', order: 5 }
       }
     };
+    this._onRefresh = this._onRefresh.bind(this);
   }
   async componentDidMount() {
     // loading the information page content
     let info = await InfoDB.Get();
+    this.setInfoContent(info);
+    this.refreshInfo();
+  }
+
+  setInfoContent(info) {
     delete info['policies'];
     const ordered = {};
     let self = this;
@@ -62,9 +70,33 @@ export default class Info extends React.Component {
     }
     this.setState({
       infoMainSections: this.ds.cloneWithRows(infoMainSections),
-      wholeInfo: info
+      wholeInfo: info,
+      refreshing: false
     });
   }
+
+  refreshInfo() {
+    this.setState({ refreshing: true });
+    fetch(URLs.info)
+      .then(response => {
+        return response.json();
+      })
+      .then(apiResponse => {
+        if (apiResponse.status == 200) {
+          console.log('refreshing sa7');
+          this.setInfoContent(apiResponse.data);
+          InfoDB.Set(apiResponse.data);
+        } else {
+          this.setState({ refreshing: false });
+        }
+      })
+      .catch(err => {
+        this.setState({ refreshing: false });
+        // FIXME: what to do on internet corruption
+        console.log('TCL: News Screen -> componentDidMount -> err', err);
+      });
+  }
+
   renderRowNews(row, L, index) {
     return (
       <TouchableOpacity
@@ -96,6 +128,7 @@ export default class Info extends React.Component {
       </TouchableOpacity>
     );
   }
+
   checkInfoAndGo(row) {
     if (this.state.wholeInfo[row]) {
       this.navigationController.direct(row, {
@@ -106,6 +139,11 @@ export default class Info extends React.Component {
       console.log('Missing info section: Info -> checkInfoAndGo -> row', row);
     }
   }
+
+  _onRefresh() {
+    this.refreshInfo();
+  }
+
   render() {
     return (
       <ImageBackground
@@ -118,6 +156,12 @@ export default class Info extends React.Component {
           bounces={false}
           style={styles.container}
           contentContainerStyle={__GStyles.default.contentContainer}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }
         >
           {/* Go ahead and delete ExpoLinksView and replace it with your
            * content, we just wanted to provide you with some helpful links */}

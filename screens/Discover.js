@@ -18,7 +18,7 @@ import * as __GStyles from '../styles';
 import Assets from '../constants/Assets';
 import Footer from '../components/Footer';
 
-
+const URLs = require('../Config/ExternalURL');
 const { height, width } = Dimensions.get('window');
 
 export default class Discover extends React.Component {
@@ -44,6 +44,11 @@ export default class Discover extends React.Component {
 
 	async componentWillMount() {
 		let places = await DiscoverDB.Get();
+		this.setMapContent(places);
+		this.refreshMapContent();
+	}
+
+	setMapContent(places) {
 		map = places.filter(item => item.location_type === 'SHOW ALL')[0];
 		places = places.filter(item => !(item.location_type === 'SHOW ALL'));
 
@@ -58,6 +63,28 @@ export default class Discover extends React.Component {
 			show
 		});
 	}
+
+	refreshMapContent() {
+		fetch(URLs.Discover)
+		  .then(response => {
+			console.log("TCL: Discover -> refreshMapContent -> response", response)
+			return response.json();
+		  })
+		  .then(apiResponse => {
+			if (apiResponse.status == 200) {
+			  console.log('refreshing sa7');
+			  this.setMapContent(apiResponse.data);
+			  DiscoverDB.Set(apiResponse.data);
+			} else {
+			  this.setState({ refreshing: false });
+			}
+		  })
+		  .catch(err => {
+			this.setState({ refreshing: false });
+			// FIXME: what to do on internet corruption
+			console.log('TCL: News Screen -> componentDidMount -> err', err);
+		  });
+	  }
 
 	render() {
 		return (
@@ -141,7 +168,9 @@ export default class Discover extends React.Component {
 									style={{
 										backgroundColor: this.state.colors[
 											item.index % Number(this.state.colors.length)
-										]
+										],
+										height: 50,
+										marginTop: -1
 									}}
 								>
 									<CheckBox
