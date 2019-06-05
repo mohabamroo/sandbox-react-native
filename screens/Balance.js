@@ -29,8 +29,8 @@ export default class Balance extends React.Component {
   }
 
   async componentDidMount() {
-    // let balanceObj = await BalanceDB.Get();
-    // this.setState({ balanceObj });
+    let balanceObj = await BalanceDB.Get();
+    this.setState({ balanceObj });
   }
 
   renderOrderRow(order, idx) {

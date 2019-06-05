@@ -66,7 +66,7 @@ export default class ProfileScreen extends React.Component {
   }
 
   refreshFavoritesList() {
-    this.setState({refreshing: true});
+    this.setState({ refreshing: true });
     fetch(URLs.getFavorites(this.state.userID))
       .then(response => {
         return response.json();
@@ -76,11 +76,11 @@ export default class ProfileScreen extends React.Component {
           this.setArtists(apiResponse.data);
           FavoritesDB.Set(apiResponse.data);
         } else {
-          this.setState({refreshing: false});
+          this.setState({ refreshing: false });
         }
       })
       .catch(err => {
-        this.setState({refreshing: false});
+        this.setState({ refreshing: false });
         // FIXME: what to do on internet corruption
         console.log('TCL: ProfileScreen -> componentDidMount -> err', err);
       });
@@ -92,7 +92,7 @@ export default class ProfileScreen extends React.Component {
   }
   setArtists(artists) {
     artists = artists.filter(x => x.artist_session);
-    console.log("TCL: ProfileScreen -> setArtists -> artists", artists.length)
+    console.log('TCL: ProfileScreen -> setArtists -> artists', artists.length);
     let dsData = this.ds.cloneWithRows(artists);
     this.setState({
       artists: dsData,
@@ -150,9 +150,9 @@ export default class ProfileScreen extends React.Component {
   }
   render() {
     let title = {
-      text: 'MY FAVORITES',
+      text: 'Your Favorites',
       fontColor: 'white',
-      bgColor: '#E9665C'
+      bgColor: '#EF7D6F'
     };
     return (
       <ImageBackground
@@ -177,37 +177,32 @@ export default class ProfileScreen extends React.Component {
               <View
                 style={[
                   __GStyles.default.subHeaderContentView,
-                  { alignItems: 'flex-start' }
+                  { alignItems: 'flex-end' }
                 ]}
               >
                 {title && <Label title={title} />}
               </View>
             </View>
           </ImageBackground>
-          <ImageBackground
-            resizeMode="repeat"
-            source={Assets.bg4}
-            style={[styles.container, { width: '100%' }]}
-          >
-            <ScrollView
-              refreshControl={
-                <RefreshControl
-                  refreshing={this.state.refreshing}
-                  onRefresh={this._onRefresh}
-                />
-              }
-              bounces={false}
-              style={{ flex: 1 }}
-            >
-              <ListView
-                bounces={false}
-                dataSource={this.state.artists}
-                renderRow={this.renderArtist.bind(this)}
-                enableEmptySections={this.section}
+
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh}
               />
-              <View style={styles.footerMargin} />
-            </ScrollView>
-          </ImageBackground>
+            }
+            bounces={false}
+            style={{ flex: 1 }}
+          >
+            <ListView
+              bounces={false}
+              dataSource={this.state.artists}
+              renderRow={this.renderArtist.bind(this)}
+              enableEmptySections={this.section}
+            />
+            <View style={styles.footerMargin} />
+          </ScrollView>
           <Footer />
         </View>
         {this.state.current_artist && (
@@ -218,7 +213,9 @@ export default class ProfileScreen extends React.Component {
             artist={this.state.current_artist}
             color1={this.state.color1}
             color2={this.state.color2}
-            onClose={() => this.setState({ current_artist: null, show_popup: false })}
+            onClose={() =>
+              this.setState({ current_artist: null, show_popup: false })
+            }
             notifyParent={() => this.fetchFavorites()}
             style={{ zIndex: 1 }}
           />

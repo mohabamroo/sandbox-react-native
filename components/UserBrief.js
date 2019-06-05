@@ -11,14 +11,25 @@ import {
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
-import * as __GStyles from '../styles';
+import * as GStyles from '../styles';
 import Assets from '../constants/Assets';
 import Layout from '../constants/Layout';
+import { BalanceDB } from '../Config/DB';
 export class UserBrief extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
+
+  async componentDidMount() {
+    let balanceObj = await BalanceDB.Get();
+    console.log(
+      'TCL: UserBrief -> componentDidMount -> balanceObj',
+      balanceObj
+    );
+    this.setState({ balanceObj });
+  }
+
   render() {
     const { user, balance } = this.props;
     return (
@@ -52,7 +63,7 @@ export class UserBrief extends React.Component {
               styles.triangle,
               styles.triangleDown,
               styles.nameArea,
-              { borderBottomColor: '#EEB8BB' }
+              { borderBottomColor: '#FDE9D6' }
             ]}
           />
           <View style={styles.textArea}>
@@ -67,15 +78,19 @@ export class UserBrief extends React.Component {
             </Text>
             <Text style={{ fontSize: 12, color: '#e9665d' }}>
               Your Balance is:
-              <Text style={{ fontWeight: 'bold' }}> {balance}</Text> EGP
+              <Text style={{ fontWeight: 'bold' }}>
+                {this.state.balanceObj ? this.state.balanceObj.user.balance : 0}
+                EGP
+              </Text>
             </Text>
           </View>
         </View>
         {this.props.hasBackBtn ? (
           <View
             style={[
+              GStyles.default.backButton,
               styles.floatingLabel,
-              { right: 20, backgroundColor: '#E9665C' }
+              { right: 10, left: null, backgroundColor: '#E9665C' }
             ]}
           >
             <TouchableOpacity
@@ -89,8 +104,7 @@ export class UserBrief extends React.Component {
                 style={{
                   color: '#FFEB5C',
                   fontWeight: 'bold',
-                  fontSize: 12,
-                  
+                  fontSize: 12
                 }}
               >
                 YOUR PASS
@@ -98,7 +112,14 @@ export class UserBrief extends React.Component {
             </TouchableOpacity>
           </View>
         ) : (
-          <View style={[styles.floatingLabel, { right: 20 }]}>
+          <View
+            style={[
+              GStyles.default.backButton,
+              ,
+              styles.floatingLabel,
+              { right: 10, left: null }
+            ]}
+          >
             <TouchableOpacity
               onPress={() => {
                 this.props.NACController.direct('Profile', {
@@ -110,8 +131,7 @@ export class UserBrief extends React.Component {
                 style={{
                   color: '#FFEB5C',
                   fontWeight: 'bold',
-                  fontSize: 12,
-                  
+                  fontSize: 12
                 }}
               >
                 YOUR PROFILE
@@ -120,7 +140,7 @@ export class UserBrief extends React.Component {
           </View>
         )}
         {this.props.hasBackBtn && (
-          <View style={[styles.floatingLabel, { left: 20 }]}>
+          <View style={[GStyles.default.backButton, styles.floatingLabel]}>
             <TouchableOpacity
               onPress={() => {
                 this.props.navigation.goBack();
@@ -131,8 +151,7 @@ export class UserBrief extends React.Component {
                   {
                     color: '#FFEB5C',
                     fontWeight: 'bold',
-                    fontSize: 12,
-                    
+                    fontSize: 12
                   }
                 ]}
               >
@@ -170,10 +189,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderLeftWidth: Layout.window.width,
     borderRightWidth: Layout.window.width / 2,
-    borderLeftColor: '#FDE9D6',
-    borderRightColor: 'transparent',
-    borderBottomColor: '#FDE9D6',
-    borderTopColor: '#FDE9D6'
+    borderRightColor: 'transparent'
   },
   triangleDown: {
     transform: [{ rotate: '180deg' }]
@@ -183,16 +199,14 @@ const styles = StyleSheet.create({
   },
   textArea: {
     position: 'absolute',
-    top: 20,
-    left: Layout.window.width / 3
+    top: 30,
+    left: Layout.window.width / 3 - 25
   },
   floatingLabel: {
     position: 'absolute',
     top: -10,
     backgroundColor: '#f069a7',
     padding: 5,
-    paddingLeft: 8,
-    paddingRight: 8,
     color: 'white'
   }
 });

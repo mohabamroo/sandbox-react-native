@@ -10,13 +10,12 @@ import {
   Animated,
   Alert
 } from 'react-native';
-import Modal from 'react-native-modal';
 import { Entypo, EvilIcons } from '@expo/vector-icons';
 import Layout from '../constants/Layout';
-import Footer from '../components/Footer';
 import { likeArtist, removeArtistLike } from '../Config/ExternalURL';
 import Assets from '../constants/Assets';
 import { FavoritesDB, UserDB } from '../Config/DB';
+import moment from 'moment';
 const URLs = require('../Config/ExternalURL');
 
 export default class ArtistPopup extends React.Component {
@@ -41,7 +40,7 @@ export default class ArtistPopup extends React.Component {
         duration: 450
       }),
       Animated.timing(this.state.position, {
-        toValue: Layout.window.height * 0.01,
+        toValue: Layout.window.height * 0.05,
         duration: 450
       })
     ]).start();
@@ -51,7 +50,6 @@ export default class ArtistPopup extends React.Component {
   }
 
   _likeArtist(opts) {
-    console.log("TCL: ArtistPopup -> _likeArtist -> opts", opts)
     if(this.state.loggedIn){
       let newLike = this.state.artist.liked == true ? false : true;
       this.setState({
@@ -167,6 +165,28 @@ export default class ArtistPopup extends React.Component {
           )}
           <View style={[styles.triangle, { borderBottomColor: color2 }]} />
           <Text style={styles.artistName}>{artist.artist_name}</Text>
+          <View style={styles.sessionInfo}>
+						<Text style={styles.sessionDay}>
+							{artist['artist_session'] && artist['artist_session']['session_stage']
+								? artist['artist_session']['session_stage'].toUpperCase()
+								: 'MAIN STAGE'}
+						</Text>
+						<Text style={styles.sessionTime}>
+							{artist['artist_session'] && artist['artist_session']['session_day']
+								? artist['artist_session']['session_day'].replace('day', 'DAY ') +
+								  ', ' +
+								  moment(
+										artist['artist_session']['session_start_time'],
+										'HH:mm'
+								  ).format('hh:mmA') +
+								  ' - ' +
+								  moment(
+										artist['artist_session']['session_end_time'],
+										'HH:mm'
+								  ).format('hh:mmA')
+								: ''}
+						</Text>
+					</View>
           <TouchableOpacity
             onPress={() => this.onClose()}
             style={styles.close}
@@ -261,6 +281,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 17,
     top: Layout.window.width * 0.05,
+    maxWidth: Layout.window.width * 0.5,
     fontSize: 25,
     color: 'white',
     fontWeight: 'bold'
@@ -270,12 +291,33 @@ const styles = StyleSheet.create({
     top: -30,
     right: -20,
     height: 50,
-    width: 40,
+    width: 50,
     justifyContent: 'center'
   },
   description: {
     fontSize: 14,
     color: 'white',
     fontWeight: '200'
-  }
+  },
+  sessionInfo: {
+    position: 'absolute',
+    right: 17,
+    top: Layout.window.width * 0.05 + 40,
+    fontSize: 20,
+    color: 'white',
+		textAlign: 'right',
+		color: '#fff',
+
+	},
+	sessionDay: {
+		color: '#fff',
+		fontWeight: 'bold',
+		textAlign: 'right',
+		fontSize: 12
+	},
+	sessionTime: {
+		color: '#fff',
+		fontSize: 8,
+		textAlign: 'right'
+	}
 });
