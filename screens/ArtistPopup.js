@@ -7,7 +7,8 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  Animated
+  Animated,
+  Alert
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { Entypo, EvilIcons } from '@expo/vector-icons';
@@ -15,7 +16,7 @@ import Layout from '../constants/Layout';
 import Footer from '../components/Footer';
 import { likeArtist, removeArtistLike } from '../Config/ExternalURL';
 import Assets from '../constants/Assets';
-import { FavoritesDB } from '../Config/DB';
+import { FavoritesDB, UserDB } from '../Config/DB';
 const URLs = require('../Config/ExternalURL');
 
 export default class ArtistPopup extends React.Component {
@@ -44,32 +45,50 @@ export default class ArtistPopup extends React.Component {
     ]).start();
   }
 
-  _likeArtist(opts) {
-    let newLike = this.state.artist.liked == true ? false : true;
-    this.setState({
-      artist: { ...this.state.artist, liked: newLike }
-    });
-    let reqURL = newLike == true ? likeArtist : removeArtistLike;
-    fetch(reqURL, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, application/xml, text/plain, text/html, *.*',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(opts)
-    }).then(res => {
-      if (res.status == 200) {
-        this.refreshFavorites().then(() => {
-          console.log('refreshing cache');
-          this.props.notifyParent();
-        });
+  componentDidMount() {
+    UserDB.Get().then(userData => {
+      console.log("TCL: HomeScreen -> refreshUserAccount -> userData", userData)
+      if (userData != null) {
+        console.log(userData)
+        userState = { user: { ...userData }, loggedIn: true };
       } else {
-        this.setState({
-          artist: { ...this.state.artist, liked: false }
-        });
+        userState = { loggedIn: false };
       }
+      this.setState({ ...userState });
     });
   }
+
+  _likeArtist(opts) {
+    if(this.state.loggedIn){
+      let newLike = this.state.artist.liked == true ? false : true;
+      this.setState({
+        artist: { ...this.state.artist, liked: newLike }
+      });
+      let reqURL = newLike == true ? likeArtist : removeArtistLike;
+      fetch(reqURL, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(opts)
+      }).then(res => {
+        if (res.status == 200) {
+          this.refreshFavorites().then(() => {
+            console.log('refreshing cache');
+            this.props.notifyParent();
+          });
+        } else {
+          this.setState({
+            artist: { ...this.state.artist, liked: false }
+          });
+        }
+      });
+    } else {
+      Alert.alert('Please login to like this artist.')
+    }
+  }
+
   refreshFavorites() {
     return new Promise((res, rej) => {
       fetch(URLs.getFavorites(this.state.userID))
@@ -138,7 +157,7 @@ export default class ArtistPopup extends React.Component {
           <TouchableOpacity
             style={styles.like}
             onPress={() =>
-              this._likeArtist({ artist_id: artist.artist_id, user_id: 38 })
+              this._likeArtist({ artist_id: artist.artist_id, user_id: this.state.user })
             }
           >
             <Image
