@@ -7,7 +7,7 @@ import {
 	View,
 	TouchableOpacity,
 	ImageBackground,
-	Button
+	BackHandler
 } from 'react-native';
 import moment from 'moment';
 import * as __GStyles from '../styles';
@@ -28,7 +28,7 @@ import {
 	SchedualDB,
 	ArtistsDB,
 	UserDB,
-	FavoritesDB
+	FavoritesDB,
 } from '../Config/DB';
 import Footer from '../components/Footer';
 import {
@@ -39,6 +39,7 @@ import {
 // const start_days = [moment]
 
 export default class HomeScreen extends React.Component {
+	backHandler;
 	__navigationOptions = {
 		title: {
 			text: 'The Home Screen',
@@ -75,6 +76,8 @@ export default class HomeScreen extends React.Component {
 		this.refreshUserAccount = this.refreshUserAccount.bind(this);
 		this.fetchFavorites = this.fetchFavorites.bind(this);
 		this.refreshBalance = this.refreshBalance.bind(this);
+		this.handleBackClick= this.handleBackClick.bind(this);
+
 	}
 
 	async componentDidMount() {
@@ -94,6 +97,7 @@ export default class HomeScreen extends React.Component {
 		);
 		this.fetchFavorites();
 		this.handleSchedule();
+		this.handleBackClick();
 		this._interval = setInterval(() => this.handleSchedule(), 6000);
 		registerForPushNotificationsAsync();
 		scheduleFavoritesNotifications();
@@ -101,6 +105,21 @@ export default class HomeScreen extends React.Component {
 
 	componentWillUnmount() {
 		clearInterval(this._interval);
+		this.backHandler.remove();
+	}
+
+	handleBackClick() {
+		const self = this;
+		this.backHandler = BackHandler.addEventListener('hardwareBackPress', function() {
+			// this.onMainScreen and this.goBack are just examples, you need to use your own implementation here
+			// Typically you would use the navigator here to go to the last state.
+			if(self.state.show_popup) {
+				console.log("popopopopop")
+				self.setState({show_popup: false});
+				return true;
+			}
+			return false;
+		  });
 	}
 
 	handleSchedule() {

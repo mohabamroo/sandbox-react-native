@@ -9,9 +9,11 @@
     "orientation": "portrait",
     "icon": "./assets/images/app-icon.png",
     "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/images/SplashScreen.orig.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff",
+      "width": 200,
+      "height": 200
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -19,11 +21,11 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.sandbox.festival",
+      "bundleIdentifier": "app.sandbox",
       "buildNumber": "1"
     },
     "android": {
-      "package": "com.sandbox.festival",
+      "package": "app.sandbox",
       "versionCode": 1,
       "icon": "./assets/images/app-icon.png",
       "config": {

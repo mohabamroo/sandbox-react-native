@@ -9,7 +9,9 @@ import * as layout from '../constants/Layout';
 
 export class Label extends React.Component{
     render(){
-        const {title, text} = this.props;
+        let {title, text} = this.props;
+        title.text = title.text.toUpperCase();
+        text = text ?  text.toUpperCase() : text;
         const fontSize = title.fontSize ? title.fontSize : layout.default.labelTextSize;
         return (
             <View style={[GStyles.default.pageTitleBox, GStyles.default.LabelsPaddings, {backgroundColor: title.bgColor}]}>
