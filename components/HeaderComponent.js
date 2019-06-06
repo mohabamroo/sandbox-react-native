@@ -99,6 +99,9 @@ export default class HeaderComponent extends Header {
 							if(this.props.backRoute) {
 								this.props.NACController.direct(this.props.backRoute);
 							} else {
+								if(this.props.notifyOnBack) {
+									this.props.notifyOnBack();
+								}
 								this.props.navigation.goBack();
 							}
 						}}

@@ -4,36 +4,25 @@ import {
 	Image,
 	StyleSheet,
 	Text,
-	TouchableOpacity,
-	TouchableHighlight
+	TouchableOpacity
 } from 'react-native';
 
 import LikeButton from './LikeButton';
-import Layout, * as layout from '../constants/Layout';
-import Assets from '../constants/Assets';
+import Layout from '../constants/Layout';
 
 export default class CurrentlyPlaying extends React.Component {
 	constructor(props) {
 		super(props);
-		console.log('TCL: CurrentlyPlaying -> constructor -> props', props);
 		this.state = {
 			active: 'now'
 		};
 	}
 
 	componentDidMount() {
-		// TODO: favorites logic
-		const favoriteArtists = this.props.favorites;
-		const currentArtistID = this.props.artistId;
-		console.log(
-			'TCL: CurrentlyPlaying -> componentDidMount -> favoriteArtists',
-			favoriteArtists
-		);
 	}
 
 	render() {
 		let { sandbox, main, nextM, nextS } = this.props.currentEvents;
-		// console.log(main, sandbox);
 		return (
 			<View style={styles.container}>
 				<View

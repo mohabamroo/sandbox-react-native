@@ -67,17 +67,18 @@ export class Boxes extends React.Component {
             onPress={() => {
               if (this.props.loggedIn)
                 this.props.NACController.direct('Balance', {
-                  user: this.props.user
+                  user: this.props.user,
+                  notifyParentBack: this.props.notifyParentBack
                 });
             }}
             underlayColor={'#f9bb79'}
             activeOpacity={0.6}
             style={[styles.box, { backgroundColor: '#f9bb79' }]}
           >
-            <View style={styles.boxBtn}>
+            <View style={[styles.boxBtn, !this.props.loggedIn?{opacity: 0.5}:{}]}>
               <Image
                 source={assets.default['balanceIco']}
-                style={styles.image}
+                style={[styles.image]}
                 resizeMode="contain"
               />
               <Text style={styles.boxText}>BALANCE</Text>

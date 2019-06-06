@@ -49,6 +49,7 @@ export default class Media extends React.Component {
     }
     var form = new FormData();
     form.append('email', this.state.email);
+    form.append('code', URLs.activationSecret);
     this.setState({ fetching: true });
     fetch(URLs.sendSMS, {
       method: 'POST',
@@ -65,7 +66,6 @@ export default class Media extends React.Component {
           Alert.alert('Invalid Email', newMessage);
           this.setState({ fetching: false });
         } else {
-          const self = this;
           this.setState({
             fetching: false
           });

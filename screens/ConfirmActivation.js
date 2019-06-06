@@ -36,7 +36,8 @@ export default class Media extends React.Component {
     var form = new FormData();
     form.append('email', email);
     form.append('token', code);
-
+    form.append('code', URLs.activationSecret);
+    
     fetch(URLs.verifyCode, {
       method: 'POST',
       headers: {

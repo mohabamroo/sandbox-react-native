@@ -84,7 +84,6 @@ export default class Info extends React.Component {
       })
       .then(apiResponse => {
         if (apiResponse.status == 200) {
-          console.log('refreshing sa7');
           this.setInfoContent(apiResponse.data);
           InfoDB.Set(apiResponse.data);
         } else {
@@ -94,7 +93,7 @@ export default class Info extends React.Component {
       .catch(err => {
         this.setState({ refreshing: false });
         // FIXME: what to do on internet corruption
-        console.log('TCL: News Screen -> componentDidMount -> err', err);
+        console.log('TCL: Info Screen -> componentDidMount -> err', err);
       });
   }
 

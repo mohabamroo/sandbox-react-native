@@ -27,6 +27,7 @@ import { UserDB } from '../Config/DB';
 import Assets from '../constants/Assets';
 import Footer from '../components/Footer';
 import { NavigationController } from '../navigation/index';
+const URLs = require('../Config/ExternalURL');
 
 export default class Media extends React.Component {
   constructor(props) {
@@ -109,7 +110,6 @@ export default class Media extends React.Component {
           imageObj: photo
         });
         console.log('TCL: Media -> photo', photo);
-        console.log('TCL: Media -> onPressIcon -> result.uri', result.uri);
       }
     } else {
       this.getPermissionOne();
@@ -137,7 +137,6 @@ export default class Media extends React.Component {
   }
 
   async sendData() {
-    console.log('TCL: Media -> sendData -> this.state.email', this.state.email);
     if (
       !this.state.yearValue ||
       !this.state.selectedMonthValue ||
@@ -159,11 +158,12 @@ export default class Media extends React.Component {
       }`
     );
 
-    var body = new FormData();
     form.append('client_photo', this.state.imageObj);
     form.append('country', this.state.cca2);
+    form.append('code', URLs.activationSecret);
+
     this.setState({ fetching: true });
-    fetch(`https://nacelle.nbhood.com/api/tickets/${this.state.email}/`, {
+    fetch(`${URLs.registerAccount}/${this.state.email}/`, {
       method: 'PATCH',
       headers: {
         Accept: 'application/json',
@@ -177,7 +177,6 @@ export default class Media extends React.Component {
           Alert.alert('Invalid data', newMessage);
         } else {
           res.json().then(jsonData => {
-            console.log('TCL: Media -> jsonData', jsonData);
             UserDB.Set(jsonData).then(cache => {
               console.log('set user in cache');
               this.props.navigation.state.params.notifyParent();

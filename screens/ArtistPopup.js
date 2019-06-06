@@ -14,7 +14,7 @@ import { Entypo, EvilIcons } from '@expo/vector-icons';
 import Layout from '../constants/Layout';
 import { likeArtist, removeArtistLike } from '../Config/ExternalURL';
 import Assets from '../constants/Assets';
-import { FavoritesDB, UserDB } from '../Config/DB';
+import { FavoritesDB } from '../Config/DB';
 import moment from 'moment';
 const URLs = require('../Config/ExternalURL');
 

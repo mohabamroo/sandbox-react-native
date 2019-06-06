@@ -13,7 +13,6 @@ import moment from 'moment';
 import * as __GStyles from '../styles';
 import { NavigationController } from '../navigation/index';
 import HeaderComponent from '../components/HeaderComponent';
-import Quadrilateral from '../components/Quadrilateral';
 import CurrentlyPlaying from '../components/CurrentlyPlaying';
 import ArtistPopup from './ArtistPopup';
 
@@ -75,6 +74,7 @@ export default class HomeScreen extends React.Component {
 		this.notifyEventStart = this.notifyEventStart.bind(this);
 		this.refreshUserAccount = this.refreshUserAccount.bind(this);
 		this.fetchFavorites = this.fetchFavorites.bind(this);
+		this.refreshBalance = this.refreshBalance.bind(this);
 	}
 
 	async componentDidMount() {
@@ -159,7 +159,6 @@ export default class HomeScreen extends React.Component {
 
 		schedule[day]['SANDBOX Stage'].forEach((artist, index) => {
 			if (currentS[0].artistName === artist.artistName) indexS = index;
-			console.log('HomeScreen->handleSchedule->CurrentS: ', currentS[0].artistName === artist.artistName,currentS[0].artistName ,artist.artistName, indexS  )
 		});
 		if (indexM === schedule[day]['Main Stage'].length - 1) {
 			indexM = null;
@@ -173,8 +172,6 @@ export default class HomeScreen extends React.Component {
 			indexS += 1;
 			nextS = schedule[day]['SANDBOX Stage'][indexS];
 		}
-
-		console.log(nextM, nextS)
 
 		this.setState({
 			currentEvents: {
@@ -216,7 +213,7 @@ export default class HomeScreen extends React.Component {
 		let userState;
 		UserDB.Get().then(userData => {
 			if (userData != null) {
-				userState = { user: { ...userData }, loggedIn: true };
+				userState = { user: { ...userData }, loggedIn: true, showUserBrief: true };
 			} else {
 				userState = { loggedIn: false };
 			}
@@ -274,6 +271,16 @@ export default class HomeScreen extends React.Component {
 		}
 	}
 
+	refreshBalance() {
+		console.log("refreshing balanc component")
+		this.setState({showUserBrief: false});
+		const self = this;
+		setTimeout(() => {
+			console.log("showing again")
+			self.setState({showUserBrief: true})
+		}, 100);
+	}
+
 	render() {
 		return (
 			<ImageBackground
@@ -315,7 +322,9 @@ export default class HomeScreen extends React.Component {
 								</View>
 							</ImageBackground>
 						) : (
+							this.state.showUserBrief &&
 							<UserBrief
+								notifyOnBack={this.refreshBalance}
 								navigation={this.props.navigation}
 								NACController={this.navigationController}
 								user={this.state.user}
@@ -358,6 +367,7 @@ export default class HomeScreen extends React.Component {
 						)}
 						{/** The boxes area */}
 						<Boxes
+							notifyParentBack={this.refreshBalance}
 							user={this.state.user}
 							loggedIn={this.state.loggedIn}
 							NACController={this.navigationController}
