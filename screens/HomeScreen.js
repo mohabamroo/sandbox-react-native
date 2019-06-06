@@ -170,11 +170,12 @@ export default class HomeScreen extends React.Component {
 
 	handleCountdown() {
 		// FIXME: hardcoded for testing
-		const startDateTime = new Date('2019-06-13T13:00:00Z');
-		const endDateTime = new Date('2019-06-16T04:00:00Z');
-		let diff = Math.floor((startDateTime - new Date()) / 1000);
-		const endedFlag = Math.floor((new Date() - endDateTime) / 1000);
-		const self = this;
+		const startDateTime = moment('2019-06-13T13:00:00');
+		const endDateTime = moment('2019-06-16T04:00:00');
+		const today = moment();
+		let currentDate = new Date();
+		let diff = Math.floor((startDateTime - currentDate)/1000);
+		const endedFlag = Math.floor((today - endDateTime / 1000));
 		return {
 			timeState: 2,
 			startDateTime,
@@ -301,7 +302,7 @@ export default class HomeScreen extends React.Component {
 							/>
 						)}
 					</View>
-					<ScrollView style={{ marginTop: -10 }}>
+					<ScrollView>
 						{this.state.countDown > 0 ? (
 							<CountDownTimer
 								duration={this.state.countDown}
@@ -309,23 +310,27 @@ export default class HomeScreen extends React.Component {
 								notifyParent={this.notifyEventStart}
 							/>
 						) : null}
-						{this.state.endedFlag ? (
+						{this.state.endedFlag && (
 							<View style={styles.counter}>
 								<View style={styles.seeYouContainer}>
 									<Text style={styles.seeYou}>SEE YOU NEXT YEAR</Text>
 								</View>
-								{/* {this.state.timeState == 2 && (
-                <View style={styles.seeYouContainer}>
-                  <Text style={styles.dotsText}> ... </Text>
-                </View>
-              )} */}
 							</View>
-						) : null}
+						)}
 						{this.state.currentEvents && (
 							<CurrentlyPlaying
 								currentEvents={this.state.currentEvents}
 								showDetials={artist => this.showDetials(artist)}
 							/>
+						)}
+
+						{!this.state.currentEvents && this.state.countDown < 0
+						&& !this.state.endedFlag &&(
+							<View style={styles.counter}>
+								<View style={styles.seeYouContainer}>
+									<Text style={styles.seeYou}>LET’S PLAY.</Text>
+								</View>
+							</View>
 						)}
 						{/** The boxes area */}
 						<Boxes
@@ -366,14 +371,14 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: 100,
 		zIndex: 3,
-		justifyContent: 'center'
+		justifyContent: 'center',
+		marginBottom: -20
 	},
 	counter: {
 		backgroundColor: '#7bc19e',
 		width: '100%',
 		height: 100,
-		zIndex: 2,
-		marginTop: -10
+		zIndex: 2
 	},
 	beforeActivationTextBG: {
 		backgroundColor: '#fde9d6',

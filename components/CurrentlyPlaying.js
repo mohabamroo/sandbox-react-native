@@ -41,6 +41,7 @@ export default class CurrentlyPlaying extends React.Component {
 					</TouchableOpacity>
 
 					<TouchableOpacity
+						activeOpacity={0.8}
 						onPress={() => this.setState({active: 'next'})}
 						style={{
 							backgroundColor: this.state.active === 'now' ?'#ffec59' :'#e9665d',
@@ -75,7 +76,7 @@ export default class CurrentlyPlaying extends React.Component {
 						flexDirection: 'row',
 						width: '100%',
 						height: 100,
-						backgroundColor: !sandbox ? '#f8b7bb' : '#7bc19e'
+						backgroundColor: 'transparent'
 					}}
 				>
 					{main && (
@@ -178,7 +179,7 @@ export default class CurrentlyPlaying extends React.Component {
 					flexDirection: 'row',
 					width: '100%',
 					height: 100,
-					backgroundColor: !sandbox ? '#f8b7bb' : '#7bc19e'
+					backgroundColor: 'transparent'
 				}}
 			>
 				{this.props.currentEvents.nextM && (
@@ -285,7 +286,6 @@ const styles = StyleSheet.create({
 	container: {
 		height: 150,
 		width: '100%',
-		marginTop: 9
 	},
 	triangle: {
 		position: 'absolute',

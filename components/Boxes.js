@@ -30,7 +30,7 @@ export class Boxes extends React.Component {
                 loggedIn: this.props.loggedIn
               });
             }}
-            underlayColor={'rgb(0, 0, 0, 0.5)'}
+            underlayColor={'#f7e25b'}
             style={[styles.box, { backgroundColor: '#f7e25b' }]}
           >
             <View style={styles.boxBtn}>
@@ -49,7 +49,7 @@ export class Boxes extends React.Component {
                 loggedIn: this.props.loggedIn
               });
             }}
-            underlayColor={'rgb(0,0,0, 0.5)'}
+            underlayColor={'#61A485'}
             activeOpacity={0.6}
             style={[styles.box, { backgroundColor: '#61A485' }]}
           >
@@ -70,7 +70,7 @@ export class Boxes extends React.Component {
                   user: this.props.user
                 });
             }}
-            underlayColor={'rgb(0, 0, 0, 0.5)'}
+            underlayColor={'#f9bb79'}
             activeOpacity={0.6}
             style={[styles.box, { backgroundColor: '#f9bb79' }]}
           >
@@ -89,7 +89,7 @@ export class Boxes extends React.Component {
             onPress={() => {
               this.props.NACController.direct('Media');
             }}
-            underlayColor={'rgb(0, 0, 0, 0.5)'}
+            underlayColor={'#ef69a7'}
             activeOpacity={0.6}
             style={[styles.box, { backgroundColor: '#ef69a7' }]}
           >
@@ -106,9 +106,9 @@ export class Boxes extends React.Component {
             onPress={() => {
               this.props.NACController.direct('Discover');
             }}
-            underlayColor={'rgb(0, 0, 0, 0.5)'}
+            underlayColor={'#cd665d'}
             activeOpacity={0.6}
-            style={[styles.box, { backgroundColor: 'rgb(205, 102, 93)' }]}
+            style={[styles.box, { backgroundColor: '#cd665d' }]}
           >
             <View style={styles.boxBtn}>
               <Image
@@ -123,7 +123,7 @@ export class Boxes extends React.Component {
             onPress={() => {
               this.props.NACController.direct('Info');
             }}
-            underlayColor={'rgb(0, 0, 0, 0.5)'}
+            underlayColor={'#7ac19d'}
             activeOpacity={0.6}
             style={[styles.box, { backgroundColor: '#7ac19d' }]}
           >
