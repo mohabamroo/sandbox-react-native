@@ -7,7 +7,6 @@ import {
   ImageBackground,
   RefreshControl
 } from 'react-native';
-import HeaderComponent from '../components/HeaderComponent';
 import ArtistPopup from './ArtistPopup';
 import Assets from '../constants/Assets';
 import { NavigationController } from '../navigation/index';
@@ -39,7 +38,8 @@ export default class ProfileScreen extends React.Component {
       color1: '#fff',
       color2: '#fff',
       userID: this.props.navigation.state.params.user.id,
-      user: this.props.navigation.state.params.user
+      user: this.props.navigation.state.params.user,
+      notifyOnBack: this.props.navigation.state.params.notifyOnBack
     };
     this._onRefresh = this._onRefresh.bind(this);
   }
@@ -60,7 +60,6 @@ export default class ProfileScreen extends React.Component {
         }
       })
       .catch(err => {
-        console.log('failed to fetch from cache', err);
         this.refreshFavoritesList();
       });
   }
@@ -92,18 +91,18 @@ export default class ProfileScreen extends React.Component {
   }
 
   sortArrayAsc(array, key) {
-   return array.sort(function (a,b) {
-     console.log(b)
-     return a.artist_name < b.artist_name ? -1
-          : b.artist_name < a.artist_name ? 1
-          : 0
-   })
- }
+    return array.sort(function(a, b) {
+      return a.artist_name < b.artist_name
+        ? -1
+        : b.artist_name < a.artist_name
+        ? 1
+        : 0;
+    });
+  }
 
   setArtists(artists) {
     artists = artists.filter(x => x.artist_session);
-    artists = this.sortArrayAsc(artists, 'artist_name')
-    console.log('TCL: ProfileScreen -> setArtists -> artists', artists.length);
+    artists = this.sortArrayAsc(artists, 'artist_name');
     let dsData = this.ds.cloneWithRows(artists);
     this.setState({
       artists: dsData,
@@ -173,6 +172,7 @@ export default class ProfileScreen extends React.Component {
       >
         <View style={[__GStyles.default.container, { paddingTop: 50 }]}>
           <UserBrief
+            notifyOnBack={this.state.notifyOnBack}
             style={{ marginTop: 50 }}
             navigation={this.props.navigation}
             NACController={this.navigationController}

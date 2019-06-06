@@ -55,8 +55,8 @@ export default class Slot extends React.Component {
                   width: 25,
                   height: 25,
                   position: 'absolute',
-                  top: 5,
-                  right: 10,
+                  top: 8,
+                  right: -3,
                   zIndex: 3
                 }}
                 size={14}

@@ -1,4 +1,3 @@
-import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 
 import Loading from '../screens/Loading';
@@ -15,7 +14,6 @@ import Policies from '../screens/Policies';
 
 import FQAs from '../screens/FQAs';
 import Partners from '../screens/Partners';
-import Profile from '../screens/Profile';
 import ProfileScreen from '../screens/Profile';
 import BusRoutes from '../screens/BusRoutes';
 import Activation1 from '../screens/Activation1';
@@ -415,7 +413,7 @@ export default createAppContainer(
       }
     },
     {
-      initialRouteName: 'Home',
+      initialRouteName: 'Loading',
       mode: 'card',
       navigationOptions: {
         animationEnabled: true

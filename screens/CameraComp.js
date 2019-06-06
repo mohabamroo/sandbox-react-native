@@ -20,10 +20,6 @@ export default class CameraPage extends React.Component {
 
   render() {
     const { hasCameraPermission } = this.state;
-    console.log(
-      'TCL: CameraPage -> render -> hasCameraPermission',
-      hasCameraPermission
-    );
 
     if (hasCameraPermission === null) {
       return <View />;

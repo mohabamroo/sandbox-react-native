@@ -136,7 +136,6 @@ export default class Media extends React.Component {
   refreshMedia() {
     fetch(URLs.Media)
       .then(response => {
-        console.log('TCL: News -> refreshNews -> response', response);
         return response.json();
       })
       .then(apiResponse => {

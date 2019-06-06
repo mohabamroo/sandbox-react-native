@@ -1,4 +1,3 @@
-import React from 'react';
 import { Permissions, Notifications } from 'expo';
 import { FavoritesDB } from '../Config/DB';
 import moment from 'moment';

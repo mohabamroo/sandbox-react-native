@@ -1,8 +1,6 @@
 import React from 'react';
 import {
-  ScrollView,
   StyleSheet,
-  Dimensions,
   View,
   TouchableOpacity,
   Text,
@@ -10,7 +8,6 @@ import {
   Image
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
 import * as GStyles from '../styles';
 import Assets from '../constants/Assets';
 import Layout from '../constants/Layout';
@@ -20,28 +17,29 @@ const URLs = require('../Config/ExternalURL');
 export class UserBrief extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { user: this.props.user, qrCode: this.props.user.qr_Serial };
+    this.state = { user: this.props.user, qrCode: this.props.user.qr_serial };
   }
 
   async componentDidMount() {
+    console.log("Mounted user brief")
     let balanceObj = await BalanceDB.Get();
 
     this.setState({ balanceObj });
-    this.pollBalance();
+    this.timer = setInterval(()=> this._onRefresh(), 1000 * 60 * 5);
+    // this.pollBalance();
   }
 
-  pollBalance() {
-    const self = this;
-    setTimeout(() => {
-      console.log('polling');
-      self.pollBalance();
-      self._onRefresh();
-    }, 10000);
+
+
+  componentWillUnmount() {
+    console.log("unmounting user brief");
+    clearInterval(this.timer);
+    this.timer = null; // here...
   }
 
   _onRefresh() {
     let qrCode = this.state.qrCode;
-    qrCode = 111;
+    console.log("TCL: UserBrief -> _onRefresh -> qrCode", qrCode)
     this.setState({ refreshing: true });
     fetch(URLs.getBalance(qrCode))
       .then(response => {
@@ -83,7 +81,7 @@ export class UserBrief extends React.Component {
         >
           <Image
             source={{
-              uri: 'https://nacelle.nbhood.com/' + user.client_photo
+              uri: URLs.imagesRoot + user.client_photo
             }}
             style={{
               width: Layout.window.width / 3,
@@ -127,7 +125,7 @@ export class UserBrief extends React.Component {
                   paddingLeft: 5
                 }}
               >
-                {this.state.balanceObj ? this.state.balanceObj.user.balance : 0}
+                {this.state.balanceObj ? Math.floor((this.state.balanceObj.user.balance)/100) : 0}
                 EGP
               </Text>
             </View>
@@ -171,7 +169,8 @@ export class UserBrief extends React.Component {
             <TouchableOpacity
               onPress={() => {
                 this.props.NACController.direct('Profile', {
-                  user: this.props.user
+                  user: this.props.user,
+                  notifyOnBack: this.props.notifyOnBack
                 });
               }}
             >
@@ -191,6 +190,10 @@ export class UserBrief extends React.Component {
           <View style={[GStyles.default.backButton, styles.floatingLabel]}>
             <TouchableOpacity
               onPress={() => {
+                console.log("TCL: UserBrief -> render -> this.props", this.props.notifyOnBack)
+                if(this.props.notifyOnBack) {
+                  this.props.notifyOnBack();
+                }
                 this.props.navigation.goBack();
               }}
             >

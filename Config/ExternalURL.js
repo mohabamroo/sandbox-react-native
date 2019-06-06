@@ -49,5 +49,8 @@ module.exports = {
     return `http://142.93.161.0:3000/api/users/${qrCode}?access_token=${access_token}`;
   },
   sendSMS: 'https://nacellegrooves.com/api/sms/send',
-  verifyCode: 'https://nacellegrooves.com/api/sms/verify'
+  verifyCode: 'https://nacellegrooves.com/api/sms/verify',
+  registerAccount: 'https://nacellegrooves.com/api/tickets',
+  imagesRoot: 'https://nacellegrooves.com',
+  activationSecret: 'JSBDAZeKd7'
 };

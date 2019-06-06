@@ -1,19 +1,15 @@
 import React from 'react';
 import {
-  ScrollView,
   StyleSheet,
-  Dimensions,
   View,
   TouchableOpacity,
   Text,
-  ImageBackground,
   Image
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
 import * as __GStyles from '../styles';
 import Assets from '../constants/Assets';
-import Layout from '../constants/Layout';
+const URLs = require('../Config/ExternalURL');
 
 export class QrCode extends React.Component {
   constructor(props) {
@@ -32,7 +28,7 @@ export class QrCode extends React.Component {
         <View>
           <Image
             source={{
-              uri: 'https://nacelle.nbhood.com/' + user.qrcode
+              uri: URLs.imagesRoot + user.qrcode
             }}
             style={{
               width: 300,

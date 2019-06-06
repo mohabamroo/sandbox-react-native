@@ -22,7 +22,8 @@ export default class Balance extends React.Component {
     this.state = {
       user: this.props.navigation.state.params.user,
       qrCode: this.props.navigation.state.params.user.qr_serial,
-      balanceObj: {}
+      balanceObj: {},
+      notifyOnBack: this.props.navigation.state.params.notifyParentBack
     };
 
     this._onRefresh = this._onRefresh.bind(this);
@@ -56,12 +57,13 @@ export default class Balance extends React.Component {
       </View>
     );
   }
+
   _onRefresh() {
     let qrCode = this.state.qrCode;
-    // qrCode = 111;
     this.setState({ refreshing: true });
     fetch(URLs.getBalance(qrCode))
       .then(response => {
+        console.log('TCL: Balance -> _onRefresh -> response', response);
         if (response.status == 200) {
           return response.json();
         } else {
@@ -83,14 +85,15 @@ export default class Balance extends React.Component {
   render() {
     let { user } = this.state;
     let { user: balanceUser, orders } = this.state.balanceObj;
-    if (!orders) orders = [];
+    if (!orders)
+    orders = [];
     return (
       <ImageBackground
         resizeMode="repeat"
         source={Assets.bg1}
         style={__GStyles.default.container}
       >
-        <HeaderComponent navigation={this.props.navigation} />
+        <HeaderComponent notifyOnBack={this.state.notifyOnBack} navigation={this.props.navigation} />
         <View style={{ width: '100%', height: 160 }}>
           <View
             style={{
@@ -104,7 +107,7 @@ export default class Balance extends React.Component {
           >
             <Image
               source={{
-                uri: 'https://nacelle.nbhood.com/' + user.client_photo
+                uri: URLs.imagesRoot + user.client_photo
               }}
               style={{
                 width: Layout.window.width / 3,
@@ -125,7 +128,7 @@ export default class Balance extends React.Component {
               <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.balance}>Your balance is:</Text>
                 <Text style={styles.number}>
-                  {balanceUser ? balanceUser.balance : 0} EGP
+                  {balanceUser ? Math.floor((balanceUser.balance)/100) : 0} EGP
                 </Text>
               </View>
             </View>
@@ -163,6 +166,13 @@ export default class Balance extends React.Component {
           }
         >
           {orders.map((order, idx) => this.renderOrderRow(order, idx))}
+          {orders.length == 0 && (
+            <View style={{ padding: 20, justifyContent: 'center' }}>
+              <Text style={{ fontSize: 15, textAlign: 'center', color: '#ccc' }}>
+                You have not done any transactions.
+              </Text>
+            </View>
+          )}
           <View style={styles.footerMargin} />
         </ScrollView>
         <Footer />
