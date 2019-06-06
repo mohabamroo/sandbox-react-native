@@ -58,7 +58,7 @@ export default class LikeButton extends React.Component {
 					FavoritesDB.Set(apiResponse.data).then(() => {
             scheduleFavoritesNotifications();
             this.props.notifyParent();
-          }	
+          }
 					);
 				}
         this.setState({fetchingLike: false})

@@ -29,81 +29,6 @@ export default class ArtistRow extends React.Component {
 		};
 	}
 
-	_handleLikeClick() {
-		console.log('like clicked');
-		this.preventDefault = true;
-		this._likeArtist();
-		this.preventDefault = false;
-	}
-
-	_likeArtist() {
-		if (this.state.loggedIn) {
-			let newLike = this.state.artist.liked == true ? false : true;
-			this.setState({
-				artist: { ...this.state.artist, liked: newLike },
-				fetchingLike: true
-			});
-			let reqURL = newLike == true ? likeArtist : removeArtistLike;
-			let opts = {
-				artist_id: this.state.artist.artist_id,
-				user_id: this.state.user_id
-			};
-			fetch(reqURL, {
-				method: 'POST',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(opts)
-			}).then(res => {
-				if (res.status == 200) {
-					this.setState({
-						fetchingLike: false
-
-					});
-					this.refreshFavorites().then(() => {
-						this.props.notifyParent();
-					});
-				} else {
-					this.setState({
-						artist: { ...this.state.artist, liked: !newLike
-						},
-						fetchingLike: false
-					});
-				}
-			}).catch(err => {
-        console.log("TCL: ArtistRow -> _likeArtist -> err", err)
-				this.setState({
-					artist: { ...this.state.artist, liked: !newLike },
-					fetchingLike: false
-				});
-			})
-		} else {
-      Alert.alert('Please login to like this artist.')
-    }
-	}
-
-	refreshFavorites() {
-		return new Promise((res, rej) => {
-			fetch(URLs.getFavorites(this.state.user_id))
-				.then(response => response.json())
-				.then(apiResponse => {
-					if (apiResponse.Status == 200) {
-						FavoritesDB.Set(apiResponse.data).then(() => res());
-					} else {
-						console.log(
-							'TCL: ArtistPopup -> refreshFavorites -> apiResponse',
-							apiResponse
-						);
-					}
-				})
-				.catch(err => {
-					rej(err);
-					// FIXME: what to do on internet corruption
-				});
-		});
-	}
-
 	handleRowClick() {
 		if (!this.preventDefault) {
 			this.props.click();
@@ -116,22 +41,24 @@ export default class ArtistRow extends React.Component {
 			<TouchableHighlight onPress={() => this.handleRowClick()}>
 				<View key={index} style={styles.artistRow}>
 					<Image source={{ uri: row.artist_image }} loadingIndicatorSource={Assets.artistPlaceholder} style={styles.image} />
-					<LikeButton
-						style={{
-							width: 25,
-							height: 25,
-							position: 'absolute',
-							top: 5,
-							left: 5,
-							zIndex: 3
-						}}
-						size={14}
-						liked={row && row.liked == true}
-						loggedIn={this.state.loggedIn}
-						user_id={this.state.user_id}
-						artist_id={row.artist_id}
-						notifyParent={() => this.props.notifyParent()}
-					/>
+					{this.state.loggedIn && (
+						<LikeButton
+							style={{
+								width: 25,
+								height: 25,
+								position: 'absolute',
+								top: 5,
+								left: 5,
+								zIndex: 3
+							}}
+							size={14}
+							liked={row && row.liked == true}
+							loggedIn={this.state.loggedIn}
+							user_id={this.state.user_id}
+							artist_id={row.artist_id}
+							notifyParent={() => this.props.notifyParent()}
+						/>
+					)}
 					<View
 						style={[
 							styles.triangle,
