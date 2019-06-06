@@ -1,21 +1,29 @@
 import React from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity, TouchableHighlight } from 'react-native';
 
-import * as GStyles from '../styles';
+import LikeButton from './LikeButton';
 import Layout, * as layout from '../constants/Layout';
 import Assets from '../constants/Assets';
 
 export default class CurrentlyPlaying extends React.Component {
-	constructor() {
-			super()
+	constructor(props) {
+			super(props)
+            console.log("TCL: CurrentlyPlaying -> constructor -> props", props)
 			this.state= {
 				active: 'now'
 			}
 	}
 
+	componentDidMount() {
+		// TODO: favorites logic
+		const favoriteArtists = this.props.favorites;
+		const currentArtistID = this.props.artistId;
+        console.log("TCL: CurrentlyPlaying -> componentDidMount -> favoriteArtists", favoriteArtists)
+	}
+
 	render() {
 		let { sandbox, main } = this.props.currentEvents;
-		console.log(main, sandbox);
+		// console.log(main, sandbox);
 		return (
 			<View style={styles.container}>
 				<View
@@ -88,20 +96,26 @@ export default class CurrentlyPlaying extends React.Component {
 									resizeMode={'cover'}
 								/>
 							</View>
-							<TouchableOpacity
-								style={{
-									position: 'absolute',
-									top: 15,
-									left: 10
-								}}
-								onPress={() => console.log('ss')}
-							>
-								<Image
-									source={Assets.heart_off}
-									style={{ width: 20, height: 20 }}
-									resizeMode={'contain'}
-								/>
-							</TouchableOpacity>
+							{
+								this.props.loggedIn && (
+									<LikeButton
+										style={{
+											width: 25,
+											height: 25,
+											position: 'absolute',
+											top: 10,
+											left: 5,
+											zIndex: 3
+										}}
+										size={14}
+										liked={true}
+										loggedIn={this.props.loggedIn}
+										user_id={this.props.user.id}
+										artist_id={main.artistId}
+										notifyParent={() => this.props.notifyParent()}
+									/>
+								)
+							}
 							<View
 								style={[
 									styles.triangle1,

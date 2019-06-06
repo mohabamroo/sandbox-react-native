@@ -53,6 +53,7 @@ export default class HomeScreen extends React.Component {
 			bg: 'circ2'
 		}
 	};
+
 	constructor(props) {
 		super(props);
 		this.navigationController = new NavigationController(this.props.navigation);
@@ -61,7 +62,8 @@ export default class HomeScreen extends React.Component {
 			currentEvents: null,
 			current_artist: false,
 			show_popup: false,
-			loggedIn: false
+			loggedIn: false,
+			favoriteArtists: []
 		};
 		this.handleSchedule = this.handleSchedule.bind(this);
 		// sets state
@@ -72,6 +74,7 @@ export default class HomeScreen extends React.Component {
 		};
 		this.notifyEventStart = this.notifyEventStart.bind(this);
 		this.refreshUserAccount = this.refreshUserAccount.bind(this);
+		this.fetchFavorites = this.fetchFavorites.bind(this);
 	}
 
 	async componentDidMount() {
@@ -89,6 +92,7 @@ export default class HomeScreen extends React.Component {
 				this.handleState();
 			}
 		);
+		this.fetchFavorites();
 		this.handleSchedule();
 		this._interval = setInterval(() => this.handleSchedule(), 6000000);
 		registerForPushNotificationsAsync();
@@ -98,7 +102,6 @@ export default class HomeScreen extends React.Component {
 	componentWillUnmount() {
 		clearInterval(this._interval);
 	}
-
 
 	handleSchedule() {
 		let { schedule } = this.state;
@@ -208,12 +211,7 @@ export default class HomeScreen extends React.Component {
 
 	refreshUserAccount() {
 		let userState;
-		let self = this;
 		UserDB.Get().then(userData => {
-			console.log(
-				'TCL: HomeScreen -> refreshUserAccount -> userData',
-				userData
-			);
 			if (userData != null) {
 				userState = { user: { ...userData }, loggedIn: true };
 			} else {
@@ -246,24 +244,18 @@ export default class HomeScreen extends React.Component {
 		}
 	}
 
-	refreshUserAccount() {
-		let userState;
-		let self = this;
-		UserDB.Get().then(userData => {
-			if (userData != null) {
-				userState = { user: { ...userData }, loggedIn: true };
-			} else {
-				userState = { loggedIn: false };
-			}
-			this.setState({ ...userState });
-		});
+	notifyEventStart() {
+		this.navigationController.direct('Loading');
 	}
 
-	notifyEventStart() {
-		console.log('event start');
-		// this.setState({ countDown: 0 });
-
-		this.navigationController.direct('Loading');
+	async fetchFavorites() {
+		if (this.state.loggedIn) {
+			let favorites = await FavoritesDB.Get();
+			if (favorites) {
+                console.log("TCL: HomeScreen -> fetchFavorites -> favorites", favorites)
+				this.setState({ favoriteArtists: favorites });
+			}
+		}
 	}
 
 	render() {
@@ -331,6 +323,10 @@ export default class HomeScreen extends React.Component {
 						)}
 						{this.state.currentEvents && (
 							<CurrentlyPlaying
+								user={this.state.user}
+								loggedIn={this.state.loggedIn}
+								notifyParent={this.fetchFavorites}
+								favorites={this.state.favoriteArtists}
 								currentEvents={this.state.currentEvents}
 								showDetials={artist => this.showDetials(artist)}
 							/>

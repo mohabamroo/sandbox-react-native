@@ -1,14 +1,11 @@
 import React from 'react';
 import {
-	View,
-	Text,
 	ActivityIndicator,
 	TouchableOpacity,
 	Image
 } from 'react-native';
 
 import Assets from '../constants/Assets';
-import * as layout from '../constants/Layout';
 import { FavoritesDB } from '../Config/DB';
 import { likeArtist, removeArtistLike } from '../Config/ExternalURL';
 
@@ -40,7 +37,6 @@ export default class LikeButton extends React.Component {
 			artist_id: this.props.artist_id,
 			user_id: this.props.user_id
 		};
-    console.log(reqURL, opts)
 		fetch(reqURL, {
 			method: 'POST',
 			headers: {
@@ -49,19 +45,20 @@ export default class LikeButton extends React.Component {
 			},
 			body: JSON.stringify(opts)
 		})
-			.then(response => response.json())
+			.then(response => {
+				return response.json()
+			})
 			.then(apiResponse => {
 				if (apiResponse.Status == 200) {
-          console.log('resssss', apiResponse.data)
 					FavoritesDB.Set(apiResponse.data).then(() =>
 						this.props.notifyParent()
 					);
 				}
-        this.setState({fetchingLike: false})
+        		this.setState({fetchingLike: false})
 			})
 			.catch(err => {
 				console.log('ERROR', err);
-        this.setState({fetchingLike: false})
+        		this.setState({fetchingLike: false})
 			});
 	}
 
