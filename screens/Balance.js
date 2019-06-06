@@ -83,39 +83,7 @@ export default class Balance extends React.Component {
   render() {
     let { user } = this.state;
     let { user: balanceUser, orders } = this.state.balanceObj;
-    if (!orders)
-      orders = [
-        {
-          id: 13,
-          items: [
-            {
-              name: 'Heineken',
-              quantity: 3,
-              price: 9500,
-              subtotal: 28500
-            },
-            {
-              name: 'Stella',
-              quantity: 2,
-              price: 1000,
-              subtotal: 1200
-            }
-          ],
-          total: 34000
-        },
-        {
-          id: 16,
-          items: [
-            {
-              name: 'Vodka',
-              quantity: 1,
-              price: 1200,
-              subtotal: 1200
-            }
-          ],
-          total: 3000
-        }
-      ];
+    if (!orders) orders = [];
     return (
       <ImageBackground
         resizeMode="repeat"
