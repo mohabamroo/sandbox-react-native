@@ -22,7 +22,10 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.sandbox",
-      "buildNumber": "1"
+      "buildNumber": "1",
+      "config": {
+        "googleMapsApiKey": "AIzaSyBbCT3VbLTN04rhXpzuJ6_WUqwjJoNBeTg"
+      }
     },
     "android": {
       "package": "app.sandbox",
