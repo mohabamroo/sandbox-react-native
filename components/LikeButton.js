@@ -4,6 +4,9 @@ import {
 	TouchableOpacity,
 	Image
 } from 'react-native';
+import {
+	scheduleFavoritesNotifications
+} from './Notifications';
 
 import Assets from '../constants/Assets';
 import { FavoritesDB } from '../Config/DB';
@@ -50,8 +53,10 @@ export default class LikeButton extends React.Component {
 			})
 			.then(apiResponse => {
 				if (apiResponse.Status == 200) {
-					FavoritesDB.Set(apiResponse.data).then(() =>
-						this.props.notifyParent()
+					FavoritesDB.Set(apiResponse.data).then(() => {
+            scheduleFavoritesNotifications();
+            this.props.notifyParent();
+          }
 					);
 				}
         		this.setState({fetchingLike: false})

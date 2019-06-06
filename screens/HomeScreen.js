@@ -94,7 +94,7 @@ export default class HomeScreen extends React.Component {
 		);
 		this.fetchFavorites();
 		this.handleSchedule();
-		this._interval = setInterval(() => this.handleSchedule(), 6000000);
+		this._interval = setInterval(() => this.handleSchedule(), 6000);
 		registerForPushNotificationsAsync();
 		scheduleFavoritesNotifications();
 	}
@@ -159,19 +159,22 @@ export default class HomeScreen extends React.Component {
 
 		schedule[day]['SANDBOX Stage'].forEach((artist, index) => {
 			if (currentS[0].artistName === artist.artistName) indexS = index;
+			console.log('HomeScreen->handleSchedule->CurrentS: ', currentS[0].artistName === artist.artistName,currentS[0].artistName ,artist.artistName, indexS  )
 		});
-		if (indexM === currentM.length - 1) {
+		if (indexM === schedule[day]['Main Stage'].length - 1) {
 			indexM = null;
 		} else {
 			indexM += 1;
 			nextM = schedule[day]['Main Stage'][indexM];
 		}
-		if (indexS === currentS.length - 1) {
+		if (indexS === schedule[day]['SANDBOX Stage'].length - 1) {
 			indexS = null;
 		} else {
 			indexS += 1;
 			nextS = schedule[day]['SANDBOX Stage'][indexS];
 		}
+
+		console.log(nextM, nextS)
 
 		this.setState({
 			currentEvents: {
@@ -250,11 +253,24 @@ export default class HomeScreen extends React.Component {
 
 	async fetchFavorites() {
 		if (this.state.loggedIn) {
-			let favorites = await FavoritesDB.Get();
-			if (favorites) {
-                console.log("TCL: HomeScreen -> fetchFavorites -> favorites", favorites)
-				this.setState({ favoriteArtists: favorites });
-			}
+			let initialArtists = this.state.artists;
+			FavoritesDB.Get().then(artists => {
+				initialArtists.forEach((artist, index) => {
+					initialArtists[index]['liked'] = false;
+				});
+				if (artists) {
+					artists.forEach(likedArtist => {
+						if (likedArtist && likedArtist.artist_id) {
+							initialArtists.forEach((artist, index) => {
+								if (artist.artist_id == likedArtist.artist_id) {
+									initialArtists[index]['liked'] = true;
+								}
+							});
+						}
+					});
+				}
+				this.setState({ artists: initialArtists, favoriteArtists: artists });
+			});
 		}
 	}
 
@@ -360,6 +376,7 @@ export default class HomeScreen extends React.Component {
 							artist={this.state.current_artist}
 							color1={'#7bc19e'}
 							color2={'#f8b7bb'}
+							notifyParent={() => this.fetchFavorites()}
 							onClose={() => this.setState({ show_popup: false })}
 						/>
 					)}

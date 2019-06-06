@@ -22,6 +22,8 @@ import { AntDesign } from '@expo/vector-icons';
 import Assets from '../constants/Assets';
 import ArtistPopup from './ArtistPopup';
 import Footer from '../components/Footer';
+import LikeButton from '../components/LikeButton';
+import Slot from '../components/Slot';
 
 import * as __GStyles from '../styles';
 import { SchedualDB, ArtistsDB, UserDB, FavoritesDB } from '../Config/DB';
@@ -40,6 +42,7 @@ export default class Schedule extends React.Component {
 			colors1: ['#fabb79', '#008691', '#e9665d', '#60a484'],
 			colors2: ['#60a484', '#f069a7', '#fabb79', '#ffe958'],
 			colorIdx: 0,
+			artists: [],
 			loggedIn: this.props.navigation.state.params.loggedIn,
 			user: this.props.navigation.state.params.user
 		};
@@ -90,18 +93,13 @@ export default class Schedule extends React.Component {
 	async fetchArtists() {
 		let artists = await ArtistsDB.Get();
 		this.setState({ artists });
-		this.fetchFavorites()
+		this.fetchFavorites();
 	}
 
 	async fetchCategories() {
 		let scheduleRes = await SchedualDB.Get();
 		this.setSchedule(scheduleRes);
 		this.refreshSchedule();
-	}
-
-	emptySpace(width, array) {
-		array.push(<View style={{ width, height: 150 }} />);
-		return array;
 	}
 
 	renderTimeslot(current, array) {
@@ -132,9 +130,12 @@ export default class Schedule extends React.Component {
 	}
 
 	fetchFavorites() {
-		if(this.state.loggedIn){
+		if (this.state.loggedIn) {
 			let initialArtists = this.state.artists;
 			FavoritesDB.Get().then(artists => {
+				initialArtists.forEach((artist, index) => {
+					initialArtists[index]['liked'] = false;
+				});
 				if (artists) {
 					artists.forEach(likedArtist => {
 						if (likedArtist && likedArtist.artist_id) {
@@ -145,125 +146,10 @@ export default class Schedule extends React.Component {
 							});
 						}
 					});
-					// changing state
-					console.log('Changing state');
-					this.setState({ artists: initialArtists });
 				}
+				this.setState({ artists: initialArtists });
 			});
 		}
-	}
-
-	_handleLikeClick(artist) {
-    console.log('like clicked');
-    this.preventDefault = true;
-    this._likeArtist(artist);
-    this.preventDefault = false;
-  }
-
-	_likeArtist(artist) {
-		if(this.state.loggedIn){
-			let newLike = artist.liked == true ? false : true;
-			let reqURL = artist.liked == true ? likeArtist : removeArtistLike;
-			let opts = {
-				artist_id: artist.artist_id,
-				user_id: this.state.user.id
-			};
-			fetch(reqURL, {
-				method: 'POST',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(opts)
-			}).then(res => {
-				if (res.status == 200) {
-					this.fetchFavorites()
-				} else {
-					Alert.alert('Please make sure that you are connnected to the internet.')
-				}
-			});
-		}else {
-			Alert.alert('Please login to like the artist.')
-		}
-
-	}
-
-	sessionSpace(width, array, item, color) {
-		array.push(
-			<TouchableHighlight
-				onPress={() => {
-					current_artist = this.state.artists.filter(
-						x => x.artist_id == item.artistId
-					)[0];
-					this.setState({
-						show_popup: true,
-						current_artist
-					});
-				}}
-			>
-				<View
-					style={{
-						flexDirection: 'row',
-						width: width,
-						height: 150,
-						overflow: 'hidden',
-						position: 'relative',
-						backgroundColor: color
-					}}
-				>
-					<View style={{ width: width - 150 }} />
-
-					<ImageBackground
-						source={{ uri: item.artistImage }}
-						style={{
-							width: 150,
-							height: 150,
-							backgroundColor: '#fff'
-						}}
-					>
-					{this.state.loggedIn && (
-						<TouchableOpacity
-							style={{
-								width: 25,
-								height: 25,
-								position: 'absolute',
-								top: 5,
-								right: 10,
-								zIndex: 3
-							}}
-							activeOpacity={0.5}
-							onPress={() => this._handleLikeClick(item)}
-						>
-							<Image
-								source={
-									item.liked == true ? Assets.heart_on : Assets.heart_off
-								}
-								style={{
-									width: 14,
-									height: 14
-								}}
-								resizeMode={'contain'}
-							/>
-						</TouchableOpacity>
-					)}
-
-					</ImageBackground>
-
-					<View
-						style={[
-							styles.triangle,
-							styles.triangleDown,
-							styles.nameArea,
-							{ borderBottomColor: color, position: 'absolute', right: 75 }
-						]}
-					/>
-					<View style={styles.textArea}>
-						<Text style={styles.name}>{item.artistName}</Text>
-					</View>
-				</View>
-			</TouchableHighlight>
-		);
-		return array;
 	}
 
 	autoScroll(day) {
@@ -291,8 +177,7 @@ export default class Schedule extends React.Component {
 		let slots = Math.abs(now.diff(begin, 'minutes')) / 30;
 		let scrollValue = (slots - 2) * interval;
 		let timer = (slots + 0.45) * interval;
-		let max =
-			this.state[day].timeslots.length * interval  - Layout.window.width;
+		let max = this.state[day].timeslots.length * interval - Layout.window.width;
 		this.setState({ timer: Math.max(0, timer) });
 
 		this.scrollView.scrollTo({
@@ -346,7 +231,7 @@ export default class Schedule extends React.Component {
 			// mainStage slots
 			if (beginMain.isAfter(begin)) {
 				let difference = Math.abs(beginMain.diff(begin, 'minutes')) / 15;
-				mainSlots = this.emptySpace((difference * interval) / 2, mainSlots);
+				mainSlots.push({ width: (difference * interval) / 2, empty: true });
 			}
 			for (; i < mainStage.length; i++) {
 				let currentBegin, prevEnd, currentEnd;
@@ -361,28 +246,26 @@ export default class Schedule extends React.Component {
 				if (i == 0 || currentBegin.isSame(prevEnd)) {
 					let difference =
 						Math.abs(currentEnd.diff(currentBegin, 'minutes')) / 15;
-					mainSlots = this.sessionSpace(
-						(difference * interval) / 2,
-						mainSlots,
-						mainStage[i],
-						'#f8b7bb'
-					);
+					mainSlots.push({
+						width: (difference * interval) / 2,
+						item: mainStage[i],
+						color: '#f8b7bb'
+					});
 				} else {
 					let difference = Math.abs(currentBegin.diff(prevEnd, 'minutes')) / 15;
-					mainSlots = this.emptySpace((difference * interval) / 2, mainSlots);
+					mainSlots.push({ width: (difference * interval) / 2, empty: true });
 					difference = Math.abs(currentBegin.diff(currentEnd, 'minutes')) / 15;
-					mainSlots = this.sessionSpace(
-						(difference * interval) / 2,
-						mainSlots,
-						mainStage[i],
-						'#f8b7bb'
-					);
+					mainSlots.push({
+						width: (difference * interval) / 2,
+						item: mainStage[i],
+						color: '#f8b7bb'
+					});
 				}
 			}
 			// sandBox slots
 			if (beginSand.isAfter(begin)) {
 				let difference = beginSand.diff(begin, 'minutes') / 15;
-				sandSlots = this.emptySpace((difference * interval) / 2, sandSlots);
+				sandSlots.push({ width: (difference * interval) / 2, empty: true });
 			}
 			for (; j < sandBox.length; j++) {
 				let currentBegin, prevEnd, currentEnd;
@@ -396,22 +279,20 @@ export default class Schedule extends React.Component {
 				}
 				if (j == 0 || currentBegin.isSame(prevEnd)) {
 					let difference = currentEnd.diff(currentBegin, 'minutes') / 15;
-					sandSlots = this.sessionSpace(
-						(difference * interval) / 2,
-						sandSlots,
-						sandBox[j],
-						'rgb(123,	192	,158)'
-					);
+					sandSlots.push({
+						width: (difference * interval) / 2,
+						item: sandBox[j],
+						color: 'rgb(123,	192	,158)'
+					});
 				} else {
 					let difference = currentBegin.diff(prevEnd, 'minutes') / 15;
-					sandSlots = this.emptySpace((difference * interval) / 2, sandSlots);
+					sandSlots.push({ width: (difference * interval) / 2, empty: true });
 					difference = currentBegin.diff(currentEnd, 'minutes') / 15;
-					sandSlots = this.sessionSpace(
-						(difference * interval) / 2,
-						sandSlots,
-						sandBox[j],
-						'rgb(123,	192	,158)'
-					);
+					sandSlots.push({
+						width: (difference * interval) / 2,
+						item: sandBox[j],
+						color: 'rgb(123,	192	,158)'
+					});
 				}
 			}
 
@@ -563,19 +444,19 @@ export default class Schedule extends React.Component {
 	}
 
 	render() {
+		let { loggedIn } = this.state
 		return (
 			<ImageBackground
 				style={__GStyles.default.container}
 				source={require('../assets/images/patterns/bg2b.png')}
 				resizeMode={'repeat'}
 			>
-
-					<HeaderComponent navigation={this.props.navigation} />
-					<ImageBackground
-						style={__GStyles.default.container}
-						source={require('../assets/images/bgschedul.png')}
-						resizeMode={'cover'}
-					>
+				<HeaderComponent navigation={this.props.navigation} />
+				<ImageBackground
+					style={__GStyles.default.container}
+					source={require('../assets/images/bgschedul.png')}
+					resizeMode={'cover'}
+				>
 					{this.renderTabs()}
 					<ScrollView
 						ref={element => (this.scrollView = element)}
@@ -590,15 +471,45 @@ export default class Schedule extends React.Component {
 						</View>
 						<View style={{ flexDirection: 'row', marginLeft: interval / 2 }}>
 							{this.state.mainSlots &&
-								this.state.mainSlots.map((item, index) => {
-									return item;
-								})}
+								this.state.mainSlots.map((object, index) => (
+									<Slot
+										onPress={() => {
+											current_artist = this.state.artists.filter(
+												x => x.artist_id == object.item.artistId
+											)[0];
+											this.setState({
+												show_popup: true,
+												current_artist
+											});
+										}}
+										artists={this.state.artists}
+										user_id={loggedIn? this.state.user.id: null}
+										loggedIn={this.state.loggedIn}
+										notifyParent={() => this.fetchFavorites()}
+										{...object}
+									/>
+								))}
 						</View>
 						<View style={{ flexDirection: 'row', marginLeft: interval / 2 }}>
 							{this.state.sandSlots &&
-								this.state.sandSlots.map((item, index) => {
-									return item;
-								})}
+								this.state.sandSlots.map((object, index) => (
+									<Slot
+										onPress={() => {
+											current_artist = this.state.artists.filter(
+												x => x.artist_id == object.item.artistId
+											)[0];
+											this.setState({
+												show_popup: true,
+												current_artist
+											});
+										}}
+										artists={this.state.artists}
+										user_id={loggedIn? this.state.user.id: null}
+										loggedIn={this.state.loggedIn}
+										notifyParent={() => this.fetchFavorites()}
+										{...object}
+									/>
+								))}
 						</View>
 						{this.state.today === this.state.active && (
 							<View
@@ -652,19 +563,25 @@ export default class Schedule extends React.Component {
 							transform: [{ rotate: '-3deg' }]
 						}}
 					/>
-					</ImageBackground>
-					{this.state.current_artist &&
-						this.state.show_popup && (
-							<ArtistPopup
-								loggedIn={this.state.loggedIn}
-								user={this.state.user}
-								artist={this.state.current_artist}
-								color1={this.state.colors1[this.state.colorIdx]}
-								color2={this.state.colors2[this.state.colorIdx]}
-								notifyParent={() => this.fetchFavorites()}
-								onClose={() => this.setState({ show_popup: false, colorIdx: this.state.colorIdx + 1 % this.state.colors1.length })}
-							/>
-						)}
+				</ImageBackground>
+				{this.state.current_artist &&
+					this.state.show_popup && (
+						<ArtistPopup
+							loggedIn={this.state.loggedIn}
+							user={loggedIn? this.state.user: null}
+							artist={this.state.current_artist}
+							color1={this.state.colors1[this.state.colorIdx]}
+							color2={this.state.colors2[this.state.colorIdx]}
+							notifyParent={() => this.fetchFavorites()}
+							onClose={() =>
+								this.setState({
+									show_popup: false,
+									colorIdx:
+										this.state.colorIdx + (1 % this.state.colors1.length)
+								})
+							}
+						/>
+					)}
 				<Footer />
 			</ImageBackground>
 		);

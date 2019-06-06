@@ -123,10 +123,8 @@ export default class LinksScreen extends React.Component {
 							});
 						}
 					});
-					// changing state
-					console.log('Changing state');
-					this.setState({ artists: initialArtists });
 				}
+				this.setState({ artists: initialArtists });
 			});
 		}
 	}

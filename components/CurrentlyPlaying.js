@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, TouchableHighlight } from 'react-native';
+import {
+	View,
+	Image,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	TouchableHighlight
+} from 'react-native';
 
 import LikeButton from './LikeButton';
 import Layout, * as layout from '../constants/Layout';
@@ -7,22 +14,25 @@ import Assets from '../constants/Assets';
 
 export default class CurrentlyPlaying extends React.Component {
 	constructor(props) {
-			super(props)
-            console.log("TCL: CurrentlyPlaying -> constructor -> props", props)
-			this.state= {
-				active: 'now'
-			}
+		super(props);
+		console.log('TCL: CurrentlyPlaying -> constructor -> props', props);
+		this.state = {
+			active: 'now'
+		};
 	}
 
 	componentDidMount() {
 		// TODO: favorites logic
 		const favoriteArtists = this.props.favorites;
 		const currentArtistID = this.props.artistId;
-        console.log("TCL: CurrentlyPlaying -> componentDidMount -> favoriteArtists", favoriteArtists)
+		console.log(
+			'TCL: CurrentlyPlaying -> componentDidMount -> favoriteArtists',
+			favoriteArtists
+		);
 	}
 
 	render() {
-		let { sandbox, main } = this.props.currentEvents;
+		let { sandbox, main, nextM, nextS } = this.props.currentEvents;
 		// console.log(main, sandbox);
 		return (
 			<View style={styles.container}>
@@ -34,70 +44,154 @@ export default class CurrentlyPlaying extends React.Component {
 						backgroundColor: 'white'
 					}}
 				>
-
-					<TouchableOpacity
-						onPress={() => this.setState({active: 'now'})}
+					<View
 						style={{
-							backgroundColor: this.state.active === 'now' ? '#e9665d':'#ffec59',
+							backgroundColor:
+								this.state.active === 'now' ? '#e9665d' : '#ffec59',
 							width: '40%',
 							alignItems: 'center',
 							flexDirection: 'row'
 						}}
 					>
-						<View style={[styles.play, {borderBottomColor: this.state.active === 'now' ? '#ffec59':'#e9665d'}]} />
-						<Text style={[{ color: '#e9665d', fontSize: 12 },  this.state.active === 'now' ?{color:  '#ffec59', fontWeight: 'bold'}:{}]}>NOW PLAYING</Text>
-					</TouchableOpacity>
-
-					<TouchableOpacity
-						activeOpacity={0.8}
-						onPress={() => this.setState({active: 'next'})}
-						style={{
-							backgroundColor: this.state.active === 'now' ?'#ffec59' :'#e9665d',
-							width: '60%',
-							alignItems: 'center',
-							flexDirection: 'row'
-						}}
-					>
-						<View
-							style={[
-								styles.play,
-								{ borderBottomColor: this.state.active === 'now' ? '#e9665d':'#ffec59', marginRight: 4 }
-							]}
-						/>
-						<View
+						<TouchableOpacity
+							onPress={() => this.setState({ active: 'now' })}
 							style={{
-								backgroundColor: this.state.active === 'now' ? '#e9665d':'#ffec59',
-								height: 10,
-								width: 2,
-								marginRight: 10
+								alignItems: 'center',
+								flexDirection: 'row'
 							}}
-						/>
-						<Text style={[{ color: '#e9665d', fontSize: 12 }, this.state.active !== 'now' ? {color:  '#ffec59', fontWeight: 'bold'}:{} ]}>
-							PLAYING NEXT
-						</Text>
-					</TouchableOpacity>
-					<View style={[styles.triangle, {borderBottomColor: this.state.active === 'now' ?'#ffec59' :'#e9665d'}]}/>
+						>
+							<View
+								style={[
+									styles.play,
+									{
+										borderBottomColor:
+											this.state.active === 'now' ? '#ffec59' : '#e9665d'
+									}
+								]}
+							/>
+							<Text
+								style={[
+									{ color: '#e9665d', fontSize: 12 },
+									this.state.active === 'now'
+										? { color: '#ffec59', fontWeight: 'bold', fontSize: 14 }
+										: {}
+								]}
+							>
+								NOW PLAYING
+							</Text>
+						</TouchableOpacity>
+					</View>
+
+					<View
+						style={[
+							{
+								backgroundColor:
+									this.state.active === 'now' ? '#ffec59' : '#e9665d',
+								width: '60%',
+								alignItems: 'center',
+								flexDirection: 'row'
+							},
+							!nextM && !nextS
+								? {
+										backgroundColor: '#dbd5a2'
+								  }
+								: {}
+						]}
+					>
+						<TouchableOpacity
+							activeOpacity={0.4}
+							disabled={!nextM && !nextS}
+							onPress={() => this.setState({ active: 'next' })}
+							style={{ flexDirection: 'row', alignItems: 'center' }}
+						>
+							<View
+								style={[
+									styles.play,
+									{
+										borderBottomColor:
+											this.state.active === 'now' ? '#e9665d' : '#ffec59',
+										marginRight: 4
+									},
+									!nextM && !nextS
+										? {
+												borderBottomColor: '#b1a09f'
+										  }
+										: {}
+								]}
+							/>
+							<View
+								style={[
+									{
+										backgroundColor:
+											this.state.active === 'now' ? '#e9665d' : '#ffec59',
+										height: 10,
+										width: 2,
+										marginRight: 10
+									},
+									!nextM && !nextS
+										? {
+												backgroundColor: '#b1a09f'
+										  }
+										: {}
+								]}
+							/>
+
+							<Text
+								style={[
+									{ color: '#e9665d', fontSize: 12 },
+									this.state.active !== 'now'
+										? { color: '#ffec59', fontWeight: 'bold', fontSize: 14 }
+										: {},
+									!nextM && !nextS
+										? {
+												color: '#b1a09f'
+										  }
+										: {}
+								]}
+							>
+								PLAYING NEXT
+							</Text>
+						</TouchableOpacity>
+					</View>
+
+					<View
+						style={[
+							styles.triangle,
+							{
+								borderBottomColor:
+									this.state.active === 'now' ? '#ffec59' : '#e9665d'
+							},
+							!nextM && !nextS
+								? {
+										borderBottomColor: '#dbd5a2'
+								  }
+								: {}
+						]}
+					/>
 				</View>
 				{this.state.active === 'now' && (
-				<View
-					style={{
-						flexDirection: 'row',
-						width: '100%',
-						height: 100,
-						backgroundColor: 'transparent'
-					}}
-				>
-					{main && (
-						<TouchableOpacity activeOpacity={0.9} onPress={() => this.props.showDetials(main)} style={{ width: '50%', height: '100%' }}>
-							<View>
-								<Image
-									source={{ uri: main.artistImage }}
-									style={styles.image}
-									resizeMode={'cover'}
-								/>
-							</View>
-							{
-								this.props.loggedIn && (
+					<View
+						style={{
+							flexDirection: 'row',
+							width: '100%',
+							height: 100,
+							backgroundColor: 'transparent'
+						}}
+					>
+						{main && (
+							<TouchableOpacity
+								activeOpacity={0.9}
+								onPress={() => this.props.showDetials(main)}
+								style={{ width: '50%', height: '100%' }}
+							>
+								<View>
+									<Image
+										source={{ uri: main.artistImage }}
+										style={styles.image}
+										resizeMode={'cover'}
+									/>
+								</View>
+								{this.props.loggedIn && (
 									<LikeButton
 										style={{
 											width: 25,
@@ -108,189 +202,213 @@ export default class CurrentlyPlaying extends React.Component {
 											zIndex: 3
 										}}
 										size={14}
-										liked={true}
+										liked={
+											this.props.favorites &&
+											this.props.favorites.filter(
+												x => x.artist_id == main.artistId
+											).length > 0
+										}
 										loggedIn={this.props.loggedIn}
 										user_id={this.props.user.id}
 										artist_id={main.artistId}
 										notifyParent={() => this.props.notifyParent()}
 									/>
-								)
-							}
-							<View
-								style={[
-									styles.triangle1,
-									{
-										position: 'absolute',
-										top: 0,
-										right: 0,
-										borderBottomColor: '#f8b7bb'
-									}
-								]}
-							/>
-							<Text
-								style={styles.artistName}
-							>
-								{main.artistName}
-							</Text>
-							<Text
-								style={styles.stageName}
-							>
-								MAIN STAGE
-							</Text>
-						</TouchableOpacity>
-					)}
-					{sandbox && (
-						<TouchableOpacity activeOpacity={0.9} onPress={() => this.props.showDetials(sandbox)} style={{ width: '50%', height: '100%' }}>
-							<View >
-								<Image
-									source={{ uri: sandbox.artistImage }}
-									style={styles.image}
-									resizeMode={'cover'}
+								)}
+								<View
+									style={[
+										styles.triangle1,
+										{
+											position: 'absolute',
+											top: 0,
+											right: 0,
+											borderBottomColor: '#f8b7bb'
+										}
+									]}
 								/>
-							</View>
-							<TouchableOpacity
-								style={{
-									position: 'absolute',
-									top: 15,
-									left: 10
-								}}
-								onPress={() => console.log('ss')}
-							>
-								<Image
-									source={Assets.heart_off}
-									style={{ width: 20, height: 20 }}
-									resizeMode={'contain'}
-								/>
+								<Text style={styles.artistName}>{main.artistName}</Text>
+								<Text style={styles.stageName}>MAIN STAGE</Text>
 							</TouchableOpacity>
-							<View
-								style={[
-									styles.triangle1,
-									{
-										position: 'absolute',
-										top: 0,
-										right: 0,
-										borderBottomColor: '#7bc19e'
+						)}
+						{sandbox && (
+							<TouchableOpacity
+								activeOpacity={0.9}
+								onPress={() => this.props.showDetials(sandbox)}
+								style={{ width: '50%', height: '100%' }}
+							>
+								<View>
+									<Image
+										source={{ uri: sandbox.artistImage }}
+										style={styles.image}
+										resizeMode={'cover'}
+									/>
+								</View>
+								{this.props.loggedIn && (
+									<LikeButton
+										style={{
+											width: 25,
+											height: 25,
+											position: 'absolute',
+											top: 10,
+											left: 5,
+											zIndex: 3
+										}}
+										size={14}
+										liked={
+											this.props.favorites &&
+											this.props.favorites.filter(
+												x => x.artist_id == sandbox.artistId
+											).length > 0
+										}
+										loggedIn={this.props.loggedIn}
+										user_id={this.props.user.id}
+										artist_id={sandbox.artistId}
+										notifyParent={() => this.props.notifyParent()}
+									/>
+								)}
+								<View
+									style={[
+										styles.triangle1,
+										{
+											position: 'absolute',
+											top: 0,
+											right: 0,
+											borderBottomColor: '#7bc19e'
+										}
+									]}
+								/>
+								<Text style={styles.artistName}>{sandbox.artistName}</Text>
+								<Text style={styles.stageName}>SANDBOX STAGE</Text>
+							</TouchableOpacity>
+						)}
+					</View>
+				)}
+				{this.state.active === 'next' &&
+					(this.props.currentEvents.nextM ||
+						this.props.currentEvents.nextS) && (
+						<View
+							style={{
+								flexDirection: 'row',
+								width: '100%',
+								height: 100,
+								backgroundColor: 'transparent'
+							}}
+						>
+							{this.props.currentEvents.nextM && (
+								<TouchableOpacity
+									activeOpacity={0.9}
+									onPress={() =>
+										this.props.showDetials(this.props.currentEvents.nextM)
 									}
-								]}
-							/>
-							<Text
-								style={styles.artistName}
-							>
-								{sandbox.artistName}
-							</Text>
-							<Text
-								style={styles.stageName}
-							>
-								SANDBOX STAGE
-							</Text>
-						</TouchableOpacity>
+									style={{ width: '50%', height: '100%' }}
+								>
+									<View>
+										<Image
+											source={{
+												uri: this.props.currentEvents.nextM.artistImage
+											}}
+											style={styles.image}
+											resizeMode={'cover'}
+										/>
+									</View>
+									{this.props.loggedIn && (
+										<LikeButton
+											style={{
+												width: 25,
+												height: 25,
+												position: 'absolute',
+												top: 10,
+												left: 5,
+												zIndex: 3
+											}}
+											size={14}
+											liked={
+												this.props.favorites &&
+												this.props.favorites.filter(
+													x => x.artist_id == nextM.artistId
+												).length > 0
+											}
+											loggedIn={this.props.loggedIn}
+											user_id={this.props.user.id}
+											artist_id={nextM.artistId}
+											notifyParent={() => this.props.notifyParent()}
+										/>
+									)}
+									<View
+										style={[
+											styles.triangle1,
+											{
+												position: 'absolute',
+												top: 0,
+												right: 0,
+												borderBottomColor: '#f8b7bb'
+											}
+										]}
+									/>
+									<Text style={styles.artistName}>
+										{this.props.currentEvents.nextM.artistName}
+									</Text>
+									<Text style={styles.stageName}>MAIN STAGE</Text>
+								</TouchableOpacity>
+							)}
+							{this.props.currentEvents.nextS && (
+								<TouchableOpacity
+									activeOpacity={0.9}
+									onPress={() =>
+										this.props.showDetials(this.props.currentEvents.nextS)
+									}
+									style={{ width: '50%', height: '100%' }}
+								>
+									<View>
+										<Image
+											source={{
+												uri: this.props.currentEvents.nextS.artistImage
+											}}
+											style={styles.image}
+											resizeMode={'cover'}
+										/>
+									</View>
+									{this.props.loggedIn && (
+										<LikeButton
+											style={{
+												width: 25,
+												height: 25,
+												position: 'absolute',
+												top: 10,
+												left: 5,
+												zIndex: 3
+											}}
+											size={14}
+											liked={
+												this.props.favorites &&
+												this.props.favorites.filter(
+													x => x.artist_id == nextS.artistId
+												).length > 0
+											}
+											loggedIn={this.props.loggedIn}
+											user_id={this.props.user.id}
+											artist_id={nextS.artistId}
+											notifyParent={() => this.props.notifyParent()}
+										/>
+									)}
+									<View
+										style={[
+											styles.triangle1,
+											{
+												position: 'absolute',
+												top: 0,
+												right: 0,
+												borderBottomColor: '#7bc19e'
+											}
+										]}
+									/>
+									<Text style={styles.artistName}>
+										{this.props.currentEvents.nextS.artistName}
+									</Text>
+									<Text style={styles.stageName}>SANDBOX STAGE</Text>
+								</TouchableOpacity>
+							)}
+						</View>
 					)}
-				</View>
-			)}
-			{this.state.active === 'next' && (this.props.currentEvents.nextM || this.props.currentEvents.nextS) &&(
-			<View
-				style={{
-					flexDirection: 'row',
-					width: '100%',
-					height: 100,
-					backgroundColor: 'transparent'
-				}}
-			>
-				{this.props.currentEvents.nextM && (
-					<TouchableOpacity  activeOpacity={0.9} onPress={() => this.props.showDetials(this.props.currentEvents.nextM)} style={{ width: '50%', height: '100%' }}>
-						<View>
-							<Image
-								source={{ uri: this.props.currentEvents.nextM.artistImage }}
-								style={styles.image}
-								resizeMode={'cover'}
-							/>
-						</View>
-						<TouchableOpacity
-							style={{
-								position: 'absolute',
-								top: 15,
-								left: 10
-							}}
-							onPress={() => console.log('ss')}
-						>
-							<Image
-								source={Assets.heart_off}
-								style={{ width: 20, height: 20 }}
-								resizeMode={'contain'}
-							/>
-						</TouchableOpacity>
-						<View
-							style={[
-								styles.triangle1,
-								{
-									position: 'absolute',
-									top: 0,
-									right: 0,
-									borderBottomColor: '#f8b7bb'
-								}
-							]}
-						/>
-						<Text
-							style={styles.artistName}
-						>
-							{this.props.currentEvents.nextM.artistName}
-						</Text>
-						<Text
-							style={styles.stageName}
-						>
-							MAIN STAGE
-						</Text>
-					</TouchableOpacity>
-				)}
-				{this.props.currentEvents.nextS && (
-					<TouchableOpacity  activeOpacity={0.9} onPress={() => this.props.showDetials(this.props.currentEvents.nextS)} style={{ width: '50%', height: '100%' }}>
-						<View>
-							<Image
-								source={{ uri: this.props.currentEvents.nextS.artistImage }}
-								style={styles.image}
-								resizeMode={'cover'}
-							/>
-						</View>
-						<TouchableOpacity
-							style={{
-								position: 'absolute',
-								top: 15,
-								left: 10
-							}}
-							onPress={() => console.log('ss')}
-						>
-							<Image
-								source={Assets.heart_off}
-								style={{ width: 20, height: 20 }}
-								resizeMode={'contain'}
-							/>
-						</TouchableOpacity>
-						<View
-							style={[
-								styles.triangle1,
-								{
-									position: 'absolute',
-									top: 0,
-									right: 0,
-									borderBottomColor: '#7bc19e'
-								}
-							]}
-						/>
-						<Text
-							style={styles.artistName}
-						>
-							{this.props.currentEvents.nextS.artistName}
-						</Text>
-						<Text
-							style={styles.stageName}
-						>
-							SANDBOX STAGE
-						</Text>
-					</TouchableOpacity>
-				)}
-			</View>
-		)}
-
 			</View>
 		);
 	}
@@ -299,7 +417,7 @@ export default class CurrentlyPlaying extends React.Component {
 const styles = StyleSheet.create({
 	container: {
 		height: 150,
-		width: '100%',
+		width: '100%'
 	},
 	triangle: {
 		position: 'absolute',
