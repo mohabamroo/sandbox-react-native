@@ -36,7 +36,7 @@ export default class Loading extends Component {
       InfoData: {},
       SchedualData: {},
       ArtistsData: {},
-      currentTaskText: 'Downloading festival content...'
+      currentTaskText: 'Testing internet connection...'
     };
     this.navigationController = new NavigationController(this.props.navigation);
   }
@@ -93,19 +93,19 @@ export default class Loading extends Component {
         }
       } else {
         console.log('the internet is working fine, ');
-        _this.setState({
-          currentTaskText: 'Internet connection is ok.'
-        });
+        // _this.setState({
+        //   currentTaskText: 'Internet connection is ok.'
+        // });
         // should check and download the content online.
         _this.checkForDownloadableContent().then(success => {
-          _this.setState({
-            currentTaskText: 'Checking for downloadable data'
-          });
+          // _this.setState({
+          //   currentTaskText: 'Checking for downloadable data'
+          // });
           // FIXME: when to direct to home, what's the condition
           if (
             success &&
-            success.artistsLastUpdate &&
-            success.scheduleLastUpdate
+            success.artistsLastUpdate &&  
+            success.scheduleLastUpdate 
           ) {
             this.navigationController.reset('Home');
             // console.log('from one');
@@ -116,7 +116,7 @@ export default class Loading extends Component {
           } else {
             console.log('from two');
             _this.setState({
-              currentTaskText: 'Downloading data from the intenet'
+              currentTaskText: 'Downloading festival content..'
             });
             _this.DownloadTheData(undefined);
           }
@@ -171,7 +171,7 @@ export default class Loading extends Component {
           : URLs.scheduleURL
       ).then(response => response.json());
       this.setState({
-        currentTaskText: 'Fetched schedule data'
+        currentTaskText: 'Downloading schedule and line-up..'
       });
       Artists = await fetch(
         object && object.artistsLastUpdate
@@ -179,19 +179,17 @@ export default class Loading extends Component {
           : URLs.getArtists(undefined)
       ).then(response => response.json());
       this.setState({
-        currentTaskText: 'Fetched artists and line-up'
+        currentTaskText: 'Downloading artist info..'
       });
       Discover = await fetch(URLs.Discover).then(response => response.json());
       this.setState({
-        currentTaskText: 'Fetched discover details'
+        currentTaskText: 'Downloading maps..'
       });
       General = await fetch(URLs.General).then(response => response.json());
-      this.setState({
-        currentTaskText: 'Fetched general data'
-      });
+    
       Media = await fetch(URLs.Media).then(response => response.json());
       this.setState({
-        currentTaskText: 'Fetched media data'
+        currentTaskText: 'Downloading media..'
       });
       News = await fetch(
         object && object.newsLastUpdate
@@ -199,7 +197,7 @@ export default class Loading extends Component {
           : URLs.getNews(undefined)
       ).then(response => response.json());
       this.setState({
-        currentTaskText: 'Fetched news and articles'
+        currentTaskText: 'Downloadnig news..'
       });
     } catch (err) {
       this.setState({

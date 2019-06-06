@@ -41,6 +41,7 @@ export default class CurrentlyPlaying extends React.Component {
 					</TouchableOpacity>
 
 					<TouchableOpacity
+						activeOpacity={0.8}
 						onPress={() => this.setState({active: 'next'})}
 						style={{
 							backgroundColor: this.state.active === 'now' ?'#ffec59' :'#e9665d',
@@ -64,7 +65,7 @@ export default class CurrentlyPlaying extends React.Component {
 							}}
 						/>
 						<Text style={[{ color: '#e9665d', fontSize: 12 }, this.state.active !== 'now' ? {color:  '#ffec59', fontWeight: 'bold'}:{} ]}>
-							PLAYING NEXT?!
+							PLAYING NEXT
 						</Text>
 					</TouchableOpacity>
 					<View style={[styles.triangle, {borderBottomColor: this.state.active === 'now' ?'#ffec59' :'#e9665d'}]}/>
@@ -75,18 +76,18 @@ export default class CurrentlyPlaying extends React.Component {
 						flexDirection: 'row',
 						width: '100%',
 						height: 100,
-						backgroundColor: !sandbox ? '#f8b7bb' : '#7bc19e'
+						backgroundColor: 'transparent'
 					}}
 				>
 					{main && (
-						<View style={{ width: '50%', height: '100%' }}>
-							<TouchableOpacity onPress={() => this.props.showDetials(main)}>
+						<TouchableOpacity activeOpacity={0.9} onPress={() => this.props.showDetials(main)} style={{ width: '50%', height: '100%' }}>
+							<View>
 								<Image
 									source={{ uri: main.artistImage }}
 									style={styles.image}
 									resizeMode={'cover'}
 								/>
-							</TouchableOpacity>
+							</View>
 							<TouchableOpacity
 								style={{
 									position: 'absolute',
@@ -122,17 +123,17 @@ export default class CurrentlyPlaying extends React.Component {
 							>
 								MAIN STAGE
 							</Text>
-						</View>
+						</TouchableOpacity>
 					)}
 					{sandbox && (
-						<View style={{ width: '50%', height: '100%' }}>
-							<TouchableOpacity onPress={() => this.props.showDetials(sandbox)}>
+						<TouchableOpacity activeOpacity={0.9} onPress={() => this.props.showDetials(sandbox)} style={{ width: '50%', height: '100%' }}>
+							<View >
 								<Image
 									source={{ uri: sandbox.artistImage }}
 									style={styles.image}
 									resizeMode={'cover'}
 								/>
-							</TouchableOpacity>
+							</View>
 							<TouchableOpacity
 								style={{
 									position: 'absolute',
@@ -168,7 +169,7 @@ export default class CurrentlyPlaying extends React.Component {
 							>
 								SANDBOX STAGE
 							</Text>
-						</View>
+						</TouchableOpacity>
 					)}
 				</View>
 			)}
@@ -178,18 +179,18 @@ export default class CurrentlyPlaying extends React.Component {
 					flexDirection: 'row',
 					width: '100%',
 					height: 100,
-					backgroundColor: !sandbox ? '#f8b7bb' : '#7bc19e'
+					backgroundColor: 'transparent'
 				}}
 			>
 				{this.props.currentEvents.nextM && (
-					<View style={{ width: '50%', height: '100%' }}>
-						<TouchableOpacity onPress={() => this.props.showDetials(this.props.currentEvents.nextM)}>
+					<TouchableOpacity  activeOpacity={0.9} onPress={() => this.props.showDetials(this.props.currentEvents.nextM)} style={{ width: '50%', height: '100%' }}>
+						<View>
 							<Image
 								source={{ uri: this.props.currentEvents.nextM.artistImage }}
 								style={styles.image}
 								resizeMode={'cover'}
 							/>
-						</TouchableOpacity>
+						</View>
 						<TouchableOpacity
 							style={{
 								position: 'absolute',
@@ -225,17 +226,17 @@ export default class CurrentlyPlaying extends React.Component {
 						>
 							MAIN STAGE
 						</Text>
-					</View>
+					</TouchableOpacity>
 				)}
 				{this.props.currentEvents.nextS && (
-					<View style={{ width: '50%', height: '100%' }}>
-						<TouchableOpacity onPress={() => this.props.showDetials(this.props.currentEvents.nextS)}>
+					<TouchableOpacity  activeOpacity={0.9} onPress={() => this.props.showDetials(this.props.currentEvents.nextS)} style={{ width: '50%', height: '100%' }}>
+						<View>
 							<Image
 								source={{ uri: this.props.currentEvents.nextS.artistImage }}
 								style={styles.image}
 								resizeMode={'cover'}
 							/>
-						</TouchableOpacity>
+						</View>
 						<TouchableOpacity
 							style={{
 								position: 'absolute',
@@ -271,7 +272,7 @@ export default class CurrentlyPlaying extends React.Component {
 						>
 							SANDBOX STAGE
 						</Text>
-					</View>
+					</TouchableOpacity>
 				)}
 			</View>
 		)}
@@ -284,7 +285,7 @@ export default class CurrentlyPlaying extends React.Component {
 const styles = StyleSheet.create({
 	container: {
 		height: 150,
-		width: '100%'
+		width: '100%',
 	},
 	triangle: {
 		position: 'absolute',

@@ -22,7 +22,7 @@ export default class ArtistPopup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      index: 0,
+      index: this.props.index,
       opacity: new Animated.Value(0),
       position: new Animated.Value(Layout.window.height)
     };
@@ -44,8 +44,8 @@ export default class ArtistPopup extends React.Component {
   componentDidMount() {
     const self = this;
     setTimeout(() => {
-      self._carousel.snapToItem(this.props.index);
-    }, 10);
+      self._carousel.snapToItem(self.props.index);
+    }, 800);
   }
 
   onClose() {
