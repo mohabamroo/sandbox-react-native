@@ -24,7 +24,7 @@ const URLs = require('../Config/ExternalURL');
 export default class LinksScreen extends React.Component {
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			active: 'all',
 			colors: ['#fabb79', '#008691', '#e9665d', '#60a484'],
@@ -107,9 +107,12 @@ export default class LinksScreen extends React.Component {
 	};
 
 	fetchFavorites() {
-		if(this.state.loggedIn){
+		if (this.state.loggedIn) {
 			let initialArtists = this.state.initialArtists;
 			FavoritesDB.Get().then(artists => {
+				initialArtists.forEach((artist, index) => {
+					initialArtists[index]['liked'] = false;
+				});
 				if (artists) {
 					artists.forEach(likedArtist => {
 						if (likedArtist && likedArtist.artist_id) {
@@ -137,7 +140,7 @@ export default class LinksScreen extends React.Component {
 	}
 
 	_onRefresh() {
-		this.setState({refreshing: true})
+		this.setState({ refreshing: true });
 		fetch(URLs.getArtists(this.formateDate(new Date())))
 			.then(response => {
 				if (response.status == 200) {

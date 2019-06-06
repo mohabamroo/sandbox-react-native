@@ -12,7 +12,7 @@ import {
 import moment from 'moment';
 import { likeArtist, removeArtistLike } from '../Config/ExternalURL';
 import { FavoritesDB } from '../Config/DB';
-
+import LikeButton from './LikeButton';
 import Layout from '../constants/Layout';
 import Assets from '../constants/Assets';
 const URLs = require('../Config/ExternalURL');
@@ -59,7 +59,7 @@ export default class ArtistRow extends React.Component {
 				if (res.status == 200) {
 					this.setState({
 						fetchingLike: false
-					
+
 					});
 					this.refreshFavorites().then(() => {
 						this.props.notifyParent();
@@ -116,8 +116,7 @@ export default class ArtistRow extends React.Component {
 			<TouchableHighlight onPress={() => this.handleRowClick()}>
 				<View key={index} style={styles.artistRow}>
 					<Image source={{ uri: row.artist_image }} loadingIndicatorSource={Assets.artistPlaceholder} style={styles.image} />
-					{this.state.loggedIn && (
-						<TouchableOpacity
+					<LikeButton
 						style={{
 							width: 25,
 							height: 25,
@@ -126,25 +125,13 @@ export default class ArtistRow extends React.Component {
 							left: 5,
 							zIndex: 3
 						}}
-						activeOpacity={0.5}
-						onPress={() => this._handleLikeClick()}
-						>
-							{this.state.fetchingLike ? (
-								<ActivityIndicator color="#ffec59" />
-							) : (
-								<Image
-									source={
-										row && row.liked == true ? Assets.heart_on : Assets.heart_off
-									}
-									style={{
-										width: 14,
-										height: 14
-									}}
-									resizeMode={'contain'}
-									/>
-							)}
-							</TouchableOpacity>
-					)}
+						size={14}
+						liked={row && row.liked == true}
+						loggedIn={this.state.loggedIn}
+						user_id={this.state.user_id}
+						artist_id={row.artist_id}
+						notifyParent={() => this.props.notifyParent()}
+					/>
 					<View
 						style={[
 							styles.triangle,
