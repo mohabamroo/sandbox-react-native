@@ -39,7 +39,7 @@ export default {
   scheduleIco: require(`${__icons}/MENU-schedule.png`),
   playIco: require(`${__icons}/play-btn.png`),
   robotdev: require(`${__path}/robot-dev.png`),
-  close: require(`${__path}/close.png`),
+  close: require(`${__path}/BUTTON-close.png`),
   QRclose: require(`${__path}/QRclose.png`),
   rules: require(`${__icons}/INFO-rules.png`),
   bus_routes: require(`${__icons}/INFO-shuttle.png`),

@@ -4,25 +4,20 @@ import {
 	StyleSheet,
 	View,
 	Text,
-	FlatList,
 	Image,
 	TouchableOpacity,
-	TouchableHighlight,
 	ImageBackground,
 	ScrollView,
-	Alert
+	BackHandler
 } from 'react-native';
 import moment from 'moment';
 import Layout from '../constants/Layout';
-import { likeArtist, removeArtistLike } from '../Config/ExternalURL';
 import HeaderComponent from '../components/HeaderComponent';
 const { width, height } = Dimensions.get('window');
 import { AntDesign } from '@expo/vector-icons';
 // import the page components
-import Assets from '../constants/Assets';
 import ArtistPopup from './ArtistPopup';
 import Footer from '../components/Footer';
-import LikeButton from '../components/LikeButton';
 import Slot from '../components/Slot';
 
 import * as __GStyles from '../styles';
@@ -31,6 +26,7 @@ const URLs = require('../Config/ExternalURL');
 
 const interval = 110;
 export default class Schedule extends React.Component {
+	backHandler;
 	constructor(props) {
 		super(props);
 
@@ -46,11 +42,28 @@ export default class Schedule extends React.Component {
 			loggedIn: this.props.navigation.state.params.loggedIn,
 			user: this.props.navigation.state.params.user
 		};
+		this.handleBackClick= this.handleBackClick.bind(this);
 	}
 
 	componentDidMount() {
 		this.fetchCategories();
 		this.fetchArtists();
+		this.handleBackClick();
+	}
+
+	componentWillUnmount() {
+		this.backHandler.remove();
+	}
+
+	handleBackClick() {
+		const self = this;
+		this.backHandler = BackHandler.addEventListener('hardwareBackPress', function() {
+			if(self.state.show_popup) {
+				self.setState({show_popup: false});
+				return true;
+			}
+			return false;
+		  });
 	}
 
 	setDay() {

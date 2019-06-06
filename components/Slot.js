@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
 	textArea: {
 		position: 'absolute',
 		top: Layout.window.height * 0.025,
-		right: 120
+		left: 30
 	},
 	name: {
 		fontSize: 18,
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
 		width: Layout.window.width / 3,
 		color: 'white',
 		width: 110,
-		textAlign: 'right'
+		textAlign: 'left'
 	},
 	tabsContainer: {
 		justifyContent: 'space-between',
