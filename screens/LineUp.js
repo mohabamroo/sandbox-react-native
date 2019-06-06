@@ -1,7 +1,5 @@
 import React from 'react';
 import {
-	ScrollView,
-	Image,
 	FlatList,
 	StyleSheet,
 	TouchableOpacity,
@@ -9,7 +7,7 @@ import {
 	Text,
 	AppState,
 	ImageBackground,
-	TouchableHighlight
+	BackHandler
 } from 'react-native';
 
 import HeaderComponent from '../components/HeaderComponent';
@@ -22,6 +20,7 @@ import ArtistRow from '../components/ArtistRow';
 const URLs = require('../Config/ExternalURL');
 
 export default class LinksScreen extends React.Component {
+	backHandler;
 	constructor(props) {
 		super(props);
 
@@ -39,6 +38,7 @@ export default class LinksScreen extends React.Component {
 			loggedIn: this.props.navigation.state.params.loggedIn,
 			user: this.props.navigation.state.params.user
 		};
+		this.handleBackClick= this.handleBackClick.bind(this);
 	}
 
 	async componentDidMount() {
@@ -46,6 +46,7 @@ export default class LinksScreen extends React.Component {
 		artists = artists.map(x => {
 			return { ...x, visible: true };
 		});
+		this.handleBackClick();
 		this.setState({
 			artists,
 			refreshing: false,
@@ -54,6 +55,21 @@ export default class LinksScreen extends React.Component {
 			appState: AppState.currentState
 		});
 		this.fetchFavorites();
+	}
+
+	componentWillUnmount() {
+		this.backHandler.remove();
+	}
+
+	handleBackClick() {
+		const self = this;
+		this.backHandler = BackHandler.addEventListener('hardwareBackPress', function() {
+			if(self.state.show_popup) {
+				self.setState({show_popup: false});
+				return true;
+			}
+			return false;
+		  });
 	}
 
 	renderArtist(item, index) {
@@ -197,7 +213,7 @@ export default class LinksScreen extends React.Component {
 								]}
 							>
 								{' '}
-								{this.state.active == 'all' ? '>' : ''} All
+								{this.state.active == 'all' ? '>' : ''} ALL
 							</Text>
 						</View>
 					</TouchableOpacity>
@@ -226,7 +242,7 @@ export default class LinksScreen extends React.Component {
 								]}
 							>
 								{' '}
-								{this.state.active == 'main' ? '>' : ''} Main Stage
+								{this.state.active == 'main' ? '>' : ''} MAIN STAGE
 							</Text>
 						</View>
 					</TouchableOpacity>
@@ -258,7 +274,7 @@ export default class LinksScreen extends React.Component {
 								]}
 							>
 								{' '}
-								{this.state.active == 'sandbox' ? '>' : ''} Sandbox Stage
+								{this.state.active == 'sandbox' ? '>' : ''} SANDBOX STAGE
 							</Text>
 						</View>
 					</TouchableOpacity>

@@ -12,7 +12,8 @@ import {
   Linking,
   ImageBackground,
   ScrollView,
-  TouchableHighlight
+  TouchableHighlight,
+	BackHandler
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import MediaPopup from './MediaPopup';
@@ -24,6 +25,7 @@ import Assets, * as assets from '../constants/Assets';
 const URLs = require('../Config/ExternalURL');
 
 export default class Media extends React.Component {
+  backHandler;
   constructor(props) {
     super(props);
     let colors = [
@@ -64,6 +66,7 @@ export default class Media extends React.Component {
 
     this.openSwiper = this.openSwiper.bind(this);
     this.renderAccordion = this.renderAccordion.bind(this);
+    this.handleBackClick= this.handleBackClick.bind(this);
   }
 
   shuffle(a) {
@@ -89,7 +92,23 @@ export default class Media extends React.Component {
   componentDidMount() {
     this.fetchMediaCache();
     this.refreshMedia();
+    this.handleBackClick();
   }
+
+  componentWillUnmount() {
+		this.backHandler.remove();
+  }
+  
+  handleBackClick() {
+		const self = this;
+		this.backHandler = BackHandler.addEventListener('hardwareBackPress', function() {
+			if(self.state.showSlider) {
+				self.setState({showSlider: false});
+				return true;
+			}
+			return false;
+		  });
+	}
 
   fetchMediaCache() {
     MediaDB.Get()
@@ -347,7 +366,7 @@ export default class Media extends React.Component {
                     }
                   ]}
                 >
-                  {this.state.active == 'pics' ? '>' : ''} Pictures
+                  {this.state.active == 'pics' ? '>' : ''} IMAGES
                 </Text>
               </View>
             </TouchableOpacity>
@@ -376,7 +395,7 @@ export default class Media extends React.Component {
                     }
                   ]}
                 >
-                  {this.state.active == 'videos' ? '>' : ''} Videos
+                  {this.state.active == 'videos' ? '>' : ''} VIDEOS
                 </Text>
               </View>
             </TouchableOpacity>
@@ -405,7 +424,7 @@ export default class Media extends React.Component {
                     }
                   ]}
                 >
-                  {this.state.active == 'music' ? '>' : ''} Music
+                  {this.state.active == 'music' ? '>' : ''} MUSIC
                 </Text>
               </View>
             </TouchableOpacity>

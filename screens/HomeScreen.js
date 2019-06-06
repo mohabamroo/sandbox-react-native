@@ -1,5 +1,4 @@
 import React from 'react';
-import { Notifications } from 'expo'
 import {
 	ScrollView,
 	StyleSheet,
@@ -7,7 +6,8 @@ import {
 	View,
 	TouchableOpacity,
 	ImageBackground,
-	Button
+	BackHandler,
+	RefreshControl
 } from 'react-native';
 import moment from 'moment';
 import * as __GStyles from '../styles';
@@ -28,7 +28,7 @@ import {
 	SchedualDB,
 	ArtistsDB,
 	UserDB,
-	FavoritesDB
+	FavoritesDB,
 } from '../Config/DB';
 import Footer from '../components/Footer';
 import {
@@ -39,6 +39,7 @@ import {
 // const start_days = [moment]
 
 export default class HomeScreen extends React.Component {
+	backHandler;
 	__navigationOptions = {
 		title: {
 			text: 'The Home Screen',
@@ -62,7 +63,9 @@ export default class HomeScreen extends React.Component {
 			current_artist: false,
 			show_popup: false,
 			loggedIn: false,
-			favoriteArtists: []
+			favoriteArtists: [],
+			showNews: true,
+			showCurrentEvents: true
 		};
 		this.handleSchedule = this.handleSchedule.bind(this);
 		// sets state
@@ -75,6 +78,8 @@ export default class HomeScreen extends React.Component {
 		this.refreshUserAccount = this.refreshUserAccount.bind(this);
 		this.fetchFavorites = this.fetchFavorites.bind(this);
 		this.refreshBalance = this.refreshBalance.bind(this);
+		this.handleBackClick= this.handleBackClick.bind(this);
+		this._onHomeRefresh = this._onHomeRefresh.bind(this);
 	}
 
 	async componentDidMount() {
@@ -86,7 +91,9 @@ export default class HomeScreen extends React.Component {
 			{
 				general,
 				schedule,
-				artists
+				artists,
+				showNews: true,
+				showCurrentEvents: true
 			},
 			() => {
 				this.handleState();
@@ -94,6 +101,7 @@ export default class HomeScreen extends React.Component {
 		);
 		this.fetchFavorites();
 		this.handleSchedule();
+		this.handleBackClick();
 		this._interval = setInterval(() => this.handleSchedule(), 6000);
 		registerForPushNotificationsAsync();
 		scheduleFavoritesNotifications();
@@ -101,6 +109,21 @@ export default class HomeScreen extends React.Component {
 
 	componentWillUnmount() {
 		clearInterval(this._interval);
+		this.backHandler.remove();
+	}
+
+	handleBackClick() {
+		const self = this;
+		this.backHandler = BackHandler.addEventListener('hardwareBackPress', function() {
+			// this.onMainScreen and this.goBack are just examples, you need to use your own implementation here
+			// Typically you would use the navigator here to go to the last state.
+			if(self.state.show_popup) {
+				console.log("popopopopop")
+				self.setState({show_popup: false});
+				return true;
+			}
+			return false;
+		  });
 	}
 
 	handleSchedule() {
@@ -281,6 +304,16 @@ export default class HomeScreen extends React.Component {
 		}, 100);
 	}
 
+	_onHomeRefresh() {
+		this.fetchFavorites();
+		// data to be refreshing by re-mounting
+		this.setState({showUserBrief: false, showNews: false, showCurrentEvents: false, refreshing: false});
+		const self = this;
+		setTimeout(() => {
+			self.setState({showUserBrief: true, showNews: true, showCurrentEvents: true})
+		}, 100);
+	}
+
 	render() {
 		return (
 			<ImageBackground
@@ -324,14 +357,20 @@ export default class HomeScreen extends React.Component {
 						) : (
 							this.state.showUserBrief &&
 							<UserBrief
-								notifyOnBack={this.refreshBalance}
+								notifyOnBack={this._onHomeRefresh}
 								navigation={this.props.navigation}
 								NACController={this.navigationController}
 								user={this.state.user}
 							/>
 						)}
 					</View>
-					<ScrollView>
+					<ScrollView 
+						refreshControl={
+							<RefreshControl
+							refreshing={this.state.refreshing}
+							onRefresh={this._onHomeRefresh}
+							/>
+						}>
 						{this.state.countDown > 0 ? (
 							<CountDownTimer
 								duration={this.state.countDown}
@@ -346,7 +385,7 @@ export default class HomeScreen extends React.Component {
 								</View>
 							</View>
 						)}
-						{this.state.currentEvents && (
+						{this.state.currentEvents && this.state.showCurrentEvents && (
 							<CurrentlyPlaying
 								user={this.state.user}
 								loggedIn={this.state.loggedIn}
@@ -367,14 +406,14 @@ export default class HomeScreen extends React.Component {
 						)}
 						{/** The boxes area */}
 						<Boxes
-							notifyParentBack={this.refreshBalance}
+							notifyParentBack={this._onHomeRefresh}
 							user={this.state.user}
 							loggedIn={this.state.loggedIn}
 							NACController={this.navigationController}
 						/>
 
 						{/**News section */}
-						<News />
+						{this.state.showNews && (<News />)}
 						<View style={styles.paddingDiv} />
 					</ScrollView>
 				</View>

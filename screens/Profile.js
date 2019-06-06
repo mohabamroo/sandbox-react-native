@@ -5,7 +5,8 @@ import {
   StyleSheet,
   View,
   ImageBackground,
-  RefreshControl
+  RefreshControl,
+  BackHandler
 } from 'react-native';
 import ArtistPopup from './ArtistPopup';
 import Assets from '../constants/Assets';
@@ -23,7 +24,7 @@ const URLs = require('../Config/ExternalURL');
 
 export default class ProfileScreen extends React.Component {
   ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-
+  backHandler;
   constructor(props) {
     super(props);
     this.navigationController = new NavigationController(this.props.navigation);
@@ -42,13 +43,26 @@ export default class ProfileScreen extends React.Component {
       notifyOnBack: this.props.navigation.state.params.notifyOnBack
     };
     this._onRefresh = this._onRefresh.bind(this);
+    this.handleBackClick= this.handleBackClick.bind(this);
   }
 
   async componentDidMount() {
     // fetch favorites
     this.fetchFavoritesList();
     this.refreshFavoritesList();
+    this.handleBackClick();
   }
+
+	handleBackClick() {
+		const self = this;
+		this.backHandler = BackHandler.addEventListener('hardwareBackPress', function() {
+			if(self.state.show_popup) {
+				self.setState({show_popup: false, current_artist: null});
+				return true;
+			}
+			return false;
+		  });
+	}
 
   fetchFavoritesList() {
     FavoritesDB.Get()
@@ -110,7 +124,9 @@ export default class ProfileScreen extends React.Component {
     });
   }
 
-  componentWillUnmount() {}
+	componentWillUnmount() {
+		this.backHandler.remove();
+	}
 
   renderArtist(row, L, index) {
     let color = this.state.colors[index % Number(this.state.colors.length)];
