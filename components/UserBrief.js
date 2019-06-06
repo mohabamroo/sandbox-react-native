@@ -21,7 +21,6 @@ export class UserBrief extends React.Component {
   }
 
   async componentDidMount() {
-    console.log("Mounted user brief")
     let balanceObj = await BalanceDB.Get();
 
     this.setState({ balanceObj });
@@ -79,6 +78,21 @@ export class UserBrief extends React.Component {
             backgroundColor: '#FDE9D6'
           }}
         >
+        <TouchableOpacity
+          style={{
+            width: Layout.window.width / 3,
+            height: '100%',
+            backgroundColor: '#EEB8BB'
+          }}
+          activeOpacity={this.props.hasBackBtn?1:0.5}
+          onPress={() => {
+            if(!this.props.hasBackBtn)
+              this.props.NACController.direct('Profile', {
+                user: this.props.user,
+                notifyOnBack: this.props.notifyOnBack
+              });
+          }}
+        >
           <Image
             source={{
               uri: URLs.imagesRoot + user.client_photo
@@ -89,6 +103,7 @@ export class UserBrief extends React.Component {
               backgroundColor: '#EEB8BB'
             }}
           />
+        </TouchableOpacity>
           <View
             style={[
               styles.triangle,
