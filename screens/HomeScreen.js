@@ -187,7 +187,7 @@ export default class HomeScreen extends React.Component {
 		const today = moment();
 		let currentDate = new Date();
 		let diff = Math.floor((startDateTime - currentDate)/1000);
-		const endedFlag = Math.floor((today - endDateTime / 1000));
+		const endedFlag = Math.floor((currentDate - endDateTime)/1000);
 		return {
 			timeState: 2,
 			startDateTime,
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
 		height: 100,
 		zIndex: 3,
 		justifyContent: 'center',
-		marginBottom: -20
+		marginBottom: -10
 	},
 	counter: {
 		backgroundColor: '#7bc19e',
