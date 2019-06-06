@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   image: {
     flex: 2,
     margin: 'auto',
-    height: 100,
+    width: 90,
     justifyContent: 'center'
   },
   box: {
