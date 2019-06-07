@@ -556,11 +556,11 @@ export default class Schedule extends React.Component {
 						source={require('../assets/images/main.png')}
 						style={{
 							height: 160,
-							width: interval / 2,
+							width: interval * 0.6,
 							resizeMode: 'cover',
 							position: 'absolute',
 							top: 70,
-							left: -10,
+							left: -7,
 							transform: [{ rotate: '-3deg' }]
 						}}
 					/>
@@ -568,11 +568,11 @@ export default class Schedule extends React.Component {
 						source={require('../assets/images/sandBox.png')}
 						style={{
 							height: 160,
-							width: interval / 2,
+							width: interval * 0.6,
 							resizeMode: 'cover',
 							position: 'absolute',
 							top: 220,
-							left: -10,
+							left: -7,
 							transform: [{ rotate: '-3deg' }]
 						}}
 					/>

@@ -43,6 +43,7 @@ export default class Slot extends React.Component {
 
           <ImageBackground
             source={{ uri: item.artistImage }}
+						defaultSource={Assets.artistPlaceholder}
             style={{
               width: 150,
               height: 150,

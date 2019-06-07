@@ -22,7 +22,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.applab.sandbox",
-      "buildNumber": "3",
+      "buildNumber": "4",
       "config": {
         "googleMapsApiKey": "AIzaSyBbCT3VbLTN04rhXpzuJ6_WUqwjJoNBeTg"
       }
