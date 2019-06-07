@@ -48,7 +48,7 @@ export default class Media extends React.Component {
       return;
     }
     var form = new FormData();
-    form.append('email', this.state.email);
+    form.append('email', this.state.email.toLocaleLowerCase());
     form.append('code', URLs.activationSecret);
     this.setState({ fetching: true });
     fetch(URLs.sendSMS, {
