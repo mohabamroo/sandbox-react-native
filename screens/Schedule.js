@@ -460,8 +460,8 @@ export default class Schedule extends React.Component {
 		let { loggedIn } = this.state
 		return (
 			<ImageBackground
-				style={__GStyles.default.container}
-				source={require('../assets/images/patterns/bg2b.png')}
+				style={styles.imageBG}
+				source={require('../assets/images/patterns/bg2.gif')}
 				resizeMode={'repeat'}
 			>
 				<HeaderComponent navigation={this.props.navigation} />
@@ -556,11 +556,11 @@ export default class Schedule extends React.Component {
 						source={require('../assets/images/main.png')}
 						style={{
 							height: 160,
-							width: interval / 2,
+							width: interval * 0.6,
 							resizeMode: 'cover',
 							position: 'absolute',
 							top: 70,
-							left: -10,
+							left: -7,
 							transform: [{ rotate: '-3deg' }]
 						}}
 					/>
@@ -568,11 +568,11 @@ export default class Schedule extends React.Component {
 						source={require('../assets/images/sandBox.png')}
 						style={{
 							height: 160,
-							width: interval / 2,
+							width: interval * 0.6,
 							resizeMode: 'cover',
 							position: 'absolute',
 							top: 220,
-							left: -10,
+							left: -7,
 							transform: [{ rotate: '-3deg' }]
 						}}
 					/>
@@ -605,6 +605,10 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#e9665d'
+	},
+	imageBG: {
+		width: '100%',
+		height: '100%'
 	},
 	triangle: {
 		width: 0,

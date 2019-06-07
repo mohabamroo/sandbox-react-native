@@ -1,9 +1,1 @@
-{
-  "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://xs-rwu.mohabamroo.sandbox-react.exp.direct",
-  "packagerNgrokUrl": "https://packager.xs-rwu.mohabamroo.sandbox-react.exp.direct",
-  "ngrokPid": 17064,
-  "devToolsPort": 19002,
-  "packagerPort": 19001,
-  "packagerPid": 16136
-}
+{}

@@ -37,7 +37,7 @@ export default class Media extends React.Component {
     form.append('email', email);
     form.append('token', code);
     form.append('code', URLs.activationSecret);
-    
+
     fetch(URLs.verifyCode, {
       method: 'POST',
       headers: {
@@ -115,7 +115,7 @@ export default class Media extends React.Component {
           NACController={this.navigationController}
           navigation={this.props.navigation}
         />
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 200}}>
           <View
             style={{
               flex: 1,

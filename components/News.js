@@ -113,7 +113,7 @@ export class News extends React.Component {
       <View style={styles.container}>
         {/**News header section */}
         <ImageBackground
-          source={Assets.circ7}
+          source={Assets.circ1}
           resizeMode="repeat"
           style={styles.sectionHeaderContainer}
         >

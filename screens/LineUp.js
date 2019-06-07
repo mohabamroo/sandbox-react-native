@@ -7,7 +7,9 @@ import {
 	Text,
 	AppState,
 	ImageBackground,
-	BackHandler
+	BackHandler,
+	Platform,
+	Image
 } from 'react-native';
 
 import HeaderComponent from '../components/HeaderComponent';
@@ -38,7 +40,7 @@ export default class LinksScreen extends React.Component {
 			loggedIn: this.props.navigation.state.params.loggedIn,
 			user: this.props.navigation.state.params.user
 		};
-		this.handleBackClick= this.handleBackClick.bind(this);
+		this.handleBackClick = this.handleBackClick.bind(this);
 	}
 
 	async componentDidMount() {
@@ -46,13 +48,17 @@ export default class LinksScreen extends React.Component {
 		artists = artists.map(x => {
 			return { ...x, visible: true };
 		});
+		main = artists.filter(x => x.artist_session.session_stage === 'Main Stage');
+		sandbox = artists.filter(x => x.artist_session.session_stage === 'Sandbox Stage');
 		this.handleBackClick();
 		this.setState({
 			artists,
 			refreshing: false,
 			currentCount: artists.length,
 			initialArtists: artists,
-			appState: AppState.currentState
+			appState: AppState.currentState,
+			main,
+			sandbox
 		});
 		this.fetchFavorites();
 	}
@@ -63,13 +69,16 @@ export default class LinksScreen extends React.Component {
 
 	handleBackClick() {
 		const self = this;
-		this.backHandler = BackHandler.addEventListener('hardwareBackPress', function() {
-			if(self.state.show_popup) {
-				self.setState({show_popup: false});
-				return true;
+		this.backHandler = BackHandler.addEventListener(
+			'hardwareBackPress',
+			function() {
+				if (self.state.show_popup) {
+					self.setState({ show_popup: false });
+					return true;
+				}
+				return false;
 			}
-			return false;
-		  });
+		);
 	}
 
 	renderArtist(item, index) {
@@ -104,22 +113,22 @@ export default class LinksScreen extends React.Component {
 
 	_handleAppStateChange = newState => {
 		this.setState(newState);
-		let currentActive = newState.active;
-		let newArr = this.state.initialArtists.filter(row => {
-			// FIXME: the session data is removed from the backend
-			let stage =
-				row['artist_session'] && row['artist_session']['session_stage']
-					? row['artist_session']['session_stage']
-					: 'main';
-			stage = stage ? stage.replace('stage', '').toLowerCase() : stage;
-			let visible =
-				currentActive == 'all' || (stage && stage.includes(currentActive));
-			return visible;
-		});
-		this.setState({
-			artists: newArr,
-			currentCount: newArr.length
-		});
+		// let currentActive = newState.active;
+		// let newArr = this.state.initialArtists.filter(row => {
+		// 	// FIXME: the session data is removed from the backend
+		// 	let stage =
+		// 		row['artist_session'] && row['artist_session']['session_stage']
+		// 			? row['artist_session']['session_stage']
+		// 			: 'main';
+		// 	stage = stage ? stage.replace('stage', '').toLowerCase() : stage;
+		// 	let visible =
+		// 		currentActive == 'all' || (stage && stage.includes(currentActive));
+		// 	return visible;
+		// });
+		// this.setState({
+		// 	artists: newArr,
+		// 	currentCount: newArr.length
+		// });
 	};
 
 	fetchFavorites() {
@@ -140,7 +149,9 @@ export default class LinksScreen extends React.Component {
 						}
 					});
 				}
-				this.setState({ artists: initialArtists });
+				main = initialArtists.filter(x => x.artist_session.session_stage === 'Main Stage');
+				sandbox = initialArtists.filter(x => x.artist_session.session_stage === 'Sandbox Stage');
+				this.setState({ artists: initialArtists, main, sandbox });
 			});
 		}
 	}
@@ -162,12 +173,16 @@ export default class LinksScreen extends React.Component {
 				}
 			})
 			.then(artists => {
+				main = artists.filter(x => x.artist_session.session_stage === 'Main Stage');
+				sandbox = artists.filter(x => x.artist_session.session_stage === 'Sandbox Stage');
 				let newState = {
 					artists: artists.data,
 					currentCount: artists.data.length,
 					initialArtists: artists.data,
 					refreshing: false,
-					active: this.state.active
+					active: this.state.active,
+					main,
+					sandbox
 				};
 				ArtistsDB.Set(artists.data);
 				this._handleAppStateChange(newState);
@@ -280,24 +295,66 @@ export default class LinksScreen extends React.Component {
 					</TouchableOpacity>
 				</View>
 				<View style={{ flex: 1 }}>
-					{this.state.artists && (
-						<FlatList
-							data={this.state.artists}
-							extraData={this.state.artists}
-							removeClippedSubviews
-							ListFooterComponent={<View style={{ height: 220 }} />}
-							style={{ flex: 1 }}
-							keyExtractor={(item, idx) => idx + ''}
-							renderItem={this.renderArtist.bind(this)}
-							getItemLayout={(data, index) => ({
-								length: Layout.window.width / 3,
-								offset: (Layout.window.width / 3) * index,
-								index
-							})}
-							refreshing={this.state.refreshing}
-							onRefresh={() => this._onRefresh()}
-						/>
-					)}
+					{this.state.artists &&
+						this.state.active == 'all' && (
+							<FlatList
+								data={this.state.artists}
+								windowSize={30}
+								extraData={this.state.artists}
+								removeClippedSubviews={Platform.OS !== 'ios'}
+								ListFooterComponent={<View style={{ height: 220 }} />}
+								style={{ flex: 1 }}
+								keyExtractor={(item, idx) => idx + ''}
+								renderItem={this.renderArtist.bind(this)}
+								getItemLayout={(data, index) => ({
+									length: Layout.window.width / 3,
+									offset: (Layout.window.width / 3) * index,
+									index
+								})}
+								refreshing={this.state.refreshing}
+								onRefresh={() => this._onRefresh()}
+							/>
+						)}
+					{this.state.artists &&
+						this.state.active == 'main' && (
+							<FlatList
+								data={this.state.main}
+								windowSize={30}
+								extraData={this.state.main}
+								removeClippedSubviews={Platform.OS !== 'ios'}
+								ListFooterComponent={<View style={{ height: 220 }} />}
+								style={{ flex: 1 }}
+								keyExtractor={(item, idx) => idx + ''}
+								renderItem={this.renderArtist.bind(this)}
+								getItemLayout={(data, index) => ({
+									length: Layout.window.width / 3,
+									offset: (Layout.window.width / 3) * index,
+									index
+								})}
+								refreshing={this.state.refreshing}
+								onRefresh={() => this._onRefresh()}
+							/>
+						)}
+					{this.state.artists &&
+						this.state.active == 'sandbox' && (
+							<FlatList
+								data={this.state.sandbox}
+								windowSize={30}
+								extraData={this.state.sandbox}
+								removeClippedSubviews={Platform.OS !== 'ios'}
+								ListFooterComponent={<View style={{ height: 220 }} />}
+								style={{ flex: 1 }}
+								keyExtractor={(item, idx) => idx + ''}
+								renderItem={this.renderArtist.bind(this)}
+								getItemLayout={(data, index) => ({
+									length: Layout.window.width / 3,
+									offset: (Layout.window.width / 3) * index,
+									index
+								})}
+								refreshing={this.state.refreshing}
+								onRefresh={() => this._onRefresh()}
+							/>
+						)}
 				</View>
 
 				{this.state.current_artist &&

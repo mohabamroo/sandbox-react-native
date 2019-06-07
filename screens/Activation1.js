@@ -48,7 +48,7 @@ export default class Media extends React.Component {
       return;
     }
     var form = new FormData();
-    form.append('email', this.state.email.toLocaleLowerCase());
+    form.append('email', this.state.email.toLowerCase());
     form.append('code', URLs.activationSecret);
     this.setState({ fetching: true });
     fetch(URLs.sendSMS, {
@@ -93,7 +93,7 @@ export default class Media extends React.Component {
         style={__GStyles.default.container}
       >
         <HeaderComponent navigation={this.props.navigation} />
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 200}}>
           <View
             style={{
               flex: 1,
