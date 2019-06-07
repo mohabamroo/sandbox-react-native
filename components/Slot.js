@@ -75,7 +75,7 @@ export default class Slot extends React.Component {
               styles.triangle,
               styles.triangleDown,
               styles.nameArea,
-              { borderBottomColor: color, position: 'absolute', right: 75 }
+              { borderTopColor: color, position: 'absolute', right: 75, bottom: 0 }
             ]}
           />
           <View style={styles.textArea}>
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
 	triangle: {
 		width: 0,
 		height: 0,
-		borderBottomWidth: Layout.window.width,
+		borderTopWidth: Layout.window.width,
 		backgroundColor: 'transparent',
 		borderStyle: 'solid',
 		borderLeftWidth: Layout.window.width / 2,
