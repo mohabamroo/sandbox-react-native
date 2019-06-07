@@ -560,7 +560,7 @@ export default class Schedule extends React.Component {
 							resizeMode: 'cover',
 							position: 'absolute',
 							top: 70,
-							left: -10,
+							left: -6,
 							transform: [{ rotate: '-3deg' }]
 						}}
 					/>
@@ -572,7 +572,7 @@ export default class Schedule extends React.Component {
 							resizeMode: 'cover',
 							position: 'absolute',
 							top: 220,
-							left: -10,
+							left: -6,
 							transform: [{ rotate: '-3deg' }]
 						}}
 					/>

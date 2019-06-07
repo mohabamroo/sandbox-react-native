@@ -275,19 +275,7 @@ export default class Media extends React.Component {
               Enter your country
             </Text>
 
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: 'white',
-                height: 35,
-                width: '100%',
-                flexGrow: 1,
-                justifyContent: 'space-between',
-                paddingHorizontal: 10
-              }}
-            >
+
               <CountryPicker
                 onChange={value => {
                   this.setState({
@@ -302,19 +290,33 @@ export default class Media extends React.Component {
                 showCallingCode={true}
                 showCountryNameWithFlag={true}
               >
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  backgroundColor: 'white',
+                  height: 35,
+                  width: '100%',
+                  flexGrow: 1,
+                  justifyContent: 'space-between',
+                  paddingHorizontal: 10
+                }}
+              >
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Text style={{ color: '#fabb79' }}>
                     {this.state.countryName}
                   </Text>
                 </View>
+                <AntDesign
+                  name="down"
+                  size={15}
+                  color="#fabb79"
+                  style={{ marginLeft: 10 }}
+                />
+          </View>
               </CountryPicker>
-                  <AntDesign
-                    name="down"
-                    size={15}
-                    color="#fabb79"
-                    style={{ marginLeft: 10 }}
-                  />
-            </View>
+
             <Text style={{ color: '#ffec59', fontSize: 10, marginVertical: 5 }}>
               Enter your Date of Birth
             </Text>
