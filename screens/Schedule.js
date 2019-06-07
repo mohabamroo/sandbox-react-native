@@ -22,6 +22,7 @@ import Slot from '../components/Slot';
 
 import * as __GStyles from '../styles';
 import { SchedualDB, ArtistsDB, UserDB, FavoritesDB } from '../Config/DB';
+import Assets from '../constants/Assets';
 const URLs = require('../Config/ExternalURL');
 
 const interval = 110;
@@ -461,12 +462,12 @@ export default class Schedule extends React.Component {
 		return (
 			<ImageBackground
 				style={styles.imageBG}
-				source={require('../assets/images/patterns/bg2.gif')}
+				source={Assets.bg2}
 				resizeMode={'repeat'}
 			>
 				<HeaderComponent navigation={this.props.navigation} />
 				<ImageBackground
-					style={__GStyles.default.container}
+					style={[__GStyles.default.container, {marginTop: -10}]}
 					source={require('../assets/images/bgschedul.png')}
 					resizeMode={'cover'}
 				>

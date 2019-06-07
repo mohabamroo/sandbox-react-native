@@ -82,7 +82,7 @@ export default createAppContainer(
             bg: 'bg2'
           },
           subHeader: {
-            bg: 'circ1'
+            bg: 'circ7'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
