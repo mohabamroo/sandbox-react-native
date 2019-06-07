@@ -178,7 +178,7 @@ export default class ProfileScreen extends React.Component {
     let title = {
       text: 'Your Favorites',
       fontColor: 'white',
-      bgColor: 'rgb(231,102,97)'
+      bgColor: '#E9655D'
     };
     return (
       <ImageBackground
@@ -196,7 +196,7 @@ export default class ProfileScreen extends React.Component {
             hasBackBtn={true}
           />
           <ImageBackground
-            source={Assets.circ2}
+            source={Assets.circAct}
             style={[__GStyles.default.subHeaderContainer]}
             resizeMode="repeat"
           >

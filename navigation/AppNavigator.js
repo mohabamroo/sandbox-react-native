@@ -137,7 +137,7 @@ export default createAppContainer(
           title: {
             text: 'Discover',
             fontColor: '#ffec59',
-            bgColor: 'rgb(231,102,97)',
+            bgColor: '#E9655D',
             bgBack: '#189aa9',
             colorBack: '#ffe958'
           },
@@ -145,7 +145,7 @@ export default createAppContainer(
             bg: 'bg1'
           },
           subHeader: {
-            bg: 'circ2'
+            bg: 'circAct'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({
