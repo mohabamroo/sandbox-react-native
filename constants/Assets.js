@@ -43,7 +43,7 @@ export default {
   QRclose: require(`${__path}/QRclose.png`),
   rules: require(`${__icons}/INFO-rules.png`),
   bus_routes: require(`${__icons}/INFO-shuttle.png`),
-  heart_on: require(`${__icons}/heart-on.png`),
+  heart_on: require(`${__icons}/heart-on.gif`),
   heart_off: require(`${__icons}/heart-off.png`),
   faqs: require(`${__icons}/INFO-faq.png`),
   policies: require(`${__path}/tmpIcon.png`),

@@ -101,6 +101,7 @@ export class UserBrief extends React.Component {
             source={{
               uri: URLs.imagesRoot + user.client_photo
             }}
+            defaultSource={Assets.artistPlaceholder}
             style={{
               width: Layout.window.width / 3,
               height: '100%',

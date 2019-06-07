@@ -93,7 +93,7 @@ export default class Media extends React.Component {
         style={__GStyles.default.container}
       >
         <HeaderComponent navigation={this.props.navigation} />
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 200}}>
           <View
             style={{
               flex: 1,
