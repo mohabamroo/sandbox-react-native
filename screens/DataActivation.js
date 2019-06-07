@@ -207,7 +207,7 @@ export default class Media extends React.Component {
           NACController={this.navigationController}
           navigation={this.props.navigation}
         />
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 200}}>
           <View
             style={{
               flex: 1,

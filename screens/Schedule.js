@@ -460,8 +460,8 @@ export default class Schedule extends React.Component {
 		let { loggedIn } = this.state
 		return (
 			<ImageBackground
-				style={__GStyles.default.container}
-				source={require('../assets/images/patterns/bg2b.png')}
+				style={styles.imageBG}
+				source={require('../assets/images/patterns/bg2.gif')}
 				resizeMode={'repeat'}
 			>
 				<HeaderComponent navigation={this.props.navigation} />
@@ -605,6 +605,10 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#e9665d'
+	},
+	imageBG: {
+		width: '100%',
+		height: '100%'
 	},
 	triangle: {
 		width: 0,

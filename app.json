@@ -5,11 +5,11 @@
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": ["ios", "android"],
-    "version": "1.0.0",
+    "version": "3.0",
     "orientation": "portrait",
     "icon": "./assets/images/app-icon.png",
     "splash": {
-      "image": "./assets/images/SplashScreen.orig.png",
+      "image": "./assets/images/SplashScreen.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff",
       "width": 200,
@@ -21,8 +21,8 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "app.sandbox",
-      "buildNumber": "1",
+      "bundleIdentifier": "com.applab.sandbox",
+      "buildNumber": "3",
       "config": {
         "googleMapsApiKey": "AIzaSyBbCT3VbLTN04rhXpzuJ6_WUqwjJoNBeTg"
       }

@@ -364,7 +364,7 @@ export default class HomeScreen extends React.Component {
 							/>
 						)}
 					</View>
-					<ScrollView 
+					<ScrollView
 						refreshControl={
 							<RefreshControl
 							refreshing={this.state.refreshing}

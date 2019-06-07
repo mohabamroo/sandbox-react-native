@@ -21,9 +21,13 @@ export class UserBrief extends React.Component {
   }
 
   async componentDidMount() {
+    console.log('USERBRIEF:',URLs.imagesRoot + this.state.user.client_photo)
     let balanceObj = await BalanceDB.Get();
-
-    this.setState({ balanceObj });
+    if(!balanceObj){
+      this._onRefresh();
+    } else {
+      this.setState({ balanceObj });
+    }
     this.timer = setInterval(()=> this._onRefresh(), 1000 * 60 * 5);
     // this.pollBalance();
   }
