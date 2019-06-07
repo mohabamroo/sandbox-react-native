@@ -123,7 +123,6 @@ export default class Balance extends React.Component {
             <View
               style={[
                 styles.triangle,
-                styles.triangleDown,
                 styles.nameArea,
                 { borderBottomColor: '#f8b7bb' }
               ]}
@@ -195,13 +194,14 @@ const styles = StyleSheet.create({
   triangle: {
     width: 0,
     height: 0,
-    borderBottomWidth: Layout.window.width,
     backgroundColor: 'transparent',
     borderStyle: 'solid',
-    borderLeftWidth: Layout.window.width,
-    borderRightWidth: Layout.window.width / 2,
+    borderLeftWidth: 30,
+    borderRightWidth: 50,
+    borderBottomWidth: 100,
     borderLeftColor: 'transparent',
-    borderRightColor: 'transparent'
+    borderRightColor: 'transparent',
+    position: 'absolute', left: (Layout.window.width / 3) + 5
   },
   triangleDown: {
     transform: [{ rotate: '180deg' }]
@@ -211,8 +211,11 @@ const styles = StyleSheet.create({
   },
   textArea: {
     position: 'absolute',
-    top: 20,
-    left: Layout.window.width / 3 - 30
+    height: '100%',
+    left: Layout.window.width / 3 - 30,
+    backgroundColor: '#f8b7bb',
+    flexDirection: 'column',
+    justifyContent: 'center'
   },
   name: {
     fontSize: 18,
