@@ -112,6 +112,7 @@ export class UserBrief extends React.Component {
           <View
             style={[
               styles.triangle,
+              styles.triangleDown,
               styles.nameArea,
               { borderBottomColor: '#FDE9D6' }
             ]}
@@ -242,18 +243,24 @@ const styles = StyleSheet.create({
     zIndex: 3,
     justifyContent: 'center',
     backgroundColor: '#EEB8BB'
+    // width: '100%',
+    // borderTopWidth: 100,
+    // borderTopColor: 'red',
+    // borderLeftWidth: 0,
+    // borderLeftColor: 'transparent',
+    // borderRightWidth: 80,
+    // borderRightColor: 'transparent',
+    // borderStyle: 'solid'
   },
   triangle: {
     width: 0,
     height: 0,
+    borderBottomWidth: Layout.window.width,
     backgroundColor: 'transparent',
     borderStyle: 'solid',
-    borderLeftWidth: 30,
-    borderRightWidth: 50,
-    borderBottomWidth: 100,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    left: (Layout.window.width / 3) + 10, position: 'absolute'
+    borderLeftWidth: Layout.window.width,
+    borderRightWidth: Layout.window.width / 2,
+    borderRightColor: 'transparent'
   },
   triangleDown: {
     transform: [{ rotate: '180deg' }]
@@ -262,11 +269,8 @@ const styles = StyleSheet.create({
     marginLeft: (Layout.window.width / 6) * -1
   },
   textArea: {
-    height: '100%',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    backgroundColor: '#FDE9D6',
     position: 'absolute',
+    top: 30,
     left: Layout.window.width / 3 - 25
   },
   floatingLabel: {

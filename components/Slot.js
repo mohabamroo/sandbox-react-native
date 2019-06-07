@@ -73,8 +73,9 @@ export default class Slot extends React.Component {
           <View
             style={[
               styles.triangle,
+              styles.triangleDown,
               styles.nameArea,
-              { borderBottomColor: color, position: 'absolute', right: 52 }
+              { borderBottomColor: color, position: 'absolute', right: 75 }
             ]}
           />
           <View style={styles.textArea}>
