@@ -57,14 +57,14 @@ export default class Media extends React.Component {
       selectedMonthValue: null,
       selectedMonthName: 'Month',
       yearValue: null,
-      cca2: 'US',
+      cca2: 'EG',
       email: this.props.navigation.state.params.email,
-      callingCode: '1',
+      callingCode: '+20',
+      countryName: 'Egypt',
       fetching: false,
       PermissionsReady: false,
       image: null,
       base64: null,
-      countryName: 'Country'
     };
     this.navigationController = new NavigationController(this.props.navigation);
   }
@@ -282,33 +282,38 @@ export default class Media extends React.Component {
                 alignItems: 'center',
                 backgroundColor: 'white',
                 height: 35,
+                width: '100%',
+                flexGrow: 1,
                 justifyContent: 'space-between',
                 paddingHorizontal: 10
               }}
             >
-              <Text style={{ color: '#fabb79' }}>{this.state.countryName}</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <CountryPicker
-                  onChange={value => {
-                    this.setState({
-                      countryName: value.name,
-                      cca2: value.cca2,
-                      callingCode: value.callingCode
-                    });
-                  }}
-                  cca2={this.state.cca2}
-                  translation="eng"
-                  filterable
-                  showCountryNameWithFlag={false}
-                />
-
-                <AntDesign
-                  name="down"
-                  size={15}
-                  color="#fabb79"
-                  style={{ marginLeft: 10 }}
-                />
-              </View>
+              <CountryPicker
+                onChange={value => {
+                  this.setState({
+                    countryName: value.name,
+                    cca2: value.cca2,
+                    callingCode: value.callingCode
+                  });
+                }}
+                cca2={this.state.cca2}
+                translation="eng"
+                filterable
+                showCallingCode={true}
+                showCountryNameWithFlag={true}
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Text style={{ color: '#fabb79' }}>
+                    {this.state.countryName}
+                  </Text>
+                </View>
+              </CountryPicker>
+                  <AntDesign
+                    name="down"
+                    size={15}
+                    color="#fabb79"
+                    style={{ marginLeft: 10 }}
+                  />
             </View>
             <Text style={{ color: '#ffec59', fontSize: 10, marginVertical: 5 }}>
               Enter your Date of Birth
