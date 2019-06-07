@@ -299,8 +299,9 @@ export default class LinksScreen extends React.Component {
 						this.state.active == 'all' && (
 							<FlatList
 								data={this.state.artists}
+								windowSize={30}
 								extraData={this.state.artists}
-								removeClippedSubviews={Platform.OS === 'android'}
+								removeClippedSubviews={Platform.OS !== 'ios'}
 								ListFooterComponent={<View style={{ height: 220 }} />}
 								style={{ flex: 1 }}
 								keyExtractor={(item, idx) => idx + ''}
@@ -318,8 +319,9 @@ export default class LinksScreen extends React.Component {
 						this.state.active == 'main' && (
 							<FlatList
 								data={this.state.main}
+								windowSize={30}
 								extraData={this.state.main}
-								removeClippedSubviews={Platform.OS === 'android'}
+								removeClippedSubviews={Platform.OS !== 'ios'}
 								ListFooterComponent={<View style={{ height: 220 }} />}
 								style={{ flex: 1 }}
 								keyExtractor={(item, idx) => idx + ''}
@@ -337,8 +339,9 @@ export default class LinksScreen extends React.Component {
 						this.state.active == 'sandbox' && (
 							<FlatList
 								data={this.state.sandbox}
+								windowSize={30}
 								extraData={this.state.sandbox}
-								removeClippedSubviews={Platform.OS === 'android'}
+								removeClippedSubviews={Platform.OS !== 'ios'}
 								ListFooterComponent={<View style={{ height: 220 }} />}
 								style={{ flex: 1 }}
 								keyExtractor={(item, idx) => idx + ''}
