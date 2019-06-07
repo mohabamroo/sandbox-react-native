@@ -100,8 +100,8 @@ export default class Loading extends Component {
           // FIXME: when to direct to home, what's the condition
           if (
             success &&
-            success.artistsLastUpdate &&  
-            success.scheduleLastUpdate 
+            success.artistsLastUpdate &&
+            success.scheduleLastUpdate
           ) {
             this.navigationController.reset('Home');
             // console.log('from one');
@@ -143,6 +143,24 @@ export default class Loading extends Component {
     });
   }
 
+  cacheImages(images) {
+    return images.map(image => {
+      if (typeof image === 'string') {
+        return Image.prefetch(image);
+      } else {
+        return Asset.fromModule(image).downloadAsync();
+      }
+    });
+  }
+
+  async _loadAssetsAsync(images) {
+    const imageAssets = cacheImages(images);
+
+    const fontAssets = [];
+
+    await Promise.all([...imageAssets, ...fontAssets]);
+  }
+
   async DownloadTheData(object) {
     console.log('DOWNLOADING START');
     // object maybe undefined
@@ -174,6 +192,8 @@ export default class Loading extends Component {
           ? URLs.getArtists(this.formateDate(new Date()))
           : URLs.getArtists(undefined)
       ).then(response => response.json());
+      artistsImages = Artists.data.map(x => x.artist_image)
+
       this.setState({
         currentTaskText: 'Downloading artist info..'
       });
@@ -182,7 +202,7 @@ export default class Loading extends Component {
         currentTaskText: 'Downloading maps..'
       });
       General = await fetch(URLs.General).then(response => response.json());
-    
+
       Media = await fetch(URLs.Media).then(response => response.json());
       this.setState({
         currentTaskText: 'Downloading media..'

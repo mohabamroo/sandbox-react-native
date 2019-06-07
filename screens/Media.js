@@ -98,7 +98,7 @@ export default class Media extends React.Component {
   componentWillUnmount() {
 		this.backHandler.remove();
   }
-  
+
   handleBackClick() {
 		const self = this;
 		this.backHandler = BackHandler.addEventListener('hardwareBackPress', function() {
@@ -336,7 +336,7 @@ export default class Media extends React.Component {
       <ImageBackground
         resizeMode="repeat"
         source={Assets.bg2}
-        style={__GStyles.default.container}
+        style={styles.imageBG}
       >
         <HeaderComponent navigation={this.props.navigation} />
 
@@ -489,6 +489,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center'
+  },
+  imageBG: {
+    width: '100%',
+    height: '100%'
   },
   imagesContainer: {
     width: Layout.window.width,

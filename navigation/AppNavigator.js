@@ -413,7 +413,7 @@ export default createAppContainer(
       }
     },
     {
-      initialRouteName: 'DataActivation',
+      initialRouteName: 'Loading',
       mode: 'card',
       navigationOptions: {
         animationEnabled: true
