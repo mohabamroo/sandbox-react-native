@@ -4,7 +4,10 @@
     "slug": "sandbox",
     "privacy": "public",
     "sdkVersion": "32.0.0",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "version": "3.0",
     "orientation": "portrait",
     "icon": "./assets/images/app-icon.png",
@@ -18,11 +21,13 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.applab.sandbox",
-      "buildNumber": "4",
+      "buildNumber": "5",
       "config": {
         "googleMapsApiKey": "AIzaSyBbCT3VbLTN04rhXpzuJ6_WUqwjJoNBeTg"
       }
@@ -37,8 +42,9 @@
         }
       }
     },
-    "notification":{
+    "notification": {
       "icon": "./assets/images/app-icon.png"
-    }
+    },
+    "description": ""
   }
 }

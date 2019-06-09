@@ -46,6 +46,7 @@ export default StyleSheet.create({
   pageTitleBox: {
     justifyContent: 'center',
     alignItems: 'center',
+    minWidth: 70,
     backgroundColor: 'rgb(217, 110, 98)'
   },
   LabelsPaddings: {
@@ -64,7 +65,7 @@ export default StyleSheet.create({
     left: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    width: 100,
+    width: 120,
     height: 30,
   }
 });

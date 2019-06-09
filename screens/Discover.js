@@ -44,6 +44,7 @@ export default class Discover extends React.Component {
 
 	async componentWillMount() {
 		let places = await DiscoverDB.Get();
+
 		if(places) {
 			this.setMapContent(places);
 		}
@@ -52,8 +53,6 @@ export default class Discover extends React.Component {
 
 	setMapContent(places) {
 		map = places.filter(item => item.location_type === 'SHOW ALL')[0];
-		places = places.filter(item => !(item.location_type === 'SHOW ALL'));
-
 		show = {};
 		for (i in places) {
 			item = places[i];
@@ -163,6 +162,7 @@ export default class Discover extends React.Component {
 									</View>
 								)
 							}
+							console.log('iksjkahdljashdlkas',item.item.location_type)
 							return (
 								<View
 									style={{
