@@ -177,7 +177,7 @@ export default class ProfileScreen extends React.Component {
   render() {
     let title = {
       text: 'Your Favorites',
-      fontColor: 'white',
+      fontColor: '#ffec59',
       bgColor: 'rgb(231,102,97)'
     };
     return (

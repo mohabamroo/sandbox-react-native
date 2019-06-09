@@ -46,7 +46,7 @@ export default class ArtistRow extends React.Component {
 				<View key={index} style={styles.artistRow}>
 					<Image
 						source={{ uri: row.artist_image, cache: 'force-cache' }}
-						loadingIndicatorSource={Assets.artistPlaceholder}
+						defaultSource={Assets.artistPlaceholder}
 						style={styles.image}
 					/>
 					{this.state.loggedIn && (

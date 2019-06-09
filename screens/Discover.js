@@ -85,6 +85,15 @@ export default class Discover extends React.Component {
 		  });
 	  }
 
+		checkShowAll() {
+			show = this.state.show
+			let isShowAll = true;
+			for(i in show){
+				isShowAll &= show[i]
+			}
+			return isShowAll
+		}
+
 	render() {
 		return (
 			<ImageBackground
@@ -145,7 +154,18 @@ export default class Discover extends React.Component {
 											checkBoxColor={'white'}
 											checkedCheckBoxColor={'white'}
 											onClick={() => {
+												show = this.state.show;
+												if(this.state.showAll){
+													for(i in show){
+														show[i] = false
+													}
+												} else {
+													for(i in show){
+														show[i] = true
+													}
+												}
 												this.setState({
+													show,
 													showAll: !this.state.showAll
 												});
 											}}
@@ -183,10 +203,11 @@ export default class Discover extends React.Component {
 												item.item.location_type
 											];
 											this.setState({
-												show
+												show,
+												showAll: this.checkShowAll()
 											});
 										}}
-										isChecked={this.state.show[item.item.location_type] || this.state.showAll}
+										isChecked={this.state.show[item.item.location_type]}
 										leftText={item.item.location_type}
 										leftTextStyle={{
 											fontSize: 16,

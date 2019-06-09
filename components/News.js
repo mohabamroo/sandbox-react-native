@@ -129,7 +129,7 @@ export class News extends React.Component {
             <Label
               title={{
                 bgColor: '#60A484',
-                fontColor: '#fff',
+                fontColor: '#ffec59',
                 text: 'Our News'
               }}
             />

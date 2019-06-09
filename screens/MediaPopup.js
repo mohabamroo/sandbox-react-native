@@ -117,7 +117,7 @@ export default class ArtistPopup extends React.Component {
                       <Image
                         source={Assets.close}
                         resizeMode={'contain'}
-                        style={{ width: 20 }}
+                        style={{ width: 40 }}
                       />
                     </TouchableOpacity>
                   </ImageBackground>
@@ -152,8 +152,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 5,
     right: 5,
-    height: 20,
-    width: 20,
+    height: 40,
+    width: 40,
     justifyContent: 'center'
   }
 });
