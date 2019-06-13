@@ -3,7 +3,6 @@ import { ScrollView, Image, TouchableOpacity, StyleSheet, View, Text, ListView, 
 import HeaderComponent from '../components/HeaderComponent';
 import * as __GStyles from '../styles';
 import Accordion from 'react-native-collapsible/Accordion';
-import Footer from '../components/Footer';
 import Assets from '../constants/Assets';
 import Layout from '../constants/Layout';
 export default class Partners extends React.Component {
@@ -18,7 +17,6 @@ export default class Partners extends React.Component {
         <ScrollView contentContainerStyle={styles.container}>
           <Image style={{height: Layout.window.height * 1.5}} resizeMode="contain" source={{uri: this.props.navigation.state.params.in.partners_image}} />
         </ScrollView>
-        <Footer />
       </ImageBackground>
     );
   }

@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import ArtistPopup from './ArtistPopup';
-import Footer from '../components/Footer';
 import Assets from '../constants/Assets';
 import { NavigationController } from '../navigation/index';
 
@@ -173,7 +172,7 @@ export default class ProfileScreen extends React.Component {
             style={{ zIndex: 1 }}
           />
         )}
-        <Footer />
+
       </View>
     );
   }

@@ -12,8 +12,8 @@ import {
 import HeaderComponent from '../components/HeaderComponent';
 import * as __GStyles from '../styles';
 import Accordion from 'react-native-collapsible/Accordion';
-import Footer from '../components/Footer';
 import Assets from '../constants/Assets';
+
 export default class Rules extends React.Component {
   ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
   constructor(props) {
@@ -109,7 +109,6 @@ export default class Rules extends React.Component {
             />
           </View>
         </ScrollView>
-        <Footer />
       </ImageBackground>
     );
   }

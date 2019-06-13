@@ -12,7 +12,6 @@ import moment from 'moment';
 import * as __GStyles from '../styles';
 import { NavigationController } from '../navigation/index';
 import HeaderComponent from '../components/HeaderComponent';
-import Footer from '../components/Footer';
 import Quadrilateral from '../components/Quadrilateral';
 import CurrentlyPlaying from '../components/CurrentlyPlaying';
 import ArtistPopup from './ArtistPopup';
@@ -29,7 +28,7 @@ import { EventInfoDB, SchedualDB, ArtistsDB, UserDB } from '../Config/DB';
 // const start_days = [moment]
 
 export default class HomeScreen extends React.Component {
-  
+
   __navigationOptions = {
     title: {
       text: 'The Home Screen',
@@ -74,30 +73,30 @@ export default class HomeScreen extends React.Component {
 		let now = moment();
 		// If festival has not started or has ended
 		let day = '';
-		if (
+    if (
 			now.isAfter(
 				moment().set({ year: 2019, month: 5, date: 13, hour: 12, minute: 59 })
 			) &&
 			now.isBefore(
-				moment().set({ year: 2019, month: 5, date: 14, hour: 12, minute: 15 })
+				moment().set({ year: 2019, month: 5, date: 14, hour: 5, minute: 0 })
 			)
 		) {
 			day = 'day1';
 		} else if (
 			now.isAfter(
-				moment().set({ year: 2019, month: 5, date: 14, hour: 12, minute: 59 })
+				moment().set({ year: 2019, month:5, date: 14, hour: 12, minute: 59 })
 			) &&
 			now.isBefore(
-				moment().set({ year: 2019, month: 5, date: 15, hour: 11, minute: 59 })
+				moment().set({ year: 2019, month: 5, date: 15, hour: 4, minute: 0 })
 			)
 		) {
-			day = 'day2';
+		    day = 'day2';
 		} else if (
 			now.isAfter(
-				moment().set({ year: 2019, month: 5, date: 15, hour: 12, minute: 59 })
+				moment().set({ year: 2019, month:5, date: 15, hour: 12, minute: 59 })
 			) &&
 			now.isBefore(
-				moment().set({ year: 2019, month: 5, date: 16, hour: 15, minute: 59 })
+				moment().set({ year: 2019, month: 5, date: 16, hour: 4, minute: 0 })
 			)
 		) {
 			day = 'day3';
@@ -323,7 +322,7 @@ export default class HomeScreen extends React.Component {
 						/>
 					)}
 
-				<Footer />
+
 			</ImageBackground>
 		);
 	}

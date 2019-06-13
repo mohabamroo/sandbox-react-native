@@ -13,7 +13,6 @@ import Assets from '../constants/Assets';
 import * as __GStyles from '../styles';
 import { BalanceDB } from '../Config/DB';
 import Layout from '../constants/Layout';
-import Footer from '../components/Footer';
 const URLs = require('../Config/ExternalURL');
 export default class Balance extends React.Component {
   constructor(props) {
@@ -171,7 +170,7 @@ export default class Balance extends React.Component {
           <Text style={styles.listTitle}>Orders List</Text>
           {orders.map((order, idx) => this.renderOrderRow(order, idx))}
         </ScrollView>
-        <Footer />
+
       </ImageBackground>
     );
   }

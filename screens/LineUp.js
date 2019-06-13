@@ -14,7 +14,6 @@ import {
 
 import HeaderComponent from '../components/HeaderComponent';
 import ArtistPopup from './ArtistPopup';
-import Footer from '../components/Footer';
 import Assets, * as assets from '../constants/Assets';
 import { FavoritesDB, ArtistsDB } from '../Config/DB';
 import * as __GStyles from '../styles';
@@ -288,7 +287,7 @@ export default class LinksScreen extends React.Component {
 							onClose={() => this.setState({ show_popup: false })}
 						/>
 					)}
-				<Footer />
+
 			</ImageBackground>
 		);
 	}

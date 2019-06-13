@@ -3,7 +3,6 @@ import { ScrollView, Image, TouchableOpacity, StyleSheet, View, Text, ListView, 
 import HeaderComponent from '../components/HeaderComponent';
 import * as __GStyles from '../styles';
 import Accordion from 'react-native-collapsible/Accordion';
-import Footer from '../components/Footer';
 import Assets from '../constants/Assets';
 export default class Policies extends React.Component {
   ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -16,10 +15,10 @@ export default class Policies extends React.Component {
     }
   }
   async componentDidMount(){
-    
+
   }
   renderRowNews(row, L, index){
-    
+
   }
   _renderSectionTitle(content, index){
     return (
@@ -44,7 +43,7 @@ export default class Policies extends React.Component {
       return (
         <View style={[styles.contentContainer, {backgroundColor: this.state.colors[index]}]}>
             {this.returnRules(content.policies)}
-          
+
         </View>
     )
   }
@@ -59,7 +58,7 @@ export default class Policies extends React.Component {
           {/* Go ahead and delete ExpoLinksView and replace it with your
             * content, we just wanted to provide you with some helpful links */}
             <View>
-                <Accordion 
+                <Accordion
                     activeSections={this.state.activeSection}
                     sections={this.state.content}
                     renderSectionTitle={this._renderSectionTitle.bind(this)}
@@ -69,7 +68,7 @@ export default class Policies extends React.Component {
                 />
             </View>
         </ScrollView>
-        <Footer />
+
       </ImageBackground>
     );
   }

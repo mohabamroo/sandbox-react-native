@@ -13,7 +13,6 @@ import {
 import Modal from 'react-native-modal';
 import Carousel from 'react-native-snap-carousel';
 import Layout from '../constants/Layout';
-import Footer from '../components/Footer';
 import Assets from '../constants/Assets';
 
 const { height, width } = Dimensions.get('window');
@@ -87,9 +86,7 @@ export default class ArtistPopup extends React.Component {
 						/>
 					</View>
 				</View>
-				<View style={{ position: 'absolute', bottom: -20, left: -20, flex: 1 }}>
-					<Footer />
-				</View>
+
 
 			</Modal>
 		);
