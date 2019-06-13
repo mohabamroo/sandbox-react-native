@@ -13,6 +13,8 @@ import Assets from '../constants/Assets';
 import * as __GStyles from '../styles';
 import { BalanceDB } from '../Config/DB';
 import Layout from '../constants/Layout';
+import Footer from '../components/Footer';
+
 const URLs = require('../Config/ExternalURL');
 export default class Balance extends React.Component {
   constructor(props) {
@@ -27,36 +29,42 @@ export default class Balance extends React.Component {
   }
 
   async componentDidMount() {
-    let balanceObj = await BalanceDB.Get();
-    this.setState({ balanceObj });
+    // let balanceObj = await BalanceDB.Get();
+    // this.setState({ balanceObj });
   }
 
   renderOrderRow(order, idx) {
     return (
       <View style={styles.orderRow} key={idx}>
-        <Text style={styles.orderTitle}>{'ORDER: ' + idx}</Text>
+        <View style={styles.orderHeader}>
+          <Text style={styles.orderTitle}>{'ORDER: ' + idx}</Text>
+          <Text style={styles.totalPrice}>
+            -{+Math.ceil(order.total / 100)} EGP
+          </Text>
+        </View>
         {order.items.map((item, itemIdx) => {
           return (
             <View style={styles.itemRow} key={itemIdx}>
-              <Text style={{ flex: 1 }}>{item.name}</Text>
-              <Text style={{ flex: 1 }}>{item.quantity}</Text>
-              <Text style={{ flex: 1 }}>{item.price}</Text>
-              <Text style={{ flex: 1 }}>{Math.ceil(item.subtotal / 100)}</Text>
+              <Text>({item.quantity})</Text>
+              <Text> . {item.name}</Text>
+              <Text> - Unit Price {Math.ceil(item.price / 100)} EGP</Text>
+              {/* <Text style={{ flex: 1 }}>{Math.ceil(item.subtotal / 100)}</Text> */}
             </View>
           );
         })}
-        <Text style={styles.totalPrice}>
-          {'Total: ' + Math.ceil(order.total / 100) + 'EGP'}
-        </Text>
       </View>
     );
   }
   _onRefresh() {
-    fetch(URLs.getBalance(this.state.qrCode))
+    let qrCode = this.state.qrCode;
+    qrCode = 111;
+    fetch(URLs.getBalance(qrCode))
       .then(response => {
-        console.log("TCL: Balance -> _onRefresh -> response", response)
+        console.log('TCL: Balance -> _onRefresh -> response', response);
         if (response.status == 200) {
           return response.json();
+        } else {
+          throw new Error();
         }
       })
       .then(apiResponse => {
@@ -116,12 +124,12 @@ export default class Balance extends React.Component {
         style={__GStyles.default.container}
       >
         <HeaderComponent navigation={this.props.navigation} />
-        <View style={{ width: '100%', height: 150, backgroundColor: 'white' }}>
+        <View style={{ width: '100%', height: 160 }}>
           <View
             style={{
               flexDirection: 'row',
               width: '100%',
-              height: Layout.window.width / 3,
+              height: 160,
               overflow: 'hidden',
               position: 'relative',
               backgroundColor: '#f8b7bb'
@@ -129,8 +137,7 @@ export default class Balance extends React.Component {
           >
             <Image
               source={{
-                uri:
-                  'https://sandboxfestival.com/wp-content/uploads/2018/04/SB18-Map-1500x1500-2-no-labels.jpg'
+                uri: 'https://nacelle.nbhood.com/' + user.client_photo
               }}
               style={{
                 width: Layout.window.width / 3,
@@ -158,6 +165,27 @@ export default class Balance extends React.Component {
           </View>
         </View>
 
+        <ImageBackground
+          resizeMode="stretch"
+          source={Assets.homeProfile}
+          style={{ height: 60, backgroundColor: 'transparent', marginTop: -10 }}
+        >
+          <View
+            style={{
+              backgroundColor: '#FDE9D6',
+              padding: 3,
+              left: 20,
+              top: 10,
+              height: 25,
+              alignItems: 'center',
+              position: 'absolute'
+            }}
+          >
+            <Text style={(styles.listTitle, { color: '#f069a7' })}>
+              Orders List
+            </Text>
+          </View>
+        </ImageBackground>
         <ScrollView
           style={styles.ordersList}
           refreshControl={
@@ -167,10 +195,10 @@ export default class Balance extends React.Component {
             />
           }
         >
-          <Text style={styles.listTitle}>Orders List</Text>
           {orders.map((order, idx) => this.renderOrderRow(order, idx))}
+          <View style={styles.footerMargin} />
         </ScrollView>
-
+        <Footer />
       </ImageBackground>
     );
   }
@@ -223,8 +251,7 @@ const styles = StyleSheet.create({
   },
   orderRow: {
     backgroundColor: 'white',
-    borderBottomWidth: 1,
-    marginBottom: 10
+    marginTop: 20
   },
   itemRow: {
     flex: 1,
@@ -232,10 +259,13 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'flex-start',
+    color: 'white'
   },
   ordersList: {
     padding: 10,
+    marginTop: -10,
+    paddingTop: 50,
     paddingLeft: 10,
     backgroundColor: 'white'
   },
@@ -243,17 +273,25 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     paddingLeft: 5,
-    marginBottom: 10
+    marginBottom: 10,
+    color: 'white'
   },
   totalPrice: {
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
     textAlign: 'right',
-    fontWeight: 'bold',
-    marginTop: 5,
-    marginBottom: 5
+    fontWeight: 'bold'
   },
   orderTitle: {
-    paddingLeft: 10
+    fontWeight: 'bold',
+    paddingLeft: 20,
+    fontSize: 16
+  },
+  orderHeader: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'space-between',
+    flexDirection: 'row'
+  },
+  footerMargin: {
+    height: Layout.window.height / 3
   }
 });

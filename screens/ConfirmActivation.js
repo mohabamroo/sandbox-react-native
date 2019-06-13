@@ -8,7 +8,8 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
-  ImageBackground
+  ImageBackground,
+  Alert
 } from 'react-native';
 import CodeInput from 'react-native-confirmation-code-input';
 import HeaderComponent from '../components/HeaderComponent';
@@ -16,6 +17,7 @@ const { width, height } = Dimensions.get('window');
 import * as __GStyles from '../styles';
 import { NavigationController } from '../navigation/index';
 import Assets from '../constants/Assets';
+import Footer from '../components/Footer';
 
 export default class Media extends React.Component {
   constructor(props) {
@@ -42,9 +44,12 @@ export default class Media extends React.Component {
       },
       body: form
     }).then(res => {
-      console.log("TCL: Media -> res", res)
+      console.log('TCL: Media -> res', res);
       if (res.status != 200) {
-        alert('wrong code');
+        Alert.alert(
+          'Wrong code',
+          'You have entered the wrong code, please check and try again.'
+        );
       } else {
         this.props.navigation.navigate('DataActivation', {
           email,
@@ -101,8 +106,6 @@ export default class Media extends React.Component {
                 codeLength={4}
                 secureTextEntry={false}
                 keyboardType="numeric"
-                activeColor="rgba(49, 180, 4, 1)"
-                inactiveColor="rgba(49, 180, 4, 1.3)"
                 autoFocus={false}
                 ignoreCase={true}
                 inputPosition="center"
@@ -110,8 +113,8 @@ export default class Media extends React.Component {
                 containerStyle={{ marginTop: 20 }}
                 onFulfill={txt => this.submitCode(txt)}
                 codeInputStyle={{
-                  borderWidth: 1.5,
                   backgroundColor: 'white',
+                  color: '#FBBA79',
                   fontSize: 20
                 }}
               />
@@ -140,7 +143,7 @@ export default class Media extends React.Component {
             </View>
           </View>
         </ScrollView>
-
+        <Footer />
       </ImageBackground>
     );
   }

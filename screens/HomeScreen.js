@@ -24,6 +24,7 @@ import Layout from '../constants/Layout';
 import { CountDownTimer } from '../components/CountDownTimer';
 import { UserBrief } from '../components/UserBrief';
 import { EventInfoDB, SchedualDB, ArtistsDB, UserDB } from '../Config/DB';
+import Footer from '../components/Footer';
 
 // const start_days = [moment]
 
@@ -168,9 +169,10 @@ export default class HomeScreen extends React.Component {
 
 	handleCountdown() {
 		// FIXME: hardcoded for testing
-		const startDateTime = new Date('2019-06-03T13:00:00Z');
+		const startDateTime = new Date('2019-06-13T13:00:00Z');
 		const endDateTime = new Date('2019-06-16T04:00:00Z');
 		const diff = Math.floor((startDateTime - new Date()) / 1000);
+    console.log("TCL: HomeScreen -> handleCountdown -> diff", diff)
 		const endedFlag = Math.floor((new Date() - endDateTime) / 1000);
 		const self = this;
 		return {
@@ -346,6 +348,9 @@ export default class HomeScreen extends React.Component {
 							onClose={() => this.setState({ show_popup: false })}
 						/>
 					)}
+
+        <Footer />
+
 			</ImageBackground>
 		);
 	}

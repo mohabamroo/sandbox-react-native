@@ -110,7 +110,7 @@ export class News extends React.Component {
       <View style={styles.container}>
         {/**News header section */}
         <ImageBackground
-          source={Assets.circ1}
+          source={Assets.circ7}
           resizeMode="repeat"
           style={styles.sectionHeaderContainer}
         >
@@ -125,7 +125,7 @@ export class News extends React.Component {
           >
             <Label
               title={{
-                bgColor: '#0899A8',
+                bgColor: '#60A484',
                 fontColor: '#fff',
                 text: 'Our News'
               }}
@@ -172,7 +172,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.newsLabelBG
   },
   dateLabelText: {
-    color: Colors.newsLabelFontColor
+    color: Colors.newsLabelFontColor,
+    fontSize: 11
   },
   newsFooter: {
     width: '100%',

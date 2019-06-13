@@ -5,14 +5,23 @@ import AppNavigator from './navigation/AppNavigator';
 import Footer from './components/Footer';
 
 Text.defaultProps = {
-	allowFontScaling: true
+  allowFontScaling: true
 };
 
 export default class App extends React.Component {
+  constructor() {
+    super();
+    console.ignoredYellowBox = ['Setting a timer'];
+  }
   state = {
-    isLoadingComplete: false,
+    isLoadingComplete: false
   };
-
+  handleNavigation(navigationProps) {
+    console.log(
+      'TCL: App -> handleNavigation -> navigationProps',
+      navigationProps
+    );
+  }
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -26,8 +35,8 @@ export default class App extends React.Component {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
-					<Footer />
+          <AppNavigator onNavigationSet={this.handleNavigation} />
+          {/* <Footer /> */}
         </View>
       );
     }
@@ -36,7 +45,7 @@ export default class App extends React.Component {
   _loadResourcesAsync = async () => {
     // should load all the data in the application.
 
-    console.log("Loading the resources");
+    console.log('Loading the resources');
     // return Promise.all([
     //   Asset.loadAsync([
     //     require('./assets/images/robot-dev.png'),
@@ -66,6 +75,6 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
+    backgroundColor: '#fff'
+  }
 });
