@@ -253,11 +253,24 @@ export default class HomeScreen extends React.Component {
 
 	async fetchFavorites() {
 		if (this.state.loggedIn) {
-			let favorites = await FavoritesDB.Get();
-			if (favorites) {
-                console.log("TCL: HomeScreen -> fetchFavorites -> favorites", favorites)
-				this.setState({ favoriteArtists: favorites });
-			}
+			let initialArtists = this.state.artists;
+			FavoritesDB.Get().then(artists => {
+				initialArtists.forEach((artist, index) => {
+					initialArtists[index]['liked'] = false;
+				});
+				if (artists) {
+					artists.forEach(likedArtist => {
+						if (likedArtist && likedArtist.artist_id) {
+							initialArtists.forEach((artist, index) => {
+								if (artist.artist_id == likedArtist.artist_id) {
+									initialArtists[index]['liked'] = true;
+								}
+							});
+						}
+					});
+				}
+				this.setState({ artists: initialArtists, favoriteArtists: artists });
+			});
 		}
 	}
 
@@ -363,6 +376,7 @@ export default class HomeScreen extends React.Component {
 							artist={this.state.current_artist}
 							color1={'#7bc19e'}
 							color2={'#f8b7bb'}
+							notifyParent={() => this.fetchFavorites()}
 							onClose={() => this.setState({ show_popup: false })}
 						/>
 					)}

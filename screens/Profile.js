@@ -90,8 +90,19 @@ export default class ProfileScreen extends React.Component {
     console.log('refreshing favorites list');
     this.refreshFavoritesList();
   }
+
+  sortArrayAsc(array, key) {
+   return array.sort(function (a,b) {
+     console.log(b)
+     return a.artist_name < b.artist_name ? -1
+          : b.artist_name < a.artist_name ? 1
+          : 0
+   })
+ }
+
   setArtists(artists) {
     artists = artists.filter(x => x.artist_session);
+    artists = this.sortArrayAsc(artists, 'artist_name')
     console.log('TCL: ProfileScreen -> setArtists -> artists', artists.length);
     let dsData = this.ds.cloneWithRows(artists);
     this.setState({
