@@ -22,7 +22,7 @@ export default class CurrentlyPlaying extends React.Component {
 	}
 
 	render() {
-		let { sandbox, main } = this.props.currentEvents;
+		let { sandbox, main, nextM, nextS } = this.props.currentEvents;
 		// console.log(main, sandbox);
 		return (
 			<View style={styles.container}>
@@ -108,7 +108,7 @@ export default class CurrentlyPlaying extends React.Component {
 											zIndex: 3
 										}}
 										size={14}
-										liked={true}
+										liked={this.props.favorites && this.props.favorites.filter(x => x.artist_id == main.artistId).length > 0}
 										loggedIn={this.props.loggedIn}
 										user_id={this.props.user.id}
 										artist_id={main.artistId}
@@ -148,20 +148,26 @@ export default class CurrentlyPlaying extends React.Component {
 									resizeMode={'cover'}
 								/>
 							</View>
-							<TouchableOpacity
-								style={{
-									position: 'absolute',
-									top: 15,
-									left: 10
-								}}
-								onPress={() => console.log('ss')}
-							>
-								<Image
-									source={Assets.heart_off}
-									style={{ width: 20, height: 20 }}
-									resizeMode={'contain'}
-								/>
-							</TouchableOpacity>
+							{
+								this.props.loggedIn && (
+									<LikeButton
+										style={{
+											width: 25,
+											height: 25,
+											position: 'absolute',
+											top: 10,
+											left: 5,
+											zIndex: 3
+										}}
+										size={14}
+										liked={this.props.favorites && this.props.favorites.filter(x => x.artist_id == sandbox.artistId).length > 0}
+										loggedIn={this.props.loggedIn}
+										user_id={this.props.user.id}
+										artist_id={sandbox.artistId}
+										notifyParent={() => this.props.notifyParent()}
+									/>
+								)
+							}
 							<View
 								style={[
 									styles.triangle1,
@@ -205,20 +211,26 @@ export default class CurrentlyPlaying extends React.Component {
 								resizeMode={'cover'}
 							/>
 						</View>
-						<TouchableOpacity
-							style={{
-								position: 'absolute',
-								top: 15,
-								left: 10
-							}}
-							onPress={() => console.log('ss')}
-						>
-							<Image
-								source={Assets.heart_off}
-								style={{ width: 20, height: 20 }}
-								resizeMode={'contain'}
-							/>
-						</TouchableOpacity>
+						{
+							this.props.loggedIn && (
+								<LikeButton
+									style={{
+										width: 25,
+										height: 25,
+										position: 'absolute',
+										top: 10,
+										left: 5,
+										zIndex: 3
+									}}
+									size={14}
+									liked={this.props.favorites && this.props.favorites.filter(x => x.artist_id == nextM.artistId).length > 0}
+									loggedIn={this.props.loggedIn}
+									user_id={this.props.user.id}
+									artist_id={nextM.artistId}
+									notifyParent={() => this.props.notifyParent()}
+								/>
+							)
+						}
 						<View
 							style={[
 								styles.triangle1,
@@ -251,20 +263,26 @@ export default class CurrentlyPlaying extends React.Component {
 								resizeMode={'cover'}
 							/>
 						</View>
-						<TouchableOpacity
-							style={{
-								position: 'absolute',
-								top: 15,
-								left: 10
-							}}
-							onPress={() => console.log('ss')}
-						>
-							<Image
-								source={Assets.heart_off}
-								style={{ width: 20, height: 20 }}
-								resizeMode={'contain'}
-							/>
-						</TouchableOpacity>
+						{
+							this.props.loggedIn && (
+								<LikeButton
+									style={{
+										width: 25,
+										height: 25,
+										position: 'absolute',
+										top: 10,
+										left: 5,
+										zIndex: 3
+									}}
+									size={14}
+									liked={this.props.favorites && this.props.favorites.filter(x => x.artist_id == nextS.artistId).length > 0}
+									loggedIn={this.props.loggedIn}
+									user_id={this.props.user.id}
+									artist_id={nextS.artistId}
+									notifyParent={() => this.props.notifyParent()}
+								/>
+							)
+						}
 						<View
 							style={[
 								styles.triangle1,

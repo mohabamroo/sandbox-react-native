@@ -159,19 +159,22 @@ export default class HomeScreen extends React.Component {
 
 		schedule[day]['SANDBOX Stage'].forEach((artist, index) => {
 			if (currentS[0].artistName === artist.artistName) indexS = index;
+			console.log('HomeScreen->handleSchedule->CurrentS: ', currentS[0].artistName === artist.artistName,currentS[0].artistName ,artist.artistName, indexS  )
 		});
-		if (indexM === currentM.length - 1) {
+		if (indexM === schedule[day]['Main Stage'].length - 1) {
 			indexM = null;
 		} else {
 			indexM += 1;
 			nextM = schedule[day]['Main Stage'][indexM];
 		}
-		if (indexS === currentS.length - 1) {
+		if (indexS === schedule[day]['SANDBOX Stage'].length - 1) {
 			indexS = null;
 		} else {
 			indexS += 1;
 			nextS = schedule[day]['SANDBOX Stage'][indexS];
 		}
+
+		console.log(nextM, nextS)
 
 		this.setState({
 			currentEvents: {

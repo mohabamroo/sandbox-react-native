@@ -44,7 +44,8 @@ function setNotificationTime(artist) {
 			month: 5,
 			date: 13,
 			hour: Number(timeSplit[0]),
-			minute: Number(timeSplit[1])
+			minute: Number(timeSplit[1]),
+			seconds: 0
 		});
 	} else if (day === 'day2') {
 		time = moment().set({
@@ -52,7 +53,8 @@ function setNotificationTime(artist) {
 			month: 5,
 			date: 14,
 			hour: Number(timeSplit[0]),
-			minute: Number(timeSplit[1])
+			minute: Number(timeSplit[1]),
+			seconds: 0
 		});
 	} else if (day === 'day3') {
 		time = moment().set({
@@ -60,7 +62,8 @@ function setNotificationTime(artist) {
 			month: 5,
 			date: 15,
 			hour: Number(timeSplit[0]),
-			minute: Number(timeSplit[1])
+			minute: Number(timeSplit[1]),
+			seconds: 0
 		});
 	}
 	if (time.hours() < 12) time.add(1, 'days');
@@ -73,13 +76,15 @@ export function scheduleFavoritesNotifications() {
 	FavoritesDB.Get().then(artists => {
 		if (artists) {
 			artists.forEach((artist, index) => {
-				let time = setNotificationTime(artist);
-				let text = `${artist.artist_name} plays on the ${
-					artist.artist_session.session_stage
-				} in 10 minutes.`;
-				if(moment().isBefore(time)){
-					console.log(text)
-					scheduleNotification(text, text, time.valueOf());
+				if (artist && artist.artist_session) {
+					let time = setNotificationTime(artist);
+					let text = `${artist.artist_name} plays on the ${
+						artist.artist_session.session_stage
+					} in 10 minutes.`;
+					console.log('SANDBOX Festival', text, time);
+					if (moment().isBefore(time)) {
+						scheduleNotification('SANDBOX Festival', text, time.valueOf());
+					}
 				}
 			});
 		}

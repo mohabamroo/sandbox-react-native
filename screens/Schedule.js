@@ -444,6 +444,7 @@ export default class Schedule extends React.Component {
 	}
 
 	render() {
+		let { loggedIn } = this.state
 		return (
 			<ImageBackground
 				style={__GStyles.default.container}
@@ -474,7 +475,7 @@ export default class Schedule extends React.Component {
 									<Slot
 										onPress={() => {
 											current_artist = this.state.artists.filter(
-												x => x.artist_id == item.artistId
+												x => x.artist_id == object.item.artistId
 											)[0];
 											this.setState({
 												show_popup: true,
@@ -482,7 +483,7 @@ export default class Schedule extends React.Component {
 											});
 										}}
 										artists={this.state.artists}
-										user_id={this.state.user.id}
+										user_id={loggedIn? this.state.user.id: null}
 										loggedIn={this.state.loggedIn}
 										notifyParent={() => this.fetchFavorites()}
 										{...object}
@@ -495,7 +496,7 @@ export default class Schedule extends React.Component {
 									<Slot
 										onPress={() => {
 											current_artist = this.state.artists.filter(
-												x => x.artist_id == item.artistId
+												x => x.artist_id == object.item.artistId
 											)[0];
 											this.setState({
 												show_popup: true,
@@ -503,7 +504,7 @@ export default class Schedule extends React.Component {
 											});
 										}}
 										artists={this.state.artists}
-										user_id={this.state.user.id}
+										user_id={loggedIn? this.state.user.id: null}
 										loggedIn={this.state.loggedIn}
 										notifyParent={() => this.fetchFavorites()}
 										{...object}
@@ -567,7 +568,7 @@ export default class Schedule extends React.Component {
 					this.state.show_popup && (
 						<ArtistPopup
 							loggedIn={this.state.loggedIn}
-							user={this.state.user}
+							user={loggedIn? this.state.user: null}
 							artist={this.state.current_artist}
 							color1={this.state.colors1[this.state.colorIdx]}
 							color2={this.state.colors2[this.state.colorIdx]}

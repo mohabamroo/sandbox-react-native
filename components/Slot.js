@@ -24,7 +24,7 @@ export default class Slot extends React.Component {
 		let {width, color, item, user_id, loggedIn, artists, empty} = this.props;
     if(empty){
       return <View style={{ width, height: 150 }} />
-    } else 
+    } else
 		return (
       <TouchableHighlight
         onPress={() => this.props.onPress()}
