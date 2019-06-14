@@ -20,7 +20,10 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.sandbox.festival",
-      "buildNumber": "1"
+      "buildNumber": "1",
+      "config": {
+        "googleMapsApiKey": "AIzaSyBbCT3VbLTN04rhXpzuJ6_WUqwjJoNBeTg"
+      }
     },
     "android": {
       "package": "com.sandbox.festival",
