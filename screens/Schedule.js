@@ -211,7 +211,7 @@ export default class Schedule extends React.Component {
 		let timer = (slots + 0.45) * interval;
 		let max =
 			this.state[day].timeslots.length * interval + 60 - Layout.window.width;
-		this.setState({ timer: Math.max(0, Math.min(timer, max)) });
+		this.setState({ timer: Math.max(0, timer) });
 		this.scrollView.scrollTo({
 			x: Math.max(0, Math.min(scrollValue, max)),
 			animated: true
