@@ -94,7 +94,7 @@ export default class HomeScreen extends React.Component {
 		);
 		this.fetchFavorites();
 		this.handleSchedule();
-		this._interval = setInterval(() => this.handleSchedule(), 6000000);
+		this._interval = setInterval(() => this.handleSchedule(), 6000);
 		registerForPushNotificationsAsync();
 		scheduleFavoritesNotifications();
 	}
