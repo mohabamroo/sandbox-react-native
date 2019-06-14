@@ -187,7 +187,7 @@ export default class Schedule extends React.Component {
 	autoScroll(day) {
 		if (this.state.today !== day) {
 			this.setState({ timer: 0 });
-			this.scrollView.scrollTo({ x: 0, animated: true });
+			setTimeout(() => this.scrollView.scrollTo({ x: 0, animated: true }), 100);
 			return;
 		}
 		let now = moment();
@@ -210,8 +210,9 @@ export default class Schedule extends React.Component {
 		let scrollValue = (slots - 2) * interval;
 		let timer = (slots + 0.45) * interval;
 		let max =
-			this.state[day].timeslots.length * interval + 60 - Layout.window.width;
+			this.state[day].timeslots.length * interval  - Layout.window.width;
 		this.setState({ timer: Math.max(0, timer) });
+
 		this.scrollView.scrollTo({
 			x: Math.max(0, Math.min(scrollValue, max)),
 			animated: true
