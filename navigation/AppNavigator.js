@@ -334,7 +334,7 @@ export default createAppContainer(
             bg: 'bg2'
           },
           subHeader: {
-            bg: 'circAct'
+            bg: 'circ2'
           }
         },
         navigationOptions: ({ navigation, screenProps }) => ({

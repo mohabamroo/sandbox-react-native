@@ -42,7 +42,7 @@ export default class Slot extends React.Component {
           <View style={{ width: width - 150 }} />
 
           <ImageBackground
-            source={{ uri: item.artistImage }}
+            source={ item.artistImage? {uri: item.artistImage}: null}
 						defaultSource={Assets.artistPlaceholder}
             style={{
               width: 150,
@@ -61,7 +61,7 @@ export default class Slot extends React.Component {
                   zIndex: 3
                 }}
                 size={14}
-                liked={artists.length > 0 && artists.filter(x => x.artist_id == item.artistId)[0]['liked']}
+                liked={artists.length > 0 && artists.filter(x => x.artist_id == item.artistId)[0]? artists.filter(x => x.artist_id == item.artistId)[0]['liked']:null}
                 loggedIn={loggedIn}
                 user_id={user_id}
                 artist_id={item.artistId}

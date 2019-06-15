@@ -9,6 +9,7 @@ import {
 
 import * as __GStyles from '../styles';
 import Assets from '../constants/Assets';
+import Layout from '../constants/Layout';
 const URLs = require('../Config/ExternalURL');
 
 export class QrCode extends React.Component {
@@ -31,8 +32,8 @@ export class QrCode extends React.Component {
               uri: URLs.imagesRoot + user.qrcode
             }}
             style={{
-              width: 300,
-              height: 300,
+              width: Layout.window.width < 350? Layout.window.width : 350,
+              height: Layout.window.width < 350? Layout.window.width : 350,
               backgroundColor: '#fde9d6'
             }}
           />
@@ -52,7 +53,7 @@ export class QrCode extends React.Component {
             style={{
               width: 20,
               height: 20,
-
+              padding: 10,
               backgroundColor: '#fde9d6'
             }}
           />
@@ -60,6 +61,7 @@ export class QrCode extends React.Component {
             TAP HERE TO CLOSE
           </Text>
         </TouchableOpacity>
+        <View style={{height: Layout.window.height / 4}}/>
       </View>
     );
   }
@@ -69,8 +71,9 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     textAlign: 'center',
+    paddingTop: 70,
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center'
   },
   nameText: {

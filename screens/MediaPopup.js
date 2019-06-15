@@ -150,8 +150,8 @@ const styles = StyleSheet.create({
   },
   close: {
     position: 'absolute',
-    top: 5,
-    right: 5,
+    top: -50,
+    right: 0,
     height: 40,
     width: 40,
     justifyContent: 'center'
